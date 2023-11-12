@@ -1,9 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const userRouter = require('./routes/users');
 const userService = require('./services/userService');
 const bodyParser = require('body-parser');
 
 const app = express();
+// Use CORS middleware to allow requests from all origins
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
