@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  db:
+    container_name: RescueCircle
+    hostname : RescueCircle
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rescue_circle
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+
+volumes:
+  db_data:
