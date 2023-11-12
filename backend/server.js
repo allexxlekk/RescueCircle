@@ -32,24 +32,24 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
+// app.post('/login', async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
 
-        // Authenticate user
-        const user = await userService.authenticateUser(email, password);
+//         // Authenticate user
+//         const user = await userService.authenticateUser(email, password);
 
-        // TODO: Create JWT Security Token
-        if (!user) {
-            res.status(401).send("Bad credentials");
-        } else {
-            res.status(200).send("Logged in as user: " + user.username);
-        }
+//         // TODO: Create JWT Security Token
+//         if (!user) {
+//             res.status(401).send("Bad credentials");
+//         } else {
+//             res.status(200).send("Logged in as user: " + user.username);
+//         }
 
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-});
+//     } catch (err) {
+//         res.status(500).send(err.message);
+//     }
+// });
 
 app.listen(port, () => {
     console.log(`Backend Server is running on http://localhost:${port}`);

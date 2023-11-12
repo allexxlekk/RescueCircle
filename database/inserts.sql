@@ -1,0 +1,1 @@
+/* Inserts for initialization of the rescue_circle database */
