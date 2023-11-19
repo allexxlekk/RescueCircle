@@ -76,6 +76,17 @@ const emailAvailable = async (username) => {
   }
 };
 
+const getUsersByRole = async (role) => {
+  try {
+    const query = 'SELECT * FROM user WHERE role = ?';
+    const [result] = await dbConnection.promise().query(query, [role]);
+    return result;
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    throw err;
+  }
+}
+
 module.exports = {
-    registerUser, usernameAvailable, emailAvailable //,authenticateUser
+    registerUser, usernameAvailable, emailAvailable, getUsersByRole //,authenticateUser
 };
