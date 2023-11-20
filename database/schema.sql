@@ -78,13 +78,13 @@ CREATE TABLE announcement (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    announcement_date DEFAULT DATETIME CURRENT_TIMESTAMP
+    announcement_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE announcements_needs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     annoucment_id INT NOT NULL,
-    item_id INT NOT NULL
+    item_id INT NOT NULL,
     FOREIGN KEY (annoucment_id) REFERENCES announcement(id),
     FOREIGN KEY (item_id) REFERENCES item(id)
 );
