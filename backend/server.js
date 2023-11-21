@@ -1,5 +1,6 @@
 const express = require('express');
 const userRouter = require('./routes/users');
+const categoriesRouter = require('./routes/categories');
 const userService = require('./services/userService');
 const bodyParser = require('body-parser');
 
@@ -9,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
 
 app.use('/users', userRouter);
+app.use('/categories', categoriesRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

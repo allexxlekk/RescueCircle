@@ -24,10 +24,6 @@ const registerUser = async (username, email, password) => {
     }
   };
 
-module.exports = {
-    registerUser
-};
-
 // const authenticateUser = async (email, password) => {
 //     try {
 //         const [users] = await dbConnection.execute('SELECT * FROM user WHERE email=?', [email]);
