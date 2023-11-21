@@ -65,7 +65,7 @@ router.get('/byRole', async (req, res) => {
     return res.status(400).json({ error: 'Role is required' });
   }
 
- if(role != "CITIZEN" || role != "RESCUER"){
+ if(role != "CITIZEN" && role != "RESCUER"){
     return res.status(400).json({error: 'Invalid Role'})
  }
   //BLOCK 1 END
@@ -77,7 +77,7 @@ router.get('/byRole', async (req, res) => {
     res.status(200).json(users);
   // BLOCK 2 END
   }
-  // ERROR MESSAGE 
+  // ERROR MESSAGE  
   catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Error during get users by role' });
