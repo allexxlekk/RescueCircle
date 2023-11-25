@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     try{
-        const item = req.body();
+        const item = req.body;
         //1) Get all categories
         const itemAdded = await itemService.addItem(item);
         if (itemAdded) {
@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
         }
     }catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error fetching categories'});
+        res.status(500).json({ error: 'Error adding item'});
     }
 });
 
