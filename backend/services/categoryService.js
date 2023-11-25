@@ -30,7 +30,22 @@ const getAllCategories = async () => {
   }
 };
 
-
+const getItemsCountInCategory = async () => {
+  try {
+    const query = `
+    SELECT item_category.name, COUNT(item.id) AS quantity
+    FROM item_category
+    LEFT JOIN item ON item_category.id = item.category_id
+    GROUP BY item_category.name;
+    `;
+    const [result] = await dbConnection.promise().query(query); 
+    const categoryWithCounts = result.rows; 
+    return result;
+  }catch (err) {
+    console.error('Error get item counts :', err);
+      throw err;
+  }
+};
 module.exports = {
-    addCategory, getAllCategories
+    addCategory, getAllCategories, getItemsCountInCategory
 };

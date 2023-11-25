@@ -39,6 +39,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET CATEGORIES AND COUNT ITEMS
+router.get('/count', async (req, res) => {
+  try{
+    //1) Get all categories
+    const categoryWithCounts = await categoryService.getItemsCountInCategory();
+    //2) Return all categories
+    res.status(200).json(categoryWithCounts);
+  }catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching categories'});
+  }
+});
 
 
 module.exports = router;
