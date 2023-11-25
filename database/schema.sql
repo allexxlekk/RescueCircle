@@ -23,8 +23,8 @@ CREATE TABLE item (
     description TEXT,
     quantity INT, 
     offer_quantity INT NOT NULL DEFAULT 2,
-    /* category_id INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES item_category(id) */
+    category_id INT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES item_category(id)
 );
 
 CREATE TABLE item_category (
