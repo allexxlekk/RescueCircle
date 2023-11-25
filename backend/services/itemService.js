@@ -3,15 +3,25 @@ const {getCategoryByName} = require("./categoryService");
 
 /**
  * Adds a new item.
- * @param {{name: string, category: string}} item - The item to add.
+ * @param {{name: string, description: string, quantity: number, offer_quantity: number, category: string}} item - The item to add.
  */
 const addItem = async (item) => {
     try {
         if (! await itemExists(item)) {
-            const categoryId = getCategoryByName(item.category).id
-            console.log(categoryId);
+            // Await the result of getCategoryByName
+            const category = await getCategoryByName(item.category);
 
-            //TODO add item details also
+            if (!category) {
+                console.error('Category not found:', item.category);
+                return false; // Handle category not found
+            }
+
+            const categoryId = category.id;
+            console.log("category id =", categoryId);
+
+            const query = 'INSERT INTO rescue_circle.item (name, description, quantity, offer_quantity, category_id) VALUES(?, ?, ?, ?, ?)';
+            const result = await dbConnection.promise().query(query, [item.name, item.description, item.quantity, item.offer_quantity, categoryId]);
+            //TODO add details of item
             return true; // Item added successfully
         } else {
             return false; // Item already exists
@@ -21,6 +31,7 @@ const addItem = async (item) => {
         throw err;
     }
 };
+
 
 const itemExists = async (item) => {
     const checkQuery = 'SELECT COUNT(*) AS count FROM item WHERE name = ?';
