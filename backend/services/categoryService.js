@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const dbConnection = require('../config/db');
 
 const categoryExists = async (categoryName) => {
@@ -7,10 +6,9 @@ const categoryExists = async (categoryName) => {
   return checkResult[0].count !== 0
 }
 
-
 const addCategory = async (categoryName) => {
   try {
-      if (!await categoryExists(categoryName)){ 
+      if (!await categoryExists(categoryName)){
           const query = 'INSERT INTO item_category (name) VALUES (?)';
           await dbConnection.promise().query(query, [categoryName]);
           return true; // Category added successfully
@@ -23,8 +21,6 @@ const addCategory = async (categoryName) => {
   }
 };
 
-
-
 const getAllCategories = async () => {
   try {
     const query = 'SELECT * FROM item_category';
@@ -36,6 +32,17 @@ const getAllCategories = async () => {
   }
 };
 
+const getCategoryByName = async (categoryName) => {
+    try {
+        const query = 'SELECT * FROM item_category WHERE name = ?';
+        const [category] = await dbConnection.promise().query(query,[categoryName]);
+        return category[0];
+    }catch (err) {
+        console.error('Error get categories:', err);
+        throw err;
+    }
+}
+
 const getItemsCountInCategory = async () => {
   try {
     const query = `
@@ -44,14 +51,13 @@ const getItemsCountInCategory = async () => {
     LEFT JOIN item ON item_category.id = item.category_id
     GROUP BY item_category.name;
     `;
-    const [result] = await dbConnection.promise().query(query); 
-    const categoryWithCounts = result.rows; 
-    return result;
+    const [result] = await dbConnection.promise().query(query);
+      return result;
   }catch (err) {
     console.error('Error get item counts :', err);
       throw err;
   }
 };
 module.exports = {
-    addCategory, getAllCategories, getItemsCountInCategory
+    addCategory, getAllCategories, getItemsCountInCategory,getCategoryByName
 };
