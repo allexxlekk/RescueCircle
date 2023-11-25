@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/users');
 const categoriesRouter = require('./routes/categories');
+const itemsRouter = require('./routes/items');
 const userService = require('./services/userService');
 const bodyParser = require('body-parser');
 
@@ -14,6 +15,7 @@ const port = process.env.PORT || 3000;
 
 app.use('/users', userRouter);
 app.use('/categories', categoriesRouter)
+app.use('/items', itemsRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
