@@ -30,7 +30,7 @@ CREATE TABLE item
     id             INT AUTO_INCREMENT PRIMARY KEY,
     name           VARCHAR(255) NOT NULL,
     description    TEXT,
-    quantity       INT,
+    quantity       INT          NOT NULL DEFAULT 0,
     offer_quantity INT          NOT NULL DEFAULT 2,
     category_id    INT          NOT NULL,
     FOREIGN KEY (category_id) REFERENCES item_category (id)
