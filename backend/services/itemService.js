@@ -31,7 +31,21 @@ const addItem = async (item) => {
         throw err;
     }
 };
-
+const getItemDetailsByName = async (name) => {
+    try {
+        const query = `
+        SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
+        FROM item
+        INNER JOIN item_category ON item.category_id = item_category.id
+        WHERE item.name = ?;
+        `;
+        const [result] = await dbConnection.promise().query(query,[name]);
+        return result;
+    } catch (err) {
+        console.error('Error get item name :', err);
+        throw err;
+    }
+};
 
 const itemExists = async (item) => {
     const checkQuery = 'SELECT COUNT(*) AS count FROM item WHERE name = ?';
@@ -40,5 +54,5 @@ const itemExists = async (item) => {
 }
 
 module.exports = {
-    addItem, itemExists
+    addItem, itemExists, getItemDetailsByName
 };
