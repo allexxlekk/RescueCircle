@@ -1,0 +1,5 @@
+.list-item {
+    list-style: none;
+    margin-bottom: 10px;
+    /* Add margin to separate each item */
+}

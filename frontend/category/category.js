@@ -1,6 +1,17 @@
+  let categoriesCount= [
+    {
+      category: 'Food',
+      itemCount: 10,
+    },
+    {
+      category : 'Drink',
+      itemCount: 25,
+    },
+  ]
+
   function renderCategories(categoriesCount) {
       const container = document.querySelector('#container');
-      container.innerHTML = ''; 
+      container.textContent = ''; 
 
       categoriesCount.forEach(categoryInfo => {
         const myList = document.createElement('ul');
@@ -34,16 +45,21 @@
           console.error('Error fetching categories:', error);
         });
     }
-
-    renderCategories([]); // Initial render with an empty array
+// Initial render with array categoriesCount
+    renderCategories(categoriesCount); 
 
     const addButton = document.querySelector('#add-button');
     addButton.addEventListener('click', () => {
-      // Assuming you have an input field for the new category
+      
       const newCategory = document.querySelector('#new-category').value;
 
+      const categoryExists = categoriesCount.some(categoryInfo => categoryInfo.category === newCategory);
+
+      if (categoryExists) {
+          console.log('The category already exists.');
+      }
       // Validate input (you may want to add more thorough validation)
-      if (newCategory) {
+      else if (newCategory) {
         // Perform your POST request to add a new category with query parameter
         fetch(`http://localhost:3000/categories?categoryName=${encodeURIComponent(newCategory)}`, {
           method: 'POST',
@@ -51,12 +67,17 @@
         .then(response => response.json())
         .then(data => {
           console.log('Category added successfully:', data);
-          fetchCategories(); // Re-fetch and render categories after adding a new one
+          fetchCategories(categoriesCount); // Re-fetch and render categories after adding a new one
         })
         .catch(error => {
           console.error('Error adding category:', error);
-        });
-      } else {
+        })}
+      
+      else {
         alert('Please enter a valid input for the new category.');
       }
     });
+
+function removeCategory(categoriesCount) {
+  
+}
