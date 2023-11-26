@@ -31,6 +31,16 @@ const addItem = async (item) => {
         throw err;
     }
 };
+const getAllItems = async () => {
+    try {
+        const query = 'SELECT * FROM item';
+        const [result] = await dbConnection.promise().query(query);
+        return result;
+    } catch (err) {
+        console.error('Error get items:', err);
+        throw err;
+    }
+};
 const getItemDetailsByName = async (name) => {
     try {
         const query = `
@@ -46,6 +56,22 @@ const getItemDetailsByName = async (name) => {
         throw err;
     }
 };
+const getItemsByCategoryName = async (categoryName) => {
+    try {
+        const query = `
+            
+            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
+             FROM item 
+             INNER JOIN item_category ON item.category_id = item_category.id
+              WHERE item_category.name = ?;
+            `;
+        const [result] = await dbConnection.promise().query(query, [categoryName]);
+        return result;
+    } catch (err) {
+        console.error('Error fetching items by category:', err);
+        throw err;
+    }
+};
 
 const itemExists = async (item) => {
     const checkQuery = 'SELECT COUNT(*) AS count FROM item WHERE name = ?';
@@ -54,5 +80,5 @@ const itemExists = async (item) => {
 }
 
 module.exports = {
-    addItem, itemExists, getItemDetailsByName
+    addItem, itemExists, getItemDetailsByName, getAllItems, getItemsByCategoryName
 };
