@@ -31,6 +31,64 @@ const addItem = async (item) => {
         throw err;
     }
 };
+const getAllItems = async () => {
+    try {
+        const query = 'SELECT * FROM item';
+        const [result] = await dbConnection.promise().query(query);
+        return result;
+    } catch (err) {
+        console.error('Error get items:', err);
+        throw err;
+    }
+};
+const getItemDetailsByName = async (name) => {
+    try {
+        const query = `
+        SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
+        FROM item
+        INNER JOIN item_category ON item.category_id = item_category.id
+        WHERE item.name = ?;
+        `;
+        const [result] = await dbConnection.promise().query(query,[name]);
+        return result;
+    } catch (err) {
+        console.error('Error get item name :', err);
+        throw err;
+    }
+};
+const getItemsByCategoryName = async (categoryName) => {
+    try {
+        const query = `
+            
+            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
+             FROM item 
+             INNER JOIN item_category ON item.category_id = item_category.id
+              WHERE item_category.name = ?;
+            `;
+        const [result] = await dbConnection.promise().query(query, [categoryName]);
+        return result;
+    } catch (err) {
+        console.error('Error fetching items by category:', err);
+        throw err;
+    }
+};
+
+const getItemsByCategoryId = async (categoryId) => {
+    try {
+        const query = `
+            
+        SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
+        FROM item 
+        INNER JOIN item_category ON item.category_id = item_category.id
+        WHERE item_category.id = ?;
+            `;
+        const [result] = await dbConnection.promise().query(query, [categoryId]);
+        return result;
+    } catch (err) {
+        console.error('Error fetching items by category ID:', err);
+        throw err;
+    }
+};
 
 
 const itemExists = async (item) => {
@@ -40,5 +98,5 @@ const itemExists = async (item) => {
 }
 
 module.exports = {
-    addItem, itemExists
+    addItem, itemExists, getItemDetailsByName, getAllItems, getItemsByCategoryName, getItemsByCategoryId
 };
