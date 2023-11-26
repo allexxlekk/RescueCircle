@@ -1,6 +1,4 @@
 const express = require('express');
-const dbConnection = require('../config/db.js');
-const userService = require('./../services/userService');
 const categoryService = require('../services/categoryService.js');
 const router = express.Router();
 
@@ -29,9 +27,7 @@ router.post('/', async (req, res) => {
 // GET ALL CATEGORIES
 router.get('/', async (req, res) => {
   try{
-    //1) Get all categories
     const categories = await categoryService.getAllCategories();
-    //2) Return all categories
     res.status(200).json({categories});
   }catch (error) {
     console.error(error);
@@ -42,9 +38,7 @@ router.get('/', async (req, res) => {
 // GET CATEGORIES AND COUNT ITEMS
 router.get('/count', async (req, res) => {
   try{
-    //1) Get all categories
     const categoryWithCounts = await categoryService.getItemsCountInCategory();
-    //2) Return all categories
     res.status(200).json(categoryWithCounts);
   }catch (error) {
     console.error(error);
@@ -52,5 +46,6 @@ router.get('/count', async (req, res) => {
   }
 });
 
-
+//TODO: add endpoint to see if the category already exists while
+// typing the category name in the frontend
 module.exports = router;

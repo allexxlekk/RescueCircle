@@ -106,3 +106,15 @@ CREATE TABLE rescue_vehicle
     rescuer_id INT,
     FOREIGN KEY (rescuer_id) REFERENCES user (id)
 );
+
+CREATE TRIGGER before_insert_item
+    BEFORE INSERT ON item
+    FOR EACH ROW
+BEGIN
+    IF NEW.quantity IS NULL THEN
+        SET NEW.quantity = 0;
+    END IF;
+    IF NEW.offer_quantity IS NULL THEN
+        SET NEW.offer_quantity = 2;
+    END IF;
+END;

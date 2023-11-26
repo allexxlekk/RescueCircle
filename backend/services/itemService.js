@@ -2,13 +2,12 @@ const dbConnection = require('../config/db');
 const {getCategoryByName} = require("./categoryService");
 
 /**
- * Adds a new item.
- * @param {{name: string, description: string, quantity: number, offer_quantity: number, category: string}} item - The item to add.
+ * Adds a new item and its details.
+ * @param {{name: string, description: string, quantity: number, offer_quantity: number, category: string, details: Array<{name: string, value: string}>}} item - The item to add.
  */
 const addItem = async (item) => {
     try {
-        if (! await itemExists(item)) {
-            // Await the result of getCategoryByName
+        if (!await itemExists(item)) {
             const category = await getCategoryByName(item.category);
 
             if (!category) {
@@ -17,12 +16,20 @@ const addItem = async (item) => {
             }
 
             const categoryId = category.id;
-            console.log("category id =", categoryId);
 
-            const query = 'INSERT INTO rescue_circle.item (name, description, quantity, offer_quantity, category_id) VALUES(?, ?, ?, ?, ?)';
-            const result = await dbConnection.promise().query(query, [item.name, item.description, item.quantity, item.offer_quantity, categoryId]);
-            //TODO add details of item
-            return true; // Item added successfully
+            const insertItemQuery = 'INSERT INTO rescue_circle.item (name, description, quantity, offer_quantity, category_id) VALUES(?, ?, ?, ?, ?)';
+            const itemResult = await dbConnection.promise().query(insertItemQuery, [item.name, item.description, item.quantity, item.offer_quantity, categoryId]);
+
+            // Get the inserted item ID
+            const itemId = itemResult[0].insertId;
+
+            // Insert each item detail
+            const insertDetailQuery = 'INSERT INTO rescue_circle.item_details (name, value, item_id) VALUES(?, ?, ?)';
+            for (const detail of item.details) {
+                await dbConnection.promise().query(insertDetailQuery, [detail.name, detail.value, itemId]);
+            }
+
+            return true; // Item and its details added successfully
         } else {
             return false; // Item already exists
         }
@@ -31,6 +38,7 @@ const addItem = async (item) => {
         throw err;
     }
 };
+
 const getAllItems = async () => {
     try {
         const query = 'SELECT * FROM item';
@@ -41,34 +49,35 @@ const getAllItems = async () => {
         throw err;
     }
 };
+
 const getItemDetailsByName = async (name) => {
     try {
         const query = `
-        SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
-        FROM item
-        INNER JOIN item_category ON item.category_id = item_category.id
-        WHERE item.name = ?;
+            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id
+            WHERE item.name = ?;
         `;
-        const [result] = await dbConnection.promise().query(query,[name]);
+        const [result] = await dbConnection.promise().query(query, [name]);
         return result;
     } catch (err) {
-        console.error('Error get item name :', err);
+        console.error('Error on getting item by name :', err);
         throw err;
     }
 };
 const getItemsByCategoryName = async (categoryName) => {
     try {
         const query = `
-            
+
             SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
-             FROM item 
-             INNER JOIN item_category ON item.category_id = item_category.id
-              WHERE item_category.name = ?;
-            `;
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id
+            WHERE item_category.name = ?;
+        `;
         const [result] = await dbConnection.promise().query(query, [categoryName]);
         return result;
     } catch (err) {
-        console.error('Error fetching items by category:', err);
+        console.error('Error fetching items by category name:', err);
         throw err;
     }
 };
@@ -76,16 +85,16 @@ const getItemsByCategoryName = async (categoryName) => {
 const getItemsByCategoryId = async (categoryId) => {
     try {
         const query = `
-            
-        SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
-        FROM item 
-        INNER JOIN item_category ON item.category_id = item_category.id
-        WHERE item_category.id = ?;
-            `;
+
+            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id
+            WHERE item_category.id = ?;
+        `;
         const [result] = await dbConnection.promise().query(query, [categoryId]);
         return result;
     } catch (err) {
-        console.error('Error fetching items by category ID:', err);
+        console.error('Error fetching items by category id:', err);
         throw err;
     }
 };
