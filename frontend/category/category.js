@@ -1,14 +1,5 @@
-  let categoriesCount= [
-    {
-      category: 'Food',
-      itemCount: 10,
-    },
-    {
-      category : 'Drink',
-      itemCount: 25,
-    },
-  ]
 
+let categoriesCount=[];
   function renderCategories(categoriesCount) {
       const container = document.querySelector('#container');
       container.textContent = ''; 
@@ -58,9 +49,9 @@
       if (categoryExists) {
           console.log('The category already exists.');
       }
-      // Validate input (you may want to add more thorough validation)
+      
       else if (newCategory) {
-        // Perform your POST request to add a new category with query parameter
+        //POST request to add a new category with query parameter
         fetch(`http://localhost:3000/categories?categoryName=${encodeURIComponent(newCategory)}`, {
           method: 'POST',
         })
@@ -77,7 +68,4 @@
         alert('Please enter a valid input for the new category.');
       }
     });
-
-function removeCategory(categoriesCount) {
-  
-}
+fetchCategories();
