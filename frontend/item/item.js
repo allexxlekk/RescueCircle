@@ -95,5 +95,22 @@ async function fetchItemsByCategoryId(category_id) {
     }
 }
 
+async function fetchItems() {
+    try {
+        const response = await fetch('http://localhost:3000/items');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Data received:', data);
+        return data; // Return the data
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
 getItemByCategoryId(3);
 
