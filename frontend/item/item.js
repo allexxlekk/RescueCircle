@@ -1,29 +1,9 @@
-itemArray = [
-    {
-        id: 2,
-        name: 'Croissant',
-        description: 'Molto',
-        quantity: 120,
-        offer_quantity: 15,
-        category_id: 8,
-    },
-    {
-        id: 5,
-        name: 'Bananas',
-        description: 'Chiquita',
-        quantity: 100,
-        offer_quantity: 25,
-        category_id: 8,
-    },
-];
+async function getItemByCategoryId(category_id) {
 
-
-//Get item by categoryID
-function getItemById(category_id) {
     // Filter items based on category_id
-    const selectedItems = itemArray.filter(item => item.category_id === category_id);
+    const selectedItems = await fetchItemsByCategoryId(category_id);
 
-    if (selectedItems.length > 0) {
+    if (selectedItems && selectedItems.length > 0) {
 
         const myList = document.createElement('ul');
         myList.classList.add('list-item');
@@ -38,13 +18,12 @@ function getItemById(category_id) {
             getItemDisplay.classList.add('item-display');
             listItem.appendChild(getItemDisplay);
 
-            getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity} Offer: ${selectedItem.offer_quantity} Category id: ${selectedItem.category_id}`;
+            getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity} Offer: ${selectedItem.quantity} Category id: ${selectedItem.category_name}`;
         });
     } else {
         console.error(`No items found with category_id = ${category_id}.`);
     }
 }
-
 
 function getItemDetailsByName(name) {
     const selectedItems = itemArray.filter(item => item.name === name);
@@ -99,10 +78,16 @@ async function getItems() {
     }
 }
 
-async function fetchItems() {
+async function fetchItemsByCategoryId(category_id) {
     try {
-        const response = await fetch('http://localhost:3000/items');
+        const response = await fetch(`http://localhost:3000/items/byCategory?id=${category_id}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log('Data received:', data);
         return data; // Return the data
     } catch (error) {
         console.error('Fetch error:', error);
@@ -110,4 +95,5 @@ async function fetchItems() {
     }
 }
 
-getItems();
+getItemByCategoryId(3);
+
