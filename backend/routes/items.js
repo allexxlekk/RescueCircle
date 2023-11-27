@@ -33,7 +33,8 @@ router.get('/', async (req, res) => {
         res.status(500).json({error: 'Error fetching items'});
     }
 });
-
+//2 endpoints changed to 1 
+/*
 //GET ITEM BY NAME
 router.get('/byName', async (req, res) => {
     const {name} = req.query;
@@ -65,6 +66,36 @@ router.get('/byCategory', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'Error fetching items'});
+    }
+});
+*/
+//GET ITEMS BY CATEGORY
+router.get('/byCategory', async (req, res) => {
+    const {id, name} = req.query;
+
+    // Handle requests by id
+    if (id) {
+        try {
+            const itemDetails = await itemService.getItemsByCategoryId(id);
+            res.status(200).json(itemDetails);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: 'Error fetching items by category id'});
+        }
+    } 
+    // Handle requests by name
+    else if (name) {
+        try {
+            const itemDetails = await itemService.getItemsByCategoryName(name);
+            res.status(200).json(itemDetails);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: 'Error fetching items by category name'});
+        }
+    } 
+    // No valid query parameter provided
+    else {
+        res.status(400).json({error: 'Either id or name is required'});
     }
 });
 
