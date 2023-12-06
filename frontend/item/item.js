@@ -85,8 +85,36 @@ async function fetchItemsBySearch(name) {
 }
 
 function showItems(items) {
+
     try {
 
+        if (items && items.length > 0) {
+            const container = document.querySelector('#container');
+            const myList = document.createElement('ul');
+            myList.classList.add('list-item');
+            container.appendChild(myList);
+
+            items.forEach(selectedItem => {
+                const listItem = document.createElement('li');
+                myList.appendChild(listItem);
+
+                const getItemDisplay = document.createElement('div');
+                getItemDisplay.classList.add('item-display');
+                listItem.appendChild(getItemDisplay);
+
+                getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity}  Category: ${selectedItem.categoryName}`;
+            });
+        } else {
+            console.error('No items found.');
+        }
+    } catch (error) {
+        console.error('Error fetching items:', error);
+    }
+}
+
+async function showAllItems() {
+    const items = await fetchItems();
+    try {
 
         if (items && items.length > 0) {
             const container = document.querySelector('#container');
@@ -133,26 +161,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const searchbar = document.getElementById('search');
     const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
-    //todo at the start show all items
-    // todo clear text after each serch
+    //todo at the start show all items -->done
+    // todo clear text after each search --> done
+
     // Function to search item
     const searchAvailability = async () => {
         const search = searchbar.value;
         if (search === '') {
-            const response = await fetch('http://localhost:3000/items');
-            const allItems = await response.json();
-            showItems(allItems);
+            clearSearchResult();
+            showAllItems();
         }
         else
             // Send a GET request to the server to check username availability
             try {
+                clearSearchResult();
                 console.log('before search');
                 const response = await fetch('http://localhost:3000/items/search?str=' + encodeURIComponent(search));
                 const searchItems = await response.json();
                 showItems(searchItems);
 
             } catch (error) {
-                console.error('Error checking username availability:', error);
+                console.error('Error while searching:', error);
                 searchAvailabilityResult.textContent = 'Error checking username availability.';
             }
     };
@@ -163,6 +192,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add a click event listener to the "Check Username Availability" button
     searchbar.addEventListener('input', debounceChecksearchAvailability);
 });
+
+function clearSearchResult() {
+    const container = document.querySelector('#container');
+    container.textContent = '';
+}
+
+//click on searchbar and have all the items 
+const search = document.querySelector('#search');
+search.addEventListener('click', () => {
+    const container = document.querySelector('#container');
+    if (search.textContent === '') {
+        clearSearchResult();
+        showAllItems();
+    }
+});
+
 
 function debounce(func, delay) {
     let timer;
