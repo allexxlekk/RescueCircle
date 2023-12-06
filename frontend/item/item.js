@@ -199,15 +199,14 @@ function clearSearchResult() {
 }
 
 //click on searchbar and have all the items 
-const search = document.querySelector('#search');
-search.addEventListener('click', () => {
-    const container = document.querySelector('#container');
-    if (search.textContent === '') {
+const searchbar = document.getElementById('search');
+searchbar.addEventListener('click', () => {
+    const search = searchbar.value;
+    if (search === '') {
         clearSearchResult();
         showAllItems();
     }
 });
-
 
 function debounce(func, delay) {
     let timer;
