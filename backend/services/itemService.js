@@ -128,7 +128,17 @@ const itemExists = async (item) => {
     const [checkResult] = await dbConnection.promise().query(checkQuery, [item.name]);
     return checkResult[0].count !== 0
 }
-
+const checkItemAvailability = async (itemName) => {
+    try {
+        const query = 'SELECT * FROM item WHERE name = ?';
+        const [result] = await dbConnection.promise().query(query, [itemName]);
+        // If result is empty, the item is not available
+        return result.length === 0 ? false : true;
+    } catch (err) {
+        console.error('Error checking item availability:', err);
+        throw err;
+    }
+};
 /**
  * Represents the JSON data object containing categories and items.
  *
@@ -196,5 +206,6 @@ module.exports = {
     getItemsByCategoryName,
     getItemsByCategoryId,
     searchItems,
-    uploadFromOnlineDatabase
+    uploadFromOnlineDatabase,
+    checkItemAvailability
 };
