@@ -133,7 +133,7 @@ const checkItemAvailability = async (itemName) => {
         const query = 'SELECT * FROM item WHERE name = ?';
         const [result] = await dbConnection.promise().query(query, [itemName]);
         // If result is empty, the item is not available
-        return result.length === 0 ? false : true;
+        return result.length !== 0 ;
     } catch (err) {
         console.error('Error checking item availability:', err);
         throw err;
