@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({error: 'Error fetching items'});
     }
 });
-//2 endpoints changed to 1 
+
 //GET ITEMS BY CATEGORY NAME OR ID
 router.get('/byCategory', async (req, res) => {
     const { id = null, name = null } = req.query;
@@ -67,7 +67,6 @@ router.get('/byCategory', async (req, res) => {
 //SEARCH ITEM
 router.get('/search', async (req, res) => {
     const {str} = req.query;
-    const items = await itemService.searchItems(str);
     if (!str) {
         return res.status(400).json({error: 'Searchstring is required'});
     }
@@ -76,27 +75,6 @@ router.get('/search', async (req, res) => {
         const items = await itemService.searchItems(str);
         //2) Return all categories
         res.status(200).json(items);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({error: 'Error fetching items'});
-    }
-});
-
-
-//GET ITEMS BY CATEGORY ID
-// NOTE: MIGHT BE UNNECESSARY TO HAVE BOTH GET BY CATEGORY NAME ADN ID ENDPOINTS
-// SHOULD REVISIT LATER
-router.get('/byCategoryId', async (req, res) => {
-    const {id} = req.query;
-
-    if (!id) {
-        return res.status(400).json({error: 'id is required'});
-    }
-    try {
-        //1) Get item details by id
-        const itemDetails = await itemService.getItemsByCategoryId(id);
-        //2) Return all categories
-        res.status(200).json(itemDetails);
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'Error fetching items'});
