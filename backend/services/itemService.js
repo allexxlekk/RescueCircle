@@ -49,18 +49,6 @@ const getAllItems = async () => {
         throw err;
     }
 };
-const checkItemAvailability = async (itemName) => {
-    try {
-        const query = 'SELECT item.name FROM item WHERE name = ?';
-        const [result] = await dbConnection.promise().query(query, [itemName]);
-        // If result is empty, the item is not available
-        return result.length !== 0;
-    } catch (err) {
-        console.error('Error get items:', err);
-        throw err;
-    }
-};
-
 
 const getItemDetailsByName = async (name) => {
     try {
@@ -201,5 +189,12 @@ function validateName(name) {
 }
 
 module.exports = {
-    addItem, itemExists, getItemDetailsByName, getAllItems, getItemsByCategoryName, getItemsByCategoryId, searchItems
+    addItem,
+    itemExists,
+    getItemDetailsByName,
+    getAllItems,
+    getItemsByCategoryName,
+    getItemsByCategoryId,
+    searchItems,
+    uploadFromOnlineDatabase
 };

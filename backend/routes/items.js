@@ -53,28 +53,7 @@ router.get('/isAvailable', async (req, res) => {
         res.status(500).json({error: 'Error fetching items'});
     }
 });
-//
 
-// router.get('/itemIsAvailable', async (req, res) => {
-//     try {
-//         // Get the item name from query parameters
-//         const itemName = req.query.name;
-
-//         // Check if the item name was provided
-//         if (!itemName) {
-//             return res.status(400).json({ error: 'Item name is required' });
-//         }
-
-//         // Check the availability of the item
-//         const isAvailable = await itemService.checkItemAvailability(itemName);
-
-//         // Return the availability status
-//         res.status(200).json({ isAvailable });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Error fetching item availability' });
-//     }
-// });
 //GET ITEMS BY CATEGORY NAME OR ID
 router.get('/byCategory', async (req, res) => {
     const {id = null, name = null} = req.query;
