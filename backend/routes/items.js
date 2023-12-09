@@ -1,6 +1,7 @@
 const express = require('express');
 const itemService = require('../services/itemService.js');
 const router = express.Router();
+const axios = require('axios');
 
 
 //ADD NEW ITEM
@@ -36,7 +37,7 @@ router.get('/', async (req, res) => {
 
 //GET ITEMS BY CATEGORY NAME OR ID
 router.get('/byCategory', async (req, res) => {
-    const { id = null, name = null } = req.query;
+    const {id = null, name = null} = req.query;
 
     // Handle requests by id
     if (id) {
@@ -47,7 +48,7 @@ router.get('/byCategory', async (req, res) => {
             console.error(error);
             res.status(500).json({error: 'Error fetching items by category id'});
         }
-    } 
+    }
     // Handle requests by name
     else if (name) {
         try {
@@ -57,7 +58,7 @@ router.get('/byCategory', async (req, res) => {
             console.error(error);
             res.status(500).json({error: 'Error fetching items by category name'});
         }
-    } 
+    }
     // No valid query parameter provided
     else {
         res.status(400).json({error: 'Either id or name is required'});
@@ -80,6 +81,36 @@ router.get('/search', async (req, res) => {
         res.status(500).json({error: 'Error fetching items'});
     }
 });
+
+//UPLOAD ITEMS
+router.post('/upload', async (req, res) => {
+
+        try {
+            let jsonData = req.body;
+            await itemService.uploadFromOnlineDatabase(jsonData);
+            res.status(201).json({message: 'Items uploaded successfully'});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: 'Error uploading items'});
+        }
+    }
+);
+
+//SYNC ITEMS WITH ONLINE DATABASE
+router.post('/sync', async (req, res) => {
+
+        try {
+            const response = await axios.get('http://usidas.ceid.upatras.gr/web/2023/export.php');
+            let jsonData = response.data;
+            console.log(jsonData)
+            await itemService.uploadFromOnlineDatabase(jsonData);
+            res.status(201).json({message: 'Items uploaded successfully'});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({error: 'Error uploading items'});
+        }
+    }
+);
 
 //TODO: add endpoint to see if the item already exists while
 // typing the item name in the frontend

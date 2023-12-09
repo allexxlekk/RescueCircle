@@ -58,6 +58,7 @@ const getItemsCountInCategory = async () => {
         throw err;
     }
 };
+
 module.exports = {
     addCategory, getAllCategories, getItemsCountInCategory, getCategoryByName, categoryExists
 };
