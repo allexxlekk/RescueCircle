@@ -1,7 +1,11 @@
 /* Inserts for initialization of the rescue_circle database */
+-- CATEGORIES
+
 INSERT INTO item_category (name) VALUES ('Dairy');
 INSERT INTO item_category (name) VALUES ('Fruits');
 INSERT INTO item_category (name) VALUES ('Bakery');
+
+-- ITEMS
 -- IDs 1-10
 INSERT INTO item (name, description, quantity, offer_quantity, category_id) VALUES ('Milk', 'Fresh cow milk', 100, 10, 1);
 INSERT INTO item (name, description, quantity, offer_quantity, category_id) VALUES ('Cheddar Cheese', 'Aged cheddar cheese', 50, 5, 1);
