@@ -134,7 +134,6 @@ function showItems(items) {
     }
 }
 
-
 async function showAllItems() {
     const items = await fetchItems();
     try {
@@ -189,6 +188,7 @@ async function fetchCategories() {
 const itemAvailability = async (itemName) => {
 
     if (itemName === '') {
+
         // itemAvailabilityResult.textContent = 'Empty item input. Please insert item you want to add.';
     }
     else
@@ -232,8 +232,6 @@ const addItem = async () => {
 
     const postedItem = await postResponse.json();
     console.log('Item posted:', postedItem);
-
-
 };
 
 
@@ -263,7 +261,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const search = searchbar.value;
         searchAvailability(search);
     }, 300);
-    // Add a click event listener to the "Check Username Availability" button
+    // Add input event listener to the searchbar
     searchbar.addEventListener('input', debounceChecksearchAvailability);
     //////////////////// SEARCHBAR END //////////////////// 
 

@@ -23,10 +23,12 @@ const addItem = async (item) => {
             // Get the inserted item ID
             const itemId = itemResult[0].insertId;
 
-            // Insert each item detail
-            const insertDetailQuery = 'INSERT INTO rescue_circle.item_details (name, value, item_id) VALUES(?, ?, ?)';
-            for (const detail of item.details) {
-                await dbConnection.promise().query(insertDetailQuery, [detail.detail_name, detail.detail_value, itemId]);
+            if (item.details !== undefined && item.details.length > 0) {
+                // Insert each item detail
+                const insertDetailQuery = 'INSERT INTO rescue_circle.item_details (name, value, item_id) VALUES(?, ?, ?)';
+                for (const detail of item.details) {
+                    await dbConnection.promise().query(insertDetailQuery, [detail.detail_name, detail.detail_value, itemId]);
+                }
             }
 
             return true; // Item and its details added successfully
