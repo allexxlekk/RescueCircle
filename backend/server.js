@@ -24,39 +24,43 @@ app.get('/', (req, res) => {
 // Register Endpoint
 app.post('/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const newUser = req.body;
 
         // Validate password
-        if (!isValidPassword(password)) {
+        if (!isValidPassword(newUser.password)) {
             return res.status(400).send({ error: "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character." });
         }
 
         // Register User
-        const message = await userService.registerUser(username, email, password);
+        const message = await userService.registerUser(newUser);
         res.status(201).send(message);
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
 
-// app.post('/login', async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
+app.post('/login', async (req, res) => {
+    try {
+        const {email, password} = req.body;
 
-//         // Authenticate user
-//         const user = await userService.authenticateUser(email, password);
+        // Authenticate user
+        const authenticated = await userService.authenticateUser(email, password);
 
-//         // TODO: Create JWT Security Token
-//         if (!user) {
-//             res.status(401).send("Bad credentials");
-//         } else {
-//             res.status(200).send("Logged in as user: " + user.username);
-//         }
+        if (!authenticated) {
+            res.status(401).send("Bad credentials");
+        } else {
+            // Generate a JWT token
+            const user = await userService.getUserByEmail(req.body.email);
+            const token = await userService.generateJwtToken(user);
 
-//     } catch (err) {
-//         res.status(500).send(err.message);
-//     }
-// });
+            // Send the token as a JSON response
+            res.json({ token });
+        }
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 app.listen(port, () => {
     console.log(`Backend Server is running on http://localhost:${port}`);
