@@ -1,5 +1,5 @@
 const dbConnection = require('../config/db');
-const {getCategoryByName, addCategory} = require("./categoryService");
+const { getCategoryByName, addCategory } = require("./categoryService");
 
 /**
  * Adds a new item and its details.
@@ -73,22 +73,7 @@ const getItemDetailsByName = async (name) => {
         throw err;
     }
 };
-const searchItems = async (str) => {
-    try {
-        const query = `
-            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
-            FROM item
-                     INNER JOIN item_category ON item.category_id = item_category.id
-            WHERE item.name LIKE ?;
-        `;
-        const searchString = '%' + str + '%'; // Add the wildcard character
-        const [result] = await dbConnection.promise().query(query, [searchString]);
-        return result;
-    } catch (err) {
-        console.error('Error on searching items:', err);
-        throw err;
-    }
-};
+
 const getItemsByCategoryName = async (categoryName) => {
     try {
         const query = `
@@ -128,12 +113,28 @@ const itemExists = async (item) => {
     const [checkResult] = await dbConnection.promise().query(checkQuery, [item.name]);
     return checkResult[0].count !== 0
 }
+const searchItems = async (str) => {
+    try {
+        const query = `
+            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id
+            WHERE item.name LIKE ?;
+        `;
+        const searchString = '%' + str + '%'; // Add the wildcard character
+        const [result] = await dbConnection.promise().query(query, [searchString]);
+        return result;
+    } catch (err) {
+        console.error('Error on searching items:', err);
+        throw err;
+    }
+};
 const checkItemAvailability = async (itemName) => {
     try {
         const query = 'SELECT * FROM item WHERE name = ?';
         const [result] = await dbConnection.promise().query(query, [itemName]);
         // If result is empty, the item is not available
-        return result.length !== 0 ;
+        return result.length !== 0;
     } catch (err) {
         console.error('Error checking item availability:', err);
         throw err;

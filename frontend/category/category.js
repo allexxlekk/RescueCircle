@@ -37,15 +37,16 @@ function fetchCategories() {
     });
 }
 // Initial render with array categoriesCount
-renderCategories(categoriesCount);
-
+// renderCategories(categoriesCount);
+//Add category on click
 const addButton = document.querySelector('#add-button');
 addButton.addEventListener('click', () => {
 
   const newCategory = document.querySelector('#new-category').value;
 
   const categoryExists = categoriesCount.some(categoryInfo => categoryInfo.category === newCategory);
-
+  console.log(categoriesCount);
+  console.log(newCategory);
   if (categoryExists) {
     console.log('The category already exists.');
   }
@@ -69,5 +70,6 @@ addButton.addEventListener('click', () => {
     alert('Please enter a valid input for the new category.');
   }
 });
+
 fetchCategories();
 
