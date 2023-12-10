@@ -186,9 +186,9 @@ async function fetchCategories() {
 }
 
 const itemAvailability = async (itemName) => {
-
+    const addButton = document.getElementById('add-button');
     if (itemName === '') {
-
+        return false;
         // itemAvailabilityResult.textContent = 'Empty item input. Please insert item you want to add.';
     }
     else
@@ -196,13 +196,14 @@ const itemAvailability = async (itemName) => {
 
             const response = await fetch('http://localhost:3000/items/isAvailable?itemName=' + encodeURIComponent(itemName));
             const addedItem = await response.json();
-            console.log(itemName);
-            console.log(addedItem);
+            console.log(addedItem.isAvailable);
+            return addedItem.isAvailable;
 
             // itemAvailabilityResult.textContent = `${showItems(addedItem)}`;
         }
         catch (error) {
             console.error('Error while adding Item:', error);
+            return false;
             // itemAvailabilityResult.textContent = 'Error while adding Item.';
         }
 };
@@ -233,7 +234,6 @@ const addItem = async () => {
     const postedItem = await postResponse.json();
     console.log('Item posted:', postedItem);
 };
-
 
 document.addEventListener('DOMContentLoaded', async () => {
     //////////////////// POPULATE CATEGORY DROPDOWN START //////////////////// 
@@ -267,28 +267,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     //////////////////// AVAILABILITY START //////////////////// 
+    const addButton = document.getElementById('add-button');
     const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
 
     const itemNameInput = document.getElementById('name');
     // const itemAvailabilityResult = document.getElementById('itemAvailabilityResult');
 
-    const debounceCheckItemAvailability = debounce(() => {
+    const debounceCheckItemAvailability = debounce(async () => {
         const itemName = itemNameInput.value;
-        itemAvailability(itemName);
+        const availability = await itemAvailability(itemName);
+        addButton.disabled = !availability;
+        console.log('Button Enabled:', addButton.disabled);
     }, 300);
     itemNameInput.addEventListener('input', debounceCheckItemAvailability);
     //////////////////// AVAILABILITY END //////////////////// 
 
     //////////////////// ADD ITEM START //////////////////// 
-    const addButton = document.getElementById('add-button');
+
     addButton.addEventListener('click', addItem);
+
 });
 
 function clearSearchResult() {
     const container = document.querySelector('#container');
     container.textContent = '';
 }
-
 
 function debounce(func, delay) {
     let timer;
