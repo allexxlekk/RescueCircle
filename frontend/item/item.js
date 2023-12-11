@@ -83,21 +83,34 @@ async function fetchItemsBySearch(name) {
         throw error; // Re-throw the error to be caught in the higher level
     }
 }
+
+//add a clear button in search results
+async function clearSearchOnClick() {
+    const clearSearchButton = document.createElement('button');
+    clearSearchButton.textContent = 'Clear search';
+    container.appendChild(clearSearchButton);
+    clearSearchButton.addEventListener('click', () => {
+        clearSearchResult();
+    });
+}
+
 // Function to search item
 const searchAvailability = async (search) => {
+
 
     if (search === '') {
         clearSearchResult();
         showAllItems();
+        clearSearchOnClick();
     }
     else
         // Send a GET request to the server to check username availability
         try {
             clearSearchResult();
-            console.log('before search');
             const response = await fetch('http://localhost:3000/items/search?str=' + encodeURIComponent(search));
             const searchItems = await response.json();
             showItems(searchItems);
+            clearSearchOnClick();
 
         } catch (error) {
             console.error('Error while searching:', error);
@@ -193,18 +206,14 @@ const itemAvailability = async (itemName) => {
     }
     else
         try {
-
             const response = await fetch('http://localhost:3000/items/isAvailable?itemName=' + encodeURIComponent(itemName));
             const addedItem = await response.json();
             console.log(addedItem.isAvailable);
-            return addedItem.isAvailable;
-
-            // itemAvailabilityResult.textContent = `${showItems(addedItem)}`;
+            return addedItem.isAvailable
         }
         catch (error) {
             console.error('Error while adding Item:', error);
             return false;
-            // itemAvailabilityResult.textContent = 'Error while adding Item.';
         }
 };
 
