@@ -11,7 +11,7 @@
         <input type="text" id="search" name="search" required>
     <div id="container">
     </div>
-        <h2>Items</h2>
+        <h2>Add items</h2>
         
         <div id="add-item">
             <button id="add-button" disabled="true">Add Item</button>
@@ -30,7 +30,25 @@
             <br>
             <label for="category">Category:</label>
             <select id="category" name="category" required></select>
+            
+            <h4>Item details:</h4>
+            <table id="detailTable">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>
+                            <input id="itemDetailName" name="itemDetailName">
+                        </td>
+                        <td>Value</td>
+                        <td>
+                            <input id="itemDetailValue" name="itemDetailValue">
+                        </td>
+                    </tr>
+                </thead>
+                
+            </table>
     
+            <button id="detailΒutton">Add more details</button>
         </div>
     
     <script src="item.js"></script>

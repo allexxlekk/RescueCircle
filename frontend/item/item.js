@@ -114,7 +114,7 @@ const searchAvailability = async (search) => {
 
         } catch (error) {
             console.error('Error while searching:', error);
-            searchAvailabilityResult.textContent = 'Error checking username availability.';
+            searchAvailabilityResult.textContent = 'Error checking search availability.';
         }
 };
 
@@ -208,7 +208,7 @@ const itemAvailability = async (itemName) => {
         try {
             const response = await fetch('http://localhost:3000/items/isAvailable?itemName=' + encodeURIComponent(itemName));
             const addedItem = await response.json();
-            console.log(addedItem.isAvailable);
+            // console.log(addedItem.isAvailable);
             return addedItem.isAvailable
         }
         catch (error) {
@@ -217,19 +217,23 @@ const itemAvailability = async (itemName) => {
         }
 };
 
+//TODO: getItemDetails method
 const addItem = async () => {
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
     const quantity = document.getElementById('quantity').value;
     const offer_quantity = document.getElementById('offerQuantity').value;
     const category = document.getElementById('category').value;
-
+    // const detailName = document.getElementById('itemDetailName').value;
+    // const detailValue = document.getElementById('itemDetailValue').value;
     const newItem = {
         name: name,
         description: description,
         quantity: quantity,
         offer_quantity: offer_quantity,
-        category: category
+        category: category,
+        // detailName: detailName,
+        // detailValue: detailValue,
     };
 
     const postResponse = await fetch('http://localhost:3000/items', {
@@ -241,14 +245,14 @@ const addItem = async () => {
     });
 
     const postedItem = await postResponse.json();
-    console.log('Item posted:', postedItem);
+    console.log(postedItem);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
     //////////////////// POPULATE CATEGORY DROPDOWN START //////////////////// 
     try {
         const dbcategories = await fetchCategories();
-        console.log(dbcategories);
+        // console.log(dbcategories);
 
         const categoryDropdown = document.getElementById('category');
         dbcategories.forEach(category => {
@@ -260,7 +264,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error('Error:', error);
     }
-    //////////////////// POPULATE CATEGORY DROPDOWN END //////////////////// 
 
     //////////////////// SEARCHBAR START //////////////////// 
     const searchbar = document.getElementById('search');
@@ -277,16 +280,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //////////////////// AVAILABILITY START //////////////////// 
     const addButton = document.getElementById('add-button');
-    const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
+    // const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
 
     const itemNameInput = document.getElementById('name');
-    // const itemAvailabilityResult = document.getElementById('itemAvailabilityResult');
 
     const debounceCheckItemAvailability = debounce(async () => {
         const itemName = itemNameInput.value;
         const availability = await itemAvailability(itemName);
         addButton.disabled = !availability;
-        console.log('Button Enabled:', addButton.disabled);
+        // console.log('Button Enabled:', addButton.disabled);
     }, 300);
     itemNameInput.addEventListener('input', debounceCheckItemAvailability);
     //////////////////// AVAILABILITY END //////////////////// 
@@ -301,6 +303,33 @@ function clearSearchResult() {
     const container = document.querySelector('#container');
     container.textContent = '';
 }
+
+// code for item details
+const detailButton = document.getElementById('detailΒutton');
+const detailsTable = document.getElementById('detailTable');
+
+detailButton.addEventListener('click', () => {
+
+    const newDetailRow = document.createElement('tr');
+
+    // Create cells for "Name" and "Value"
+    const nameCell = document.createElement('td');
+    nameCell.textContent = 'Name';
+    const nameInput = document.createElement('input');
+    nameInput.setAttribute('name', 'itemDetailName');
+    nameCell.appendChild(nameInput);
+
+    const valueCell = document.createElement('td');
+    valueCell.textContent = 'Value';
+    const valueInput = document.createElement('input');
+    valueInput.setAttribute('name', 'itemDetailValue');
+    valueCell.appendChild(valueInput);
+
+    newDetailRow.appendChild(nameCell);
+    newDetailRow.appendChild(valueCell);
+
+    detailsTable.appendChild(newDetailRow);
+});
 
 function debounce(func, delay) {
     let timer;
