@@ -218,55 +218,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 300));
 });
 
-//////////////////// POPULATE CATEGORY DROPDOWN START //////////////////// 
-// try {
-//     const dbcategories = await fetchCategories();
-//     // console.log(dbcategories);
-
-//     const categoryDropdown = document.getElementById('category');
-//     dbcategories.forEach(category => {
-//         const option = document.createElement('option');
-//         option.value = category.name;
-//         option.textContent = category.name;
-//         categoryDropdown.appendChild(option);
-//     });
-// } catch (error) {
-//     console.error('Error:', error);
-// }
-
-// //////////////////// SEARCHBAR START //////////////////// 
-// const searchbar = document.getElementById('search');
-// // Define a debounce function with a 300ms delay
-// const search = searchbar.value;
-// const debounceChecksearchAvailability = debounce(() => {
-//     const search = searchbar.value;
-//     searchAvailability(search);
-// }, 300);
-// // Add input event listener to the searchbar
-// searchbar.addEventListener('input', debounceChecksearchAvailability);
-// //////////////////// SEARCHBAR END //////////////////// 
-
-
-// //////////////////// AVAILABILITY START //////////////////// 
-// const addButton = document.getElementById('add-button');
-// // const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
-
-// const itemNameInput = document.getElementById('name');
-
-// const debounceCheckItemAvailability = debounce(async () => {
-//     const itemName = itemNameInput.value;
-//     const availability = await itemAvailability(itemName);
-//     addButton.disabled = !availability;
-//     // console.log('Button Enabled:', addButton.disabled);
-// }, 300);
-// itemNameInput.addEventListener('input', debounceCheckItemAvailability);
-// //////////////////// AVAILABILITY END //////////////////// 
-
-// //////////////////// ADD ITEM START //////////////////// 
-
-// addButton.addEventListener('click', addItem);
-
-// });
 
 function createItemElement(item) {
     const itemElement = document.createElement('li');
