@@ -86,13 +86,13 @@ router.get('/byCategory', async (req, res) => {
 
 //SEARCH ITEM
 router.get('/search', async (req, res) => {
-    const { str } = req.query;
+    const { str, categoryId = null } = req.query;
     if (!str) {
         return res.status(400).json({ error: 'Searchstring is required' });
     }
     try {
         //1) Get item details by name
-        const items = await itemService.searchItems(str);
+        const items = await itemService.searchItems(str, categoryId);
         //2) Return all categories
         res.status(200).json(items);
     } catch (error) {

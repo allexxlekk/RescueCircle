@@ -43,7 +43,11 @@ const addItem = async (item) => {
 
 const getAllItems = async () => {
     try {
-        const query = 'SELECT * FROM item';
+        const query = `
+            SELECT item.id, item.name, item.description, item.quantity,item.category_id, item_category.name AS category_name
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id;
+        `;
         const [result] = await dbConnection.promise().query(query);
         return result;
     } catch (err) {
@@ -97,7 +101,7 @@ const getItemsByCategoryId = async (categoryId) => {
     try {
         const query = `
 
-            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS category_name
+            SELECT item.id, item.name, item.description,item.category_id, item.quantity, item_category.name AS category_name
             FROM item
                      INNER JOIN item_category ON item.category_id = item_category.id
             WHERE item_category.id = ?;
@@ -115,17 +119,39 @@ const itemExists = async (item) => {
     const [checkResult] = await dbConnection.promise().query(checkQuery, [item.name]);
     return checkResult[0].count !== 0
 }
-const searchItems = async (str) => {
+const searchItems = async (str, categoryId) => {
     try {
-        const query = `
-            SELECT item.id, item.name, item.description, item.quantity, item_category.name AS categoryName
+
+        if (categoryId === undefined || categoryId === null || categoryId === "") {
+            const query = `
+            SELECT item.id, item.name, item.description,item.category_id, item.quantity, item_category.name AS category_name
             FROM item
                      INNER JOIN item_category ON item.category_id = item_category.id
             WHERE item.name LIKE ?;
         `;
-        const searchString = '%' + str + '%'; // Add the wildcard character
-        const [result] = await dbConnection.promise().query(query, [searchString]);
-        return result;
+
+
+            const searchString = '%' + str + '%'; // Add the wildcard character
+            const [result] = await dbConnection.promise().query(query, [searchString]);
+            return result;
+
+        }
+        else {
+
+            const query = `
+                SELECT item.id, item.name, item.description,item.category_id, item.quantity, item_category.name AS category_name
+                FROM item
+                         INNER JOIN item_category ON item.category_id = item_category.id
+                WHERE item.name LIKE ? AND item.category_id = ?;
+            `;
+
+
+            const searchString = '%' + str + '%'; // Add the wildcard character
+            const [result] = await dbConnection.promise().query(query, [searchString, categoryId]);
+            return result;
+
+        }
+
     } catch (err) {
         console.error('Error on searching items:', err);
         throw err;
@@ -150,13 +176,13 @@ const checkItemAvailability = async (itemName) => {
  * @property {string} message - A message indicating the status.
  * @property {Array<Category>} categories - An array of category objects.
  * @property {Array<Item>} items - An array of item objects.
-
+ 
  * Represents a category object within the JSON data.
  *
  * @typedef {Object} Category
  * @property {string} id - The unique identifier for the category.
  * @property {string} category_name - The name of the category.
-
+ 
  * Represents an item object within the JSON data.
  *
  * @typedef {Object} Item
@@ -164,7 +190,7 @@ const checkItemAvailability = async (itemName) => {
  * @property {string} name - The name of the item.
  * @property {string} category - The ID of the category to which the item belongs.
  * @property {Array<ItemDetail>} details - An array of detail objects associated with the item.
-
+ 
  * Represents a detail object associated with an item within the JSON data.
  *
  * @typedef {Object} ItemDetail

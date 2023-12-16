@@ -1,124 +1,4 @@
-async function getItemByCategoryId(category_id) {
-
-    // Filter items based on category_id
-    const selectedItems = await fetchItemsByCategoryId(category_id);
-    if (selectedItems && selectedItems.length > 0) {
-
-        const myList = document.createElement('ul');
-        myList.classList.add('list-item');
-        container.appendChild(myList);
-
-        selectedItems.forEach(selectedItem => {
-
-            const listItem = document.createElement('li');
-            myList.appendChild(listItem);
-
-            const getItemDisplay = document.createElement('div');
-            getItemDisplay.classList.add('item-display');
-            listItem.appendChild(getItemDisplay);
-
-            getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity} Offer: ${selectedItem.quantity} Category id: ${selectedItem.category_name}`;
-        });
-    } else {
-        console.error(`No items found with category_id = ${category_id}.`);
-    }
-}
-
-async function fetchItemsByCategoryId(category_id) {
-    try {
-        const response = await fetch(`http://localhost:3000/items/byCategory?id=${category_id}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Data received:', data);
-        return data; // Return the data
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to be caught in the higher level
-    }
-}
-
-async function getItemBySearch(name) {
-
-    // Filter items based on category_id
-    const selectedItems = await fetchItemsBySearch(name);
-    if (selectedItems && selectedItems.length > 0) {
-
-        const myList = document.createElement('ul');
-        myList.classList.add('list-item');
-        container.appendChild(myList);
-
-        selectedItems.forEach(selectedItem => {
-
-            const listItem = document.createElement('li');
-            myList.appendChild(listItem);
-
-            const getItemDisplay = document.createElement('div');
-            getItemDisplay.classList.add('item-display');
-            listItem.appendChild(getItemDisplay);
-
-            getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity} Offer: ${selectedItem.quantity} Category id: ${selectedItem.category_name}`;
-        });
-    } else {
-        console.error(`No items found with Search  = ${name}.`);
-    }
-}
-
-async function fetchItemsBySearch(name) {
-    try {
-        const response = await fetch(`http://localhost:3000/items/search?str=${name}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Data received:', data);
-        return data; // Return the data
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to be caught in the higher level
-    }
-}
-
-//add a clear button in search results
-async function clearSearchOnClick() {
-    const clearSearchButton = document.createElement('button');
-    clearSearchButton.textContent = 'Clear search';
-    container.appendChild(clearSearchButton);
-    clearSearchButton.addEventListener('click', () => {
-        clearSearchResult();
-    });
-}
-
-// Function to search item
-const searchAvailability = async (search) => {
-
-
-    if (search === '') {
-        clearSearchResult();
-        showAllItems();
-        clearSearchOnClick();
-    }
-    else
-        // Send a GET request to the server to check username availability
-        try {
-            clearSearchResult();
-            const response = await fetch('http://localhost:3000/items/search?str=' + encodeURIComponent(search));
-            const searchItems = await response.json();
-            showItems(searchItems);
-            clearSearchOnClick();
-
-        } catch (error) {
-            console.error('Error while searching:', error);
-            searchAvailabilityResult.textContent = 'Error checking search availability.';
-        }
-};
-
-//Used for search items from searchbar
+//DISPLAYS ALL ITEMS
 function showItems(items) {
 
     try {
@@ -147,34 +27,7 @@ function showItems(items) {
     }
 }
 
-async function showAllItems() {
-    const items = await fetchItems();
-    try {
-
-        if (items && items.length > 0) {
-            const container = document.querySelector('#container');
-            const myList = document.createElement('ul');
-            myList.classList.add('list-item');
-            container.appendChild(myList);
-
-            items.forEach(selectedItem => {
-                const listItem = document.createElement('li');
-                myList.appendChild(listItem);
-
-                const getItemDisplay = document.createElement('div');
-                getItemDisplay.classList.add('item-display');
-                listItem.appendChild(getItemDisplay);
-
-                getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity} Offer: ${selectedItem.offer_quantity} Category id: ${selectedItem.category_id}`;
-            });
-        } else {
-            console.error('No items found.');
-        }
-    } catch (error) {
-        console.error('Error fetching items:', error);
-    }
-}
-
+// API CALLS //
 async function fetchItems() {
     try {
         const response = await fetch('http://localhost:3000/items');
@@ -198,17 +51,69 @@ async function fetchCategories() {
     return data.categories;
 }
 
-const itemAvailability = async (itemName) => {
-    const addButton = document.getElementById('add-button');
+async function fetchItemsBySearch(name) {
+    try {
+        let response;
+        if (name === "" || name === undefined || name === null) {
+            response = await fetchItems();
+            return response
+        } else {
+            response = await fetch(`http://localhost:3000/items/search?str=${name}`);
+            const data = await response.json();
+            return data; // Return the data
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+async function fetchItemsByCategoryId(categoryId) {
+    try {
+        const response = await fetch(`http://localhost:3000/items/byCategory?id=${categoryId}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Data received:', data);
+        return data; // Return the data
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+async function fetchItemsByCategoryIdAndSearch(categoryId, searchString) {
+    try {
+        let response;
+        console.log('SearchString:', searchString);
+        if (searchString === "" || searchString === undefined) {
+            response = await fetchItemsByCategoryId(categoryId);
+            return response;
+        }
+        else {
+            response = await fetch(`http://localhost:3000/items/search?str=${searchString}&categoryId=${categoryId}`);
+
+            const data = await response.json();
+            console.log('Data received:', data);
+            return data; // Return the data
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+const fetchItemAvailability = async (itemName) => {
     if (itemName === '') {
         return false;
-        // itemAvailabilityResult.textContent = 'Empty item input. Please insert item you want to add.';
     }
     else
         try {
             const response = await fetch('http://localhost:3000/items/isAvailable?itemName=' + encodeURIComponent(itemName));
             const addedItem = await response.json();
-            // console.log(addedItem.isAvailable);
             return addedItem.isAvailable
         }
         catch (error) {
@@ -216,6 +121,31 @@ const itemAvailability = async (itemName) => {
             return false;
         }
 };
+// API CALLS //
+
+// EVENT LISTENERS //
+async function filterItemsByCategory(categoryId) {
+    let items;
+
+    if (categoryId === "all")
+        items = await fetchItems();
+    else
+        items = await fetchItemsByCategoryId(categoryId);
+
+    showItems(items);
+}
+
+async function filterItemsBySearch(searchString, categoryId) {
+    let items;
+    if (categoryId === "all") {
+        items = await fetchItemsBySearch(searchString);
+    }
+    else {
+        items = await fetchItemsByCategoryIdAndSearch(categoryId, searchString);
+    }
+    showItems(items);
+}
+// EVENT LISTENERS //
 
 //TODO: getItemDetails method
 const addItem = async () => {
@@ -249,86 +179,147 @@ const addItem = async () => {
     console.log(newItem);
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
-    //////////////////// POPULATE CATEGORY DROPDOWN START //////////////////// 
-    try {
-        const dbcategories = await fetchCategories();
-        // console.log(dbcategories);
+function showItems(items) {
+    const itemListElement = document.getElementById('item-list');
+    itemListElement.innerHTML = '';
 
-        const categoryDropdown = document.getElementById('category');
-        dbcategories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.name;
-            option.textContent = category.name;
-            categoryDropdown.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    items.forEach(item => {
+        // Create the list item
+        let itemElement = createItemElement(item);
+        // Add it to the list
+        itemListElement.appendChild(itemElement);
+        itemListElement.appendChild(document.createElement("br"));
 
-    //////////////////// SEARCHBAR START //////////////////// 
-    const searchbar = document.getElementById('search');
-    // Define a debounce function with a 300ms delay
-    const search = searchbar.value;
-    const debounceChecksearchAvailability = debounce(() => {
-        const search = searchbar.value;
-        searchAvailability(search);
-    }, 300);
-    // Add input event listener to the searchbar
-    searchbar.addEventListener('input', debounceChecksearchAvailability);
-    //////////////////// SEARCHBAR END //////////////////// 
+    });
 
-
-    //////////////////// AVAILABILITY START //////////////////// 
-    const addButton = document.getElementById('add-button');
-    // const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
-
-    const itemNameInput = document.getElementById('name');
-
-    const debounceCheckItemAvailability = debounce(async () => {
-        const itemName = itemNameInput.value;
-        const availability = await itemAvailability(itemName);
-        addButton.disabled = !availability;
-        // console.log('Button Enabled:', addButton.disabled);
-    }, 300);
-    itemNameInput.addEventListener('input', debounceCheckItemAvailability);
-    //////////////////// AVAILABILITY END //////////////////// 
-
-    //////////////////// ADD ITEM START //////////////////// 
-
-    addButton.addEventListener('click', addItem);
-
-});
-
-function clearSearchResult() {
-    const container = document.querySelector('#container');
-    container.textContent = '';
 }
 
-// code for dynamically expand the item details table
-const detailButton = document.getElementById('detailΒutton');
-const detailsTable = document.getElementById('detailTable');
+document.addEventListener('DOMContentLoaded', async () => {
+    // Show items at the start
+    let items = await fetchItems();
+    showItems(items);
 
-detailButton.addEventListener('click', () => {
+    // Initialize the category filter dropdown
+    let categories = await fetchCategories();
+    createCategoryFilterElement(categories);
 
-    const newDetailRow = document.createElement('tr');
-    const nameCell = document.createElement('td');
-    nameCell.textContent = 'Name';
-    const nameInput = document.createElement('input');
-    nameInput.setAttribute('name', 'itemDetailName');
-    nameCell.appendChild(nameInput);
+    const categoryFilter = document.getElementById('category-filter');
+    const searchFilter = document.getElementById('search-filter');
 
-    const valueCell = document.createElement('td');
-    valueCell.textContent = 'Value';
-    const valueInput = document.createElement('input');
-    valueInput.setAttribute('name', 'itemDetailValue');
-    valueCell.appendChild(valueInput);
+    categoryFilter.addEventListener('change', async (e) => {
+        filterItemsByCategory(e.target.value);
+        searchFilter.value = ""
+    });
 
-    newDetailRow.appendChild(nameCell);
-    newDetailRow.appendChild(valueCell);
-
-    detailsTable.appendChild(newDetailRow);
+    searchFilter.addEventListener('input', debounce(async (e) => {
+        const searchString = e.target.value;
+        const categoryId = categoryFilter.value;
+        filterItemsBySearch(searchString, categoryId);
+    }, 300));
 });
+
+//////////////////// POPULATE CATEGORY DROPDOWN START //////////////////// 
+// try {
+//     const dbcategories = await fetchCategories();
+//     // console.log(dbcategories);
+
+//     const categoryDropdown = document.getElementById('category');
+//     dbcategories.forEach(category => {
+//         const option = document.createElement('option');
+//         option.value = category.name;
+//         option.textContent = category.name;
+//         categoryDropdown.appendChild(option);
+//     });
+// } catch (error) {
+//     console.error('Error:', error);
+// }
+
+// //////////////////// SEARCHBAR START //////////////////// 
+// const searchbar = document.getElementById('search');
+// // Define a debounce function with a 300ms delay
+// const search = searchbar.value;
+// const debounceChecksearchAvailability = debounce(() => {
+//     const search = searchbar.value;
+//     searchAvailability(search);
+// }, 300);
+// // Add input event listener to the searchbar
+// searchbar.addEventListener('input', debounceChecksearchAvailability);
+// //////////////////// SEARCHBAR END //////////////////// 
+
+
+// //////////////////// AVAILABILITY START //////////////////// 
+// const addButton = document.getElementById('add-button');
+// // const searchAvailabilityResult = document.getElementById('searchAvailabilityResult');
+
+// const itemNameInput = document.getElementById('name');
+
+// const debounceCheckItemAvailability = debounce(async () => {
+//     const itemName = itemNameInput.value;
+//     const availability = await itemAvailability(itemName);
+//     addButton.disabled = !availability;
+//     // console.log('Button Enabled:', addButton.disabled);
+// }, 300);
+// itemNameInput.addEventListener('input', debounceCheckItemAvailability);
+// //////////////////// AVAILABILITY END //////////////////// 
+
+// //////////////////// ADD ITEM START //////////////////// 
+
+// addButton.addEventListener('click', addItem);
+
+// });
+
+function createItemElement(item) {
+    const itemElement = document.createElement('li');
+    itemElement.className = "item";
+    itemElement.id = item.id;
+
+    let itemNameElement = document.createElement("span");
+    itemNameElement.className = "name";
+    itemNameElement.textContent = `${item.name}`;
+    const itemNameDiv = document.createElement("div");
+    itemNameDiv.textContent = "Name: ";
+    itemNameDiv.appendChild(itemNameElement);
+
+    let itemCategoryElement = document.createElement("span");
+    itemCategoryElement.className = "category";
+    itemCategoryElement.textContent = `${item.category_name}`;
+    const itemCategoryDiv = document.createElement("div");
+    itemCategoryDiv.textContent = "Category: ";
+    itemCategoryDiv.appendChild(itemCategoryElement);
+
+    let itemQuantity = document.createElement("span");
+    itemQuantity.className = "quantity";
+    itemQuantity.textContent = `${item.quantity}`;
+    const itemQuantityDiv = document.createElement("div");
+    itemQuantityDiv.textContent = "Quantity: ";
+    itemQuantityDiv.appendChild(itemQuantity);
+
+    itemElement.appendChild(itemNameDiv);
+    itemElement.appendChild(itemCategoryDiv);
+    itemElement.appendChild(itemQuantityDiv);
+
+
+    return itemElement;
+
+}
+
+function createCategoryFilterElement(categories) {
+    const categoryFilter = document.getElementById('category-filter');
+    categoryFilter.innerHTML = '';
+
+    const option = document.createElement('option');
+    option.value = "all";
+    option.textContent = "All Categories";
+
+    categoryFilter.appendChild(option);
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id
+        option.textContent = category.name;
+        categoryFilter.appendChild(option);
+    });
+
+}
 
 function debounce(func, delay) {
     let timer;

@@ -3,11 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Items        </title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <label for="search">Search Item:</label>
+    <!-- View All Items -->
+    <div id="header-container">
+        <h1>Items in the base</h1>
+
+        <!-- Add a category dropdown -->
+        <label for="category-filter">Filter Category:</label>
+        <select id="category-filter"></select>
+    </div>
+     <!-- Add a search bar -->
+     <input type="text" id="search-filter" placeholder="Search items by name">
+
+        <ul id="item-list">
+            <li class="item"></li>
+        </ul>
+    </div>
+
+
+
+    <!-- <label for="search">Search Item:</label>
         <input type="text" id="search" name="search" required>
     <div id="container">
     </div>
@@ -49,7 +67,7 @@
             </table>
     
             <button id="detailΒutton">Add more details</button>
-        </div>
+        </div> -->
     
     <script src="item.js"></script>
 </body>
