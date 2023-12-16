@@ -1,32 +1,3 @@
-//DISPLAYS ALL ITEMS
-function showItems(items) {
-
-    try {
-
-        if (items && items.length > 0) {
-            const container = document.querySelector('#container');
-            const myList = document.createElement('ul');
-            myList.classList.add('list-item');
-            container.appendChild(myList);
-
-            items.forEach(selectedItem => {
-                const listItem = document.createElement('li');
-                myList.appendChild(listItem);
-
-                const getItemDisplay = document.createElement('div');
-                getItemDisplay.classList.add('item-display');
-                listItem.appendChild(getItemDisplay);
-
-                getItemDisplay.textContent = `Item id: ${selectedItem.id} Name: ${selectedItem.name} Description: ${selectedItem.description} Quantity: ${selectedItem.quantity}  Category: ${selectedItem.categoryName}`;
-            });
-        } else {
-            console.error('No items found.');
-        }
-    } catch (error) {
-        console.error('Error fetching items:', error);
-    }
-}
-
 // API CALLS //
 async function fetchItems() {
     try {
@@ -147,53 +118,6 @@ async function filterItemsBySearch(searchString, categoryId) {
 }
 // EVENT LISTENERS //
 
-//TODO: getItemDetails method
-const addItem = async () => {
-    const name = document.getElementById('name').value;
-    const description = document.getElementById('description').value;
-    const quantity = document.getElementById('quantity').value;
-    const offer_quantity = document.getElementById('offerQuantity').value;
-    const category = document.getElementById('category').value;
-    // const detailName = document.getElementById('itemDetailName').value;
-    // const detailValue = document.getElementById('itemDetailValue').value;
-    const newItem = {
-        name: name,
-        description: description,
-        quantity: quantity,
-        offer_quantity: offer_quantity,
-        category: category,
-        // detailName: detailName,
-        // detailValue: detailValue,
-    };
-
-    const postResponse = await fetch('http://localhost:3000/items', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newItem),
-    });
-
-    const postedItem = await postResponse.json();
-    console.log(postedItem);
-    console.log(newItem);
-};
-
-function showItems(items) {
-    const itemListElement = document.getElementById('item-list');
-    itemListElement.innerHTML = '';
-
-    items.forEach(item => {
-        // Create the list item
-        let itemElement = createItemElement(item);
-        // Add it to the list
-        itemListElement.appendChild(itemElement);
-        itemListElement.appendChild(document.createElement("br"));
-
-    });
-
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     // Show items at the start
     let items = await fetchItems();
@@ -218,6 +142,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 300));
 });
 
+
+// HELPER FUNCTIONS //
+function showItems(items) {
+    const itemListElement = document.getElementById('item-list');
+    itemListElement.innerHTML = '';
+
+    items.forEach(item => {
+        // Create the list item
+        let itemElement = createItemElement(item);
+        // Add it to the list
+        itemListElement.appendChild(itemElement);
+        itemListElement.appendChild(document.createElement("br"));
+
+    });
+
+}
 
 function createItemElement(item) {
     const itemElement = document.createElement('li');
@@ -249,6 +189,10 @@ function createItemElement(item) {
     itemElement.appendChild(itemCategoryDiv);
     itemElement.appendChild(itemQuantityDiv);
 
+
+    itemElement.addEventListener('click', () => {
+        window.location.href = `manageItem.html?id=${itemElement.id}`;
+    })
 
     return itemElement;
 

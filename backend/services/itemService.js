@@ -80,6 +80,22 @@ const getItemDetailsByName = async (name) => {
     }
 };
 
+const getItemById = async (id) => {
+    try {
+        const query = `
+            SELECT item.id, item.name, item.description, item.category_id, item.quantity, item_category.name AS category_name
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id
+            WHERE item.id = ?;
+        `;
+        const [result] = await dbConnection.promise().query(query, [id]);
+        return result[0];
+    } catch (err) {
+        console.error('Error on getting item by name :', err);
+        throw err;
+    }
+}
+
 const getItemsByCategoryName = async (categoryName) => {
     try {
         const query = `
@@ -236,5 +252,6 @@ module.exports = {
     getItemsByCategoryId,
     searchItems,
     uploadFromOnlineDatabase,
-    checkItemAvailability
+    checkItemAvailability,
+    getItemById
 };

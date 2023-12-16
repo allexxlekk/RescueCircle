@@ -34,6 +34,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Error fetching items' });
     }
 });
+
 //check if the item name is avalaible.
 router.get('/isAvailable', async (req, res) => {
     try {
@@ -130,6 +131,28 @@ router.post('/sync', async (req, res) => {
     }
 }
 );
+
+//GET ITEM BY ID
+router.get('/:id', async (req, res) => {
+    try {
+        // Extract the item ID from the route parameter
+        const itemId = req.params.id;
+
+        // Retrieve the single item using the ID
+        const item = await itemService.getItemById(itemId);
+
+        // Check if the item exists
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        // Return the single item
+        res.status(200).json(item);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching the item' });
+    }
+});
 
 //TODO: add endpoint to see if the item already exists while
 // typing the item name in the frontend
