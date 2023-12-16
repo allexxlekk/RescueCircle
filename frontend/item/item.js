@@ -246,6 +246,7 @@ const addItem = async () => {
 
     const postedItem = await postResponse.json();
     console.log(postedItem);
+    console.log(newItem);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -304,15 +305,13 @@ function clearSearchResult() {
     container.textContent = '';
 }
 
-// code for item details
+// code for dynamically expand the item details table
 const detailButton = document.getElementById('detailΒutton');
 const detailsTable = document.getElementById('detailTable');
 
 detailButton.addEventListener('click', () => {
 
     const newDetailRow = document.createElement('tr');
-
-    // Create cells for "Name" and "Value"
     const nameCell = document.createElement('td');
     nameCell.textContent = 'Name';
     const nameInput = document.createElement('input');
