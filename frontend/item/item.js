@@ -3,15 +3,24 @@ async function fetchItems() {
     try {
         const response = await fetch('http://localhost:3000/items');
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        // console.log('Data received:', data);
-        return data; // Return the data
+        return await response.json(); // Return the data
     } catch (error) {
         console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+async function syncItems() {
+    try {
+        await fetch('http://localhost:3000/items/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(undefined),
+        });
+    } catch (error) {
+        console.error('Sync error:', error);
         throw error; // Re-throw the error to be caught in the higher level
     }
 }
@@ -30,8 +39,7 @@ async function fetchItemsBySearch(name) {
             return response
         } else {
             response = await fetch(`http://localhost:3000/items/search?str=${name}`);
-            const data = await response.json();
-            return data; // Return the data
+            return await response.json(); // Return the data
         }
     } catch (error) {
         console.error('Fetch error:', error);
@@ -42,10 +50,6 @@ async function fetchItemsBySearch(name) {
 async function fetchItemsByCategoryId(categoryId) {
     try {
         const response = await fetch(`http://localhost:3000/items/byCategory?id=${categoryId}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
 
         const data = await response.json();
         console.log('Data received:', data);
@@ -63,13 +67,10 @@ async function fetchItemsByCategoryIdAndSearch(categoryId, searchString) {
         if (searchString === "" || searchString === undefined) {
             response = await fetchItemsByCategoryId(categoryId);
             return response;
-        }
-        else {
+        } else {
             response = await fetch(`http://localhost:3000/items/search?str=${searchString}&categoryId=${categoryId}`);
 
-            const data = await response.json();
-            console.log('Data received:', data);
-            return data; // Return the data
+            return await response.json(); // Return the data
         }
     } catch (error) {
         console.error('Fetch error:', error);
@@ -80,14 +81,12 @@ async function fetchItemsByCategoryIdAndSearch(categoryId, searchString) {
 const fetchItemAvailability = async (itemName) => {
     if (itemName === '') {
         return false;
-    }
-    else
+    } else
         try {
             const response = await fetch('http://localhost:3000/items/isAvailable?itemName=' + encodeURIComponent(itemName));
             const addedItem = await response.json();
             return addedItem.isAvailable
-        }
-        catch (error) {
+        } catch (error) {
             console.error('Error while adding Item:', error);
             return false;
         }
@@ -110,12 +109,20 @@ async function filterItemsBySearch(searchString, categoryId) {
     let items;
     if (categoryId === "all") {
         items = await fetchItemsBySearch(searchString);
-    }
-    else {
+    } else {
         items = await fetchItemsByCategoryIdAndSearch(categoryId, searchString);
     }
     showItems(items);
 }
+
+
+async function synchronizeItemList() {
+    let items;
+    await syncItems();
+    items = await fetchItems();
+    showItems(items);
+}
+
 // EVENT LISTENERS //
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -129,16 +136,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const categoryFilter = document.getElementById('category-filter');
     const searchFilter = document.getElementById('search-filter');
+    const syncButton = document.getElementById('synchronize-button');
 
     categoryFilter.addEventListener('change', async (e) => {
-        filterItemsByCategory(e.target.value);
+        await filterItemsByCategory(e.target.value);
         searchFilter.value = ""
     });
 
     searchFilter.addEventListener('input', debounce(async (e) => {
         const searchString = e.target.value;
         const categoryId = categoryFilter.value;
-        filterItemsBySearch(searchString, categoryId);
+        await filterItemsBySearch(searchString, categoryId);
+    }, 300));
+
+    syncButton.addEventListener('click', debounce(async () => {
+        searchFilter.value = "";
+        createCategoryFilterElement(await fetchCategories())
+        await synchronizeItemList();
     }, 300));
 });
 

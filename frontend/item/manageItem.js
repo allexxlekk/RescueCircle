@@ -32,8 +32,7 @@ const addItem = async () => {
 async function fetchItemById(itemId) {
     try {
         const response = await fetch(`http://localhost:3000/items/${itemId}`);
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;

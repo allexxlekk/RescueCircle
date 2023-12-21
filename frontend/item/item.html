@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Items        </title>
+    <title>Items</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,13 +15,19 @@
         <select id="category-filter"></select>
     </div>
 
-     <!-- Search Filtering -->
-     <input type="text" id="search-filter" placeholder="Search items by name">
+    <!-- Search Filtering -->
+    <label for="search-filter">Search: </label><input type="text" id="search-filter" placeholder="e.g. Water, Shoes, ...">
 
-     <!-- Item List -->
-        <ul id="item-list" ></ul>
-    </div>
-    
-    <script src="item.js"></script>
+    <!-- Synchronize Button -->
+    <button id="synchronize-button">Synchronize</button>
+
+    <!-- File Upload for JSON -->
+    <label for="file-upload">Upload JSON File:</label>
+    <input type="file" id="file-upload" accept=".json">
+
+    <!-- Item List -->
+    <ul id="item-list"></ul>
+
+<script src="item.js"></script>
 </body>
 </html>
