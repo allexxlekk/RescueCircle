@@ -69,7 +69,6 @@ async function fetchItemsByCategoryIdAndSearch(categoryId, searchString) {
             return response;
         } else {
             response = await fetch(`http://localhost:3000/items/search?str=${searchString}&categoryId=${categoryId}`);
-
             return await response.json(); // Return the data
         }
     } catch (error) {
@@ -114,7 +113,6 @@ async function filterItemsBySearch(searchString, categoryId) {
     }
     showItems(items);
 }
-
 
 async function synchronizeItemList() {
     let items;

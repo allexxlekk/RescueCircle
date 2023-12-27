@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+</head>
+<body>
+    <h1>Add item</h1>
+
+    <form id="addItem">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        
+        <label for="description">Description:</label>
+        <textarea id="description" required></textarea>
+        
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" required>
+        
+        <label for="offerQuantity">Offer Quantity:</label>
+        <input type="number" id="offerQuantity" required>
+        
+        <label for="category">Category:</label>
+        <input type="text" id="category" required>
+        
+        <button type="button" onclick="addItem()">Add Item</button>
+    </form>
+    <script src="addItem.js"></script>
+</body>
+</html>
