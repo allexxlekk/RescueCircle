@@ -53,7 +53,7 @@ CREATE TABLE request
     item_id          INT,
     number_of_people INT NOT NULL,
     quantity         INT, -- TRIGGER: BEFORE INSERT quantity = number_of_people * item.offer_quantity
-    status           ENUM ('PENDING', 'COMPLETED') DEFAULT 'PENDING',
+    status           ENUM ('PENDING','ASSUMED', 'COMPLETED') DEFAULT 'PENDING',
     created_at       DATETIME                      DEFAULT CURRENT_TIMESTAMP,
     assumed_at       DATETIME,
     completed_at     DATETIME,

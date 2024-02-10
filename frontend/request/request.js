@@ -1,41 +1,77 @@
-const testRequests = [
-    {
-        item: { name: 'Water'},
-        status: 'Completed',
-        numberOfPeople: 2,
-        quantity: 6,
-        createdAt: '10/02/24',
-        completedAt: '13/02/24'
-    },
-    {
-        item: { name: 'Food'},
-        status: 'Pending',
-        numberOfPeople: 3,
-        quantity: 10,
-        createdAt: '15/02/24',
-        completedAt: ''
-    },
-    {
-        item: { name: 'Blankets'},
-        status: 'Assumed',
-        numberOfPeople: 5,
-        quantity: 15,
-        createdAt: '17/02/24',
-        completedAt: ''
+//API CALLS
+async function fetchRequests(citizenId) {
+    try {
+        const response = await fetch('http://localhost:3000/requests/citizen/' + citizenId);
+
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
     }
-];
+}
 
-document.addEventListener('DOMContentLoaded', function() {
-    showRequests(testRequests);
+
+async function postRequest(newRequest) {
+    const postRequest = await fetch('http://localhost:3000/requests', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRequest),
+    });
+}
+
+async function fetchItems() {
+    try {
+        const response = await fetch('http://localhost:3000/items');
+
+        return await response.json(); // Return the data
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const citizenId = 1;
+
+    let requests = await fetchRequests(citizenId);
+    console.log(requests);
+    showRequests(requests);
+
+    let items = await fetchItems();
+
+    // Assuming createItemDropdownElement is a function that populates the item dropdown
+    createItemDropdownElement(items);
+
+    const selectItem = document.getElementById('select-item');
+    const numberOfPeople = document.getElementById('number-of-people');
+    const requestButton = document.getElementById('request-button');
+
+    requestButton.addEventListener('click', async () => {
+        const selectedItemId = selectItem.value; // Use 'value' to get the selected option value
+        const numberOfPeopleValue = numberOfPeople.value;
+        const requestObject = {
+            itemId: selectedItemId,
+            numberOfPeople: numberOfPeopleValue,
+            citizenId: citizenId
+        }
+        await postRequest(requestObject);
+        showRequests(await fetchRequests(citizenId));
+
+    });
+
+    // console.log(requestObject);
+    // Now you can perform further actions, such as sending the request to the server
+    // using fetch or any other AJAX method.
 });
-
-
 
 // Helper Functions
 function showRequests(requests) {
     const requestListContainer = document.getElementById('request-list');
+
     const requestListElement = requestListContainer.querySelector('ul');
-    
+
     // Check if the title and total number div already exists, if not create it
     let titleDiv = requestListContainer.querySelector('.request-list-title');
     if (!titleDiv) {
@@ -56,7 +92,6 @@ function showRequests(requests) {
         requestListElement.appendChild(requestCardElement);
     });
 }
-
 
 function createRequestCardElement(request) {
     const li = document.createElement('li');
@@ -101,4 +136,20 @@ function createRequestCardElement(request) {
     li.appendChild(detailsDiv);
 
     return li;
+
 }
+
+function createItemDropdownElement(items) {
+    const selectItem = document.getElementById('select-item');
+    selectItem.innerHTML = '';
+    const option = document.createElement('option');
+    selectItem.appendChild(option);
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id
+        option.textContent = item.name;
+        selectItem.appendChild(option);
+    });
+
+}
+
