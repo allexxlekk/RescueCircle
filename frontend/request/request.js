@@ -1,6 +1,5 @@
 const testRequests = [
     {
-        id: 'req1',
         item: { name: 'Water'},
         status: 'Completed',
         numberOfPeople: 2,
@@ -9,7 +8,6 @@ const testRequests = [
         completedAt: '13/02/24'
     },
     {
-        id: 'req2',
         item: { name: 'Food'},
         status: 'Pending',
         numberOfPeople: 3,
@@ -18,7 +16,6 @@ const testRequests = [
         completedAt: ''
     },
     {
-        id: 'req3',
         item: { name: 'Blankets'},
         status: 'Assumed',
         numberOfPeople: 5,
@@ -36,7 +33,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Helper Functions
 function showRequests(requests) {
-    const requestListElement = document.getElementById('request-list').querySelector('ul');
+    const requestListContainer = document.getElementById('request-list');
+    const requestListElement = requestListContainer.querySelector('ul');
+    
+    // Check if the title and total number div already exists, if not create it
+    let titleDiv = requestListContainer.querySelector('.request-list-title');
+    if (!titleDiv) {
+        titleDiv = document.createElement('div');
+        titleDiv.className = 'request-list-title';
+        requestListContainer.insertBefore(titleDiv, requestListElement);
+    }
+
+    // Set the title and total number of requests
+    titleDiv.textContent = `Requests (${requests.length})`;
+
     requestListElement.innerHTML = ''; // Clear existing items
 
     requests.forEach(request => {
@@ -46,6 +56,7 @@ function showRequests(requests) {
         requestListElement.appendChild(requestCardElement);
     });
 }
+
 
 function createRequestCardElement(request) {
     const li = document.createElement('li');
