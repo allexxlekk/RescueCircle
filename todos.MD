@@ -1,0 +1,32 @@
+1) Citizen Request
+- Add Request
+    a) Endpoint to add the request to
+        JSON for endpoint request (Add Request JSON)
+        {
+            itemId,
+            numberOfPeople,
+            citizenId
+        }
+    b) What are the fields for the Frontend
+        - Item Dropdown (endpoints used: /items or /items/search)
+        - Category Dorpdown (endpoints used: /category /items/category)
+        - Number of people (number input field)
+        - Submit Request Button
+
+- Get Request Of Citizen
+    a) Endpoint to fetch the requests
+        JSON for endpoint response
+    [
+        {
+            status,
+            itemId,
+            numberOfPeople,
+            quantity,
+            created_at,
+            completed_at,
+            assumed_at
+        },
+        .
+        .
+    ]
+    b) Frontend List to shwo the requests
