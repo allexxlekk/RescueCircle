@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Populate item details on the page
         document.getElementById('item-name').textContent = item.name;
         document.getElementById('item-category').textContent = item.category_name;
+        document.getElementById('item-description').textContent = item.description;
+        document.getElementById('item-quantity').textContent = item.quantity;
     } catch (error) {
         // Handle errors during the fetch
         console.error('Error fetching the item:', error);
