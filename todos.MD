@@ -30,3 +30,15 @@
         .
     ]
     b) Frontend List to show the requests
+
+2) Create Rescuers
+   
+   {
+    username,
+    fullname,
+    email,
+    password,
+    phone,
+    longitude,
+    latitude,
+   }
