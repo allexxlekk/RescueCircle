@@ -18,16 +18,22 @@ router.post('/', async (req, res) => {
     }
 });
 
-// // GET ALL CATEGORIES
-// router.get('/', async (req, res) => {
-//   try{
-//     const categories = await categoryService.getAllCategories();
-//     res.status(200).json({categories});
-//   }catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Error fetching categories'});
-//   }
-// });
+// // GET 
+router.get('/citizen/:citizenId', async (req, res) => {
+    try {
+      // Extract the citizenId from the route parameters
+      const citizenId = req.params.citizenId;
+  
+      // Call your service function with the extracted citizenId
+      const requests = await requestService.fetchRequestsForCitizen(citizenId);
+  
+      // Send the fetched requests as a JSON response
+      res.status(200).json(requests);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error fetching requests' });
+    }
+  });
 
 
 module.exports = router;
