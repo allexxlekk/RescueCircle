@@ -53,3 +53,6 @@ INSERT INTO item_details (name, value, item_id) VALUES ('Organic', 'Yes', 11);
 -- 'Bread' has ID 21
 INSERT INTO item_details (name, value, item_id) VALUES ('Weight', '500g', 21);
 INSERT INTO item_details (name, value, item_id) VALUES ('Grain', 'Whole Wheat', 21);
+
+INSERT INTO user (username, password, role, full_name, email, phone, location_id)
+VALUES ('citizen1', 'password123', 'CITIZEN', 'John Doe', 'john@example.com', '1234567890', null);

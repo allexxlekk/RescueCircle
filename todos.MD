@@ -3,8 +3,8 @@
     a) Endpoint to add the request to
         JSON for endpoint request (Add Request JSON)
         {
-            itemId,
-            numberOfPeople,
+            itemId, -->dropdown
+            numberOfPeople, --> number input
             citizenId
         }
     b) What are the fields for the Frontend
@@ -13,7 +13,7 @@
         - Number of people (number input field)
         - Submit Request Button
 
-- Get Request Of Citizen
+- Get Request Of Citizen -- DONE
     a) Endpoint to fetch the requests
         JSON for endpoint response
     [
@@ -29,4 +29,4 @@
         .
         .
     ]
-    b) Frontend List to shwo the requests
+    b) Frontend List to show the requests
