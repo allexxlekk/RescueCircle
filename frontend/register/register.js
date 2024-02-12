@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     maxZoom: 18,
   }).addTo(mymap);
 
-  mymap.on("click", onMapClick);
-  
   mymap.setView([baseLocation.latitude, baseLocation.longitude], 12);
   let center = [baseLocation.latitude, baseLocation.longitude];
   const radius = 5000;
@@ -22,6 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     fillOpacity: 0.1,
     radius: radius,
   }).addTo(mymap);
+
+  circle.on("click", onMapClick);
 });
 
 function onMapClick(e) {
@@ -31,15 +31,10 @@ function onMapClick(e) {
     theMarker.setLatLng(e.latlng);
   } else {
     // Create a new draggable marker at the clicked position
-    theMarker = L.marker(e.latlng, { draggable: true }).addTo(mymap);
-
-    // Event listener for the marker to log new position after drag ends
-    theMarker.on("dragend", function (event) {
-      var marker = event.target;
-      var position = marker.getLatLng();
-      console.log("Marker new position: ", position);
-    });
+    theMarker = L.marker(e.latlng, { draggable: false }).addTo(mymap);
   }
+  var position = theMarker.getLatLng();
+  console.log("Marker new position: ", position);
 }
 
 //API CALLS
