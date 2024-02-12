@@ -24,7 +24,7 @@ const registerUser = async (newUser) => {
       "INSERT INTO location (latitude, longitude) VALUES (?,?)";
     const locationResult = await dbConnection
       .promise()
-      .query(locationInsert, [newUser.longitude, newUser.latitude]);
+      .query(locationInsert, [newUser.latitude, newUser.longitude]);
 
     const locationId = locationResult[0].insertId;
     const query =
