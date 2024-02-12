@@ -1,68 +1,86 @@
 let mymap = L.map("mapid").setView([51.505, -0.09], 13);
 let theMarker = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  let baseLocation = await getBaseLocation();
+  baseLocation = baseLocation[0];
 
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+  }).addTo(mymap);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-            'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 18,
-    }).addTo(mymap);
-    mymap.on('click', onMapClick);
-
+  mymap.on("click", onMapClick);
+  
+  mymap.setView([baseLocation.latitude, baseLocation.longitude], 12);
+  let center = [baseLocation.latitude, baseLocation.longitude];
+  const radius = 5000;
+  const circle = L.circle(center, {
+    color: "red",
+    fillColor: "#f03",
+    fillOpacity: 0.1,
+    radius: radius,
+  }).addTo(mymap);
 });
 
-
 function onMapClick(e) {
-    // Check if the marker already exists
-    if (theMarker != null) {
-        // Move the existing marker to the new location
-        theMarker.setLatLng(e.latlng);
-    } else {
-        // Create a new draggable marker at the clicked position
-        theMarker = L.marker(e.latlng, { draggable: true }).addTo(mymap);
+  // Check if the marker already exists
+  if (theMarker != null) {
+    // Move the existing marker to the new location
+    theMarker.setLatLng(e.latlng);
+  } else {
+    // Create a new draggable marker at the clicked position
+    theMarker = L.marker(e.latlng, { draggable: true }).addTo(mymap);
 
-        // Event listener for the marker to log new position after drag ends
-        theMarker.on('dragend', function (event) {
-            var marker = event.target;
-            var position = marker.getLatLng();
-            console.log("Marker new position: ", position);
-        });
-    }
-};
+    // Event listener for the marker to log new position after drag ends
+    theMarker.on("dragend", function (event) {
+      var marker = event.target;
+      var position = marker.getLatLng();
+      console.log("Marker new position: ", position);
+    });
+  }
+}
 
 //API CALLS
 
 async function postRegister(register) {
-    const postRegister = await fetch('http://localhost:3000/reqister', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(register),
-    });
+  const postRegister = await fetch("http://localhost:3000/reqister", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(register),
+  });
 }
 
-// 
+//
 
-let registerButton = document.getElementById('register-button');
-registerButton.addEventListener('click', async () => {
+let registerButton = document.getElementById("register-button");
+registerButton.addEventListener("click", async () => {
+  let position = theMarker.getLatLng();
 
-    let position = theMarker.getLatLng();
-
-    console.log(username, fullname, email, password);
-    const registerObject = {
-        username: document.getElementById('username').value,
-        fullname: document.getElementById('fullname').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        phone: document.getElementById('phone').value,
-        longitude: position.lng,
-        latitude: position.lat,
-    }
-    console.log(registerObject);
-    await postRegister(registerObject);
+  console.log(username, fullname, email, password);
+  const registerObject = {
+    username: document.getElementById("username").value,
+    fullname: document.getElementById("fullname").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    phone: document.getElementById("phone").value,
+    longitude: position.lng,
+    latitude: position.lat,
+  };
+  console.log(registerObject);
+  await postRegister(registerObject);
 });
 
+async function getBaseLocation() {
+  try {
+    const response = await fetch("http://localhost:3000/baseLocation");
 
+    return await response.json(); // Return the data
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error; // Re-throw the error to be caught in the higher level
+  }
+}

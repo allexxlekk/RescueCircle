@@ -5,6 +5,7 @@ const categoriesRouter = require('./routes/categories');
 const itemsRouter = require('./routes/items');
 const requestsRouter = require('./routes/requests');
 const userService = require('./services/userService');
+const locationService = require('./services/locationService');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -68,6 +69,10 @@ app.listen(port, () => {
     console.log(`Backend Server is running on http://localhost:${port}`);
 });
 
+
+app.get('/baseLocation', async (req, res) => {
+    res.send(await locationService.baseLocation());
+});
 
 function isValidPassword(password) {
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/;
