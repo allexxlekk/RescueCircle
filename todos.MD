@@ -41,4 +41,5 @@
     phone,
     longitude,
     latitude,
+    role,
    }

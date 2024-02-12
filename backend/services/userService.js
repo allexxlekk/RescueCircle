@@ -9,18 +9,23 @@ const {sign} = require("jsonwebtoken");
  * @property {string} username - The username for the new user. (Required)
  * @property {string} password - The password for the new user. (Required)
  * @property {string} role - The role of the new user, which should be one of 'ADMIN', 'RESCUER', or 'CITIZEN'. (Required)
- * @property {string} full_name - The full name of the new user. (Optional)
+ * @property {string} fullname - The full name of the new user. (Optional)
  * @property {string} email - The email address of the new user. (Required)
  * @property {string} phone - The phone number of the new user. (Required)
- * @property {number} location_id - The ID of the user's location. (Optional)
+ * @property {number} longitude
+ * @property {number} latitude
  */
 const registerUser = async (newUser) => {
     try {
         // Encrypt Password
         const hashedPassword = await bcrypt.hash(newUser.password, 10);
 
-        const query = 'INSERT INTO user (username, password, role, full_name, email, phone) VALUES (?,?,?,?,?,?)';
-        await dbConnection.promise().query(query, [newUser.username, hashedPassword, newUser.role, newUser.full_name, newUser.email, newUser.phone]);
+        const locationInsert = 'INSERT INTO location (latitude, longitude) VALUES (?,?)';
+        const locationResult = await dbConnection.promise().query(locationInsert, [newUser.longitude, newUser.latitude]);
+
+        const locationId = locationResult[0].insertId;
+        const query = 'INSERT INTO user (username, password, role, full_name, email, phone, location_id) VALUES (?,?,?,?,?,?,?)';
+        await dbConnection.promise().query(query, [newUser.username, hashedPassword, newUser.role, newUser.fullname, newUser.email, newUser.phone,locationId]);
 
         return 'User registered successfully';
     } catch (err) {

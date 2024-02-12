@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }).addTo(mymap);
 
   circle.on("click", onMapClick);
+
+  const registerButton = document.getElementById("register-button");
+  registerButton.addEventListener('click', registerUser);
+
 });
 
 function onMapClick(e) {
@@ -40,7 +44,7 @@ function onMapClick(e) {
 //API CALLS
 
 async function postRegister(register) {
-  const postRegister = await fetch("http://localhost:3000/reqister", {
+  const postRegister = await fetch("http://localhost:3000/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -51,14 +55,14 @@ async function postRegister(register) {
 
 //
 
-let registerButton = document.getElementById("register-button");
-registerButton.addEventListener("click", async () => {
+const registerUser = async () => {
   let position = theMarker.getLatLng();
 
   console.log(username, fullname, email, password);
   const registerObject = {
     username: document.getElementById("username").value,
     fullname: document.getElementById("fullname").value,
+    role: 'CITIZEN',
     email: document.getElementById("email").value,
     password: document.getElementById("password").value,
     phone: document.getElementById("phone").value,
@@ -67,7 +71,7 @@ registerButton.addEventListener("click", async () => {
   };
   console.log(registerObject);
   await postRegister(registerObject);
-});
+};
 
 async function getBaseLocation() {
   try {
