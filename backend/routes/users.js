@@ -85,4 +85,37 @@ router.get('/byRole', async (req, res) => {
 
 });
 
+router.get('/markers/:role', async (req, res) => {
+  //BLOCK 1 START
+  // Check restrictions for bad requests
+  //TODO: ADD ADMIN ONLY REQUIRED
+  //if(!userService.isAdmin){
+    // return res.status(404).json({error : 'Not found'})
+  // }
+
+  const role = req.params.role.toUpperCase();
+
+  if (!role) {
+    return res.status(400).json({ error: 'Role is required' });
+  }
+
+ if(role != "CITIZEN" && role != "RESCUER"){
+    return res.status(400).json({error: 'Invalid Role'})
+ }
+
+  //BLOCK 2 START
+  // Implements business logic  
+  try {
+    const users = await userService.getMarkersByRole(role);
+    res.status(200).json(users);
+  // BLOCK 2 END
+  }
+  // ERROR MESSAGE  
+  catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error during get users markers by role' });
+  }
+
+});
+
 module.exports = router;
