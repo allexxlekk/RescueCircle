@@ -118,19 +118,3 @@ BEGIN
         SET NEW.offer_quantity = 2;
     END IF;
 END;
-
-
-CREATE TRIGGER before_request_insert
-BEFORE INSERT
-ON request FOR EACH ROW
-BEGIN
-    DECLARE offer_quantity INT;
-    
-    -- Retrieve the offer_quantity from the item table
-    SELECT offer_quantity INTO offer_quantity
-    FROM item
-    WHERE id = NEW.item_id;
-    
-    -- Set the quantity for the new request
-    SET NEW.quantity = NEW.number_of_people * offer_quantity;
-END;

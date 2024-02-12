@@ -54,5 +54,11 @@ INSERT INTO item_details (name, value, item_id) VALUES ('Organic', 'Yes', 11);
 INSERT INTO item_details (name, value, item_id) VALUES ('Weight', '500g', 21);
 INSERT INTO item_details (name, value, item_id) VALUES ('Grain', 'Whole Wheat', 21);
 
+
+INSERT INTO location (id, latitude, longitude, distance_to_base) VALUES(1, 38.24289851714071, 21.727808051916337, 0);
+
+INSERT INTO user (id, username, password, role, full_name, email, phone, location_id)
+VALUES(1, 'admin', 'admin', 'ADMIN', '', 'admin.base0@system.gov', '', 1);
+
 INSERT INTO user (username, password, role, full_name, email, phone, location_id)
 VALUES ('citizen1', 'password123', 'CITIZEN', 'John Doe', 'john@example.com', '1234567890', null);
