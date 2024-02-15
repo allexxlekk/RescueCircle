@@ -46,7 +46,5 @@
     Request Body{
         name,
         description,
-        announcementNeeds : [
-            itemId
-        ]
+        items: [itemId1, itemId2, ...]
     }
