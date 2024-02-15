@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const dbConnection = require("../config/db");
+const locationService = require("./locationService")
 const { sign } = require("jsonwebtoken");
 
 /**
@@ -14,22 +15,32 @@ const { sign } = require("jsonwebtoken");
  * @property {string} phone - The phone number of the new user. (Required)
  * @property {number} longitude
  * @property {number} latitude
+ * @property {string} vehicleType
  */
 const registerUser = async (newUser) => {
   try {
     // Encrypt Password
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
 
+    let lat = newUser.latitude;
+    let lng = newUser.longitude;
+
+    if(newUser.role === "RESCUER"){
+        const baseCoordinates = await locationService.baseLocation();
+        lat = baseCoordinates[0].latitude;
+        lng = baseCoordinates[0].longitude;
+    }
+
     const locationInsert =
       "INSERT INTO location (latitude, longitude) VALUES (?,?)";
     const locationResult = await dbConnection
       .promise()
-      .query(locationInsert, [newUser.latitude, newUser.longitude]);
+      .query(locationInsert, [lat, lng]);
 
     const locationId = locationResult[0].insertId;
     const query =
       "INSERT INTO user (username, password, role, full_name, email, phone, location_id) VALUES (?,?,?,?,?,?,?)";
-    await dbConnection
+    const userResult = await dbConnection
       .promise()
       .query(query, [
         newUser.username,
@@ -40,6 +51,14 @@ const registerUser = async (newUser) => {
         newUser.phone,
         locationId,
       ]);
+
+    if (newUser.role === "RESCUER") {
+      const userId = userResult[0].insertId;
+
+      const vehicleInsert =
+        "INSERT INTO rescue_vehicle (type, rescuer_id) VALUES (?, ?)";
+      await dbConnection.promise().query(vehicleInsert, [newUser.vehicleType, userId]);
+    }
 
     return "User registered successfully";
   } catch (err) {
