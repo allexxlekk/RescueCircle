@@ -34,12 +34,16 @@
 2) Create Rescuers
    
    {
-    username,
+   
     fullname,
     email,
     password,
     phone,
-    longitude,
-    latitude,
     role,
+
+    vehicle: {
+        type, 
+    }
    }
+
+   P@ssw0rd

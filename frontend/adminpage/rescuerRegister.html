@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rescuer Register</title>
+    
+    <link rel="stylesheet" href="rescuerRegister.css">
+</head>
+<body>
+    <h1>Register To Rescue Circle<img src="../resources/rescue_circle_logo.webp" alt="" width="100px""></h1>
+    <div id="rescuerRegistrationForm">
+    
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required>
+        
+        
+        <label for="vehicle_type">Vehicle Type:</label>
+        <select id="vehicle_type" name="type" required>
+            <option value="PERSONAL USE">PERSONAL USE</option>
+            <option value="VAN">VAN</option>
+            <option value="PICKUP TRUCK">PICKUP TRUCK</option>
+        </select>
+
+           
+            
+        </div>
+
+        <div id="mapid" style="width: 600px; height: 400px;"></div>
+        <button id="register-button"type="submit">Register</button>
+
+        
+    </div>
+
+    <script src="rescuerRegister.js"></script>
+</body>
+</html>
