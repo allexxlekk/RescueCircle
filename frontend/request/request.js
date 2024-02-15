@@ -33,7 +33,7 @@ async function fetchItems() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const citizenId = 2;
+    const citizenId = 8;
 
     let requests = await fetchRequests(citizenId);
     console.log(requests);

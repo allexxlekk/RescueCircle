@@ -34,13 +34,11 @@
 2) Create Rescuers
    
    {
-    username,
+   
     fullname,
     email,
     password,
     phone,
-    longitude,
-    latitude,
     role,
    }
 3) Create Announcements

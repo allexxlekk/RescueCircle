@@ -100,9 +100,8 @@ CREATE TABLE offer
 CREATE TABLE rescue_vehicle
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
-    type       VARCHAR(255) NOT NULL,
-    capacity   INT,
-    status     ENUM ('AVAILABLE', 'UNAVAILABLE') DEFAULT 'AVAILABLE',
+    type       ENUM('PERSONAL USE','VAN','PICKUP TRUCK') NOT NULL,
+    status     ENUM ('WAITING', 'ACTIVE' ,'UNAVAILABLE') DEFAULT 'WAITING',
     rescuer_id INT,
     FOREIGN KEY (rescuer_id) REFERENCES user (id)
 );
