@@ -4,6 +4,7 @@ const userRouter = require('./routes/users');
 const categoriesRouter = require('./routes/categories');
 const itemsRouter = require('./routes/items');
 const requestsRouter = require('./routes/requests');
+const anouncementsRouter = require('./routes/announcements');
 const userService = require('./services/userService');
 const locationService = require('./services/locationService');
 const bodyParser = require('body-parser');
@@ -19,6 +20,7 @@ app.use('/users', userRouter);
 app.use('/categories', categoriesRouter)
 app.use('/items', itemsRouter)
 app.use('/requests', requestsRouter)
+app.use('/announcements', anouncementsRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

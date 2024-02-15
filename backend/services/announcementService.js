@@ -1,93 +1,50 @@
 const bcrypt = require("bcrypt");
 const dbConnection = require("../config/db");
-const locationService = require("./locationService")
+const locationService = require("./locationService");
 const { sign } = require("jsonwebtoken");
 
 /**
- * Represents a JSON request for user registration.
+ * JSON Request
  *
- * @typedef {Object} newUser
- * @property {string} username - The username for the new user. (Required)
- * @property {string} password - The password for the new user. (Required)
- * @property {string} role - The role of the new user, which should be one of 'ADMIN', 'RESCUER', or 'CITIZEN'. (Required)
- * @property {string} fullname - The full name of the new user. (Optional)
- * @property {string} email - The email address of the new user. (Required)
- * @property {string} phone - The phone number of the new user. (Required)
- * @property {number} longitude
- * @property {number} latitude
- * @property {string} vehicleType
+ * @typedef {Object} newAnnouncement
+ * @property {string} name
+ * @property {number} description
+ * @property {list} items
  */
 const createAnnouncement = async (newAnnouncement) => {
   try {
-    // Encrypt Password
-    const hashedPassword = await bcrypt.hash(newUser.password, 10);
-
-    let lat = newUser.latitude;
-    let lng = newUser.longitude;
-
-    if(newUser.role === "RESCUER"){
-        const baseCoordinates = await locationService.baseLocation();
-        lat = baseCoordinates[0].latitude;
-        lng = baseCoordinates[0].longitude;
-    }
-
-    const locationInsert =
-      "INSERT INTO location (latitude, longitude) VALUES (?,?)";
-    const locationResult = await dbConnection
+    let items = newAnnouncement.items.filter(onlyUnique);
+    const announcementInsert =
+      "INSERT INTO announcement (name, description) VALUES (?,?)";
+    const announcementResult = await dbConnection
       .promise()
-      .query(locationInsert, [lat, lng]);
-
-    const locationId = locationResult[0].insertId;
-    const query =
-      "INSERT INTO user (username, password, role, full_name, email, phone, location_id) VALUES (?,?,?,?,?,?,?)";
-    const userResult = await dbConnection
-      .promise()
-      .query(query, [
-        newUser.username,
-        hashedPassword,
-        newUser.role,
-        newUser.fullname,
-        newUser.email,
-        newUser.phone,
-        locationId,
+      .query(announcementInsert, [
+        newAnnouncement.name,
+        newAnnouncement.description,
       ]);
 
-    if (newUser.role === "RESCUER") {
-      const userId = userResult[0].insertId;
+    const announcementId = announcementResult[0].insertId;
+    const itemInsertQuery =
+      "INSERT INTO announcements_needs (announcement_id, item_id) VALUES (?,?)";
+    
+    for (const item of items) {
+        await dbConnection.promise().query(itemInsertQuery, [announcementId, item]);
+      }
+    return "Announcement Created Successfully";
 
-      const vehicleInsert =
-        "INSERT INTO rescue_vehicle (type, rescuer_id) VALUES (?, ?)";
-      await dbConnection.promise().query(vehicleInsert, [newUser.vehicleType, userId]);
-    }
-
-    return "User registered successfully";
   } catch (err) {
-    if (err.code === "ER_DUP_ENTRY") {
-      // Handle duplicate entry error (email or username already exists)
-      console.error("Duplicate entry:", err.message);
-      throw new Error("User with the same email or username already exists.");
-    } else {
-      // Handle other database errors
-      console.error("Error registering user:", err);
-      throw err;
-    }
+    console.error("Error creating announcement:", err);
+    throw err;
   }
 };
 
-const authenticateUser = async (email, password) => {
+const getAllAnnouncements = async () => {
   try {
-    const query = "SELECT user.email, user.password FROM user WHERE email = ?";
-    const [result] = await dbConnection.promise().query(query, [email]);
-
-    if (result.length === 0) {
-      // User not found
-      return false;
-    }
-
-    const user = result[0];
+    const query = "SELECT ann.id, ann.name, ann.description FROM announcement AS ann";
+    const [announcements] = await dbConnection.promise().query(query);
 
     // Compare the entered password with the stored password hash
-    return await bcrypt.compare(password, user.password);
+    return announcements;
   } catch (error) {
     // Handle any errors that occur during the database query or password comparison
     console.error("Error authenticating user:", error.message);
@@ -166,9 +123,11 @@ const getMarkersByRole = async (role) => {
   }
 };
 
+function onlyUnique(value, index, array) {
+  return array.indexOf(value) === index;
+}
 
 module.exports = {
-  registerUser,
-  usernameAvailable,
-  emailAvailable,
+  createAnnouncement,
+  getAllAnnouncements
 };
