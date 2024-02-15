@@ -43,3 +43,12 @@
     latitude,
     role,
    }
+3) Create Announcements
+    POST /api/announcements
+    Request Body{
+        name,
+        description,
+        announcementNeeds : [
+            itemId
+        ]
+    }
