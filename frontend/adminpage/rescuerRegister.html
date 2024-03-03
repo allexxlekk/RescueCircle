@@ -1,45 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rescuer Register</title>
-    
+
     <link rel="stylesheet" href="rescuerRegister.css">
 </head>
+
 <body>
+    <header>
+        <a href="announcements.html">Announcements</a>
+        <a href="adminpage.html">Admin page</a>
+        <a href="rescuerRegister.html">Create Rescuer</a>
+        <a href="../item/addItem.html">Create Item</a>
+        <a href="../item/item.html">See Item</a>
+
+    </header>
+
     <h1>Register To Rescue Circle</h1><br>
     <img src="../resources/rescue_circle_logo.webp" alt="" width="100px"">
-    <div id="rescuerRegistrationForm">
-    
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+    <div id=" rescuerRegistrationForm">
 
-        <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" required>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <label for="fullname">Full Name:</label>
+    <input type="text" id="fullname" name="fullname" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
 
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required>
-        
-        
-        <label for="vehicle_type">Vehicle Type:</label>
-        <select id="vehicle_type" name="type" required>
-            <option value="PERSONAL USE">PERSONAL USE</option>
-            <option value="VAN">VAN</option>
-            <option value="PICKUP TRUCK">PICKUP TRUCK</option>
-        </select>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
 
-        </div>
+    <label for="phone">Phone:</label>
+    <input type="tel" id="phone" name="phone" required>
 
-        <button id="register-button"type="submit">Register</button>
+
+    <label for="vehicle_type">Vehicle Type:</label>
+    <select id="vehicle_type" name="type" required>
+        <option value="PERSONAL USE">PERSONAL USE</option>
+        <option value="VAN">VAN</option>
+        <option value="PICKUP TRUCK">PICKUP TRUCK</option>
+    </select>
+
+    </div>
+
+    <button id="register-button" type="submit">Register</button>
     </div>
 
     <script src="rescuerRegister.js"></script>
 </body>
+
 </html>

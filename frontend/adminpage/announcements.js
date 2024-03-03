@@ -15,6 +15,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         let itemList = await fetchItems();
         addItemToList(itemList);
     });
+
+    let headerLinks = document.querySelectorAll('header a');
+    headerLinks.forEach(function (link) {
+
+        link.addEventListener('click', function () {
+
+        });
+    });
+
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all <a> tags within the header
+    var headerLinks = document.querySelectorAll('header a');
+
+    // Iterate through each <a> tag
+    headerLinks.forEach(function (link) {
+        // Add event listener, e.g., for logging the href attribute
+        link.addEventListener('click', function () {
+            console.log(link.href);
+            // You can perform other actions here
+        });
+    });
 });
 
 async function fetchItems() {
