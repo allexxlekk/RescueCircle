@@ -49,4 +49,4 @@
         items: [itemId1, itemId2, ...]
     }
 
-    
+   Announcement: Create select more than one item in each announcement.

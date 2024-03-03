@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const items = await fetchItems();
+    let items = await fetchItems();
     const itemDropdown = document.getElementById('item');
-
     // Populate the item dropdown
     items.forEach(item => {
         const option = document.createElement('option');
@@ -11,7 +10,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 
-    document.getElementById('annButton').addEventListener('click', createAnnouncement);
+    document.getElementById('addButton').addEventListener('click', createAnnouncement);
+    document.getElementById('add-item-button').addEventListener('click', async () => {
+        let itemList = await fetchItems();
+        addItemToList(itemList);
+    });
 });
 
 async function fetchItems() {
@@ -27,13 +30,22 @@ async function fetchItems() {
 async function createAnnouncement() {
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
-    const selectedItem = document.getElementById('item');
-    const selectedItemId = selectedItem.options[selectedItem.selectedIndex].value;
+    const itemList = document.getElementById('item-list');
 
+    // Use querySelectorAll to get all select elements within itemList
+    const selectElements = itemList.querySelectorAll('select');
+
+    // Convert the NodeList to an array (if needed)
+    const selectArray = Array.from(selectElements);
+    const selectedItemIds = []
+    selectArray.forEach(selectedItem =>
+        selectedItemIds.push(selectedItem.options[selectedItem.selectedIndex].value))
+
+    const uniqueItemIds = [...new Set(selectedItemIds)];
     const announcementBody = {
         name,
         description,
-        items: [selectedItemId]
+        items: uniqueItemIds
     };
 
     try {
@@ -52,24 +64,21 @@ async function createAnnouncement() {
     }
 }
 
+const addItemToList = (items) => {
+    const itemList = document.getElementById('item-list');
+    const newSelect = document.createElement("select")
+    newSelect.id = `item-${itemList.length}`;
+    items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.name;
+        newSelect.appendChild(option);
+    });
+    const newLi = document.createElement("li");
+    newLi.appendChild(newSelect);
+    itemList.appendChild(newLi);
 
-
-// const Createannouncement = async () => {
-
-//     const announcementObject = {
-//         name: document.getElementById("name").value,
-//         description: document.getElementById("description").value,
-//         items: []
-//     }
-//     console.log(announcementObject);
-// }
-// document.addEventListener("DOMContentLoaded", async () => {
-
-//     const annButton = document.getElementById("annButton");
-//     annButton.addEventListener('click', Createannouncement);
-
-// });
-
+}
 
 // API CALLS
 async function fetchItems() {
