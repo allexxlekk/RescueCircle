@@ -20,28 +20,28 @@
 
     </header>
     <div id="main">
-    <div id="header-container">
-        <h1>Items in the base</h1>
+        <div id="header-container">
+            <h1>Items in the base</h1>
 
-        <!-- Category Filtering -->
-        <label for="category-filter">Filter Category:</label>
-        <select id="category-filter"></select>
+            <!-- Category Filtering -->
+            <label for="category-filter">Filter Category:</label>
+            <select id="category-filter"></select>
+        </div>
+
+        <!-- Search Filtering -->
+        <label for="search-filter">Search: </label><input type="text" id="search-filter"
+            placeholder="e.g. Water, Shoes, ...">
+
+        <!-- Synchronize Button -->
+        <button id="synchronize-button">Synchronize</button>
+
+        <!-- File Upload for JSON -->
+        <label for="file-upload">Upload JSON File:</label>
+        <input type="file" id="file-upload" accept=".json">
+
+        <!-- Item List -->
+        <ul id="item-list"></ul>
     </div>
-
-    <!-- Search Filtering -->
-    <label for="search-filter">Search: </label><input type="text" id="search-filter"
-        placeholder="e.g. Water, Shoes, ...">
-
-    <!-- Synchronize Button -->
-    <button id="synchronize-button">Synchronize</button>
-
-    <!-- File Upload for JSON -->
-    <label for="file-upload">Upload JSON File:</label>
-    <input type="file" id="file-upload" accept=".json">
-
-    <!-- Item List -->
-    <ul id="item-list"></ul>
-</div>
 
     <script src="item.js"></script>
 </body>
