@@ -29,7 +29,7 @@ router.put('/', async (req, res) => {
         //1) 
         const itemAdded = await itemService.editItem(item);
         if (itemAdded) {
-            res.status(201).json({ message: 'Item added successfully' });
+            res.status(201).json({ message: 'Item updated successfully' });
         } else {
             res.status(409).json({ error: 'Item already exists' });
         }

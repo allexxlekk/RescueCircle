@@ -61,34 +61,30 @@ const addItem = async (item) => {
  * Adds a new item and its details.
  * @param {{name: string, description: string, quantity: number, offer_quantity: number, category: string}} item - The item to add.
  */
- const editItem = async (item) => {
+const editItem = async (item) => {
   try {
-    if (!(await itemExists(item))) {
-      const category = await getCategoryByName(item.category);
+    const category = await getCategoryByName(item.category);
 
-      if (!category) {
-        console.error("Category not found:", item.category);
-        return false; // Handle category not found
-      }
-
-      const categoryId = category.id;
-
-      const insertItemQuery =
-        "UPDATE INTO rescue_circle.item (name, description, quantity, offer_quantity, category_id) VALUES(?, ?, ?, ?, ?)";
-      const itemResult = await dbConnection
-        .promise()
-        .query(insertItemQuery, [
-          item.name,
-          item.description,
-          item.quantity,
-          item.offer_quantity,
-          categoryId,
-        ]);
-
-      return true; // Item and its details added successfully
-    } else {
-      return false; // Item already exists
+    if (!category) {
+      console.error("Category not found:", item.category);
+      return false; // Handle category not found
     }
+
+    const categoryId = category.id;
+
+    const insertItemQuery =
+      "UPDATE rescue_circle.item SET name = ?, description = ?, quantity = ?, category_id = ? WHERE id = ?";
+    const itemResult = await dbConnection
+      .promise()
+      .query(insertItemQuery, [
+        item.name,
+        item.description,
+        item.quantity,
+        categoryId,
+        item.id,
+      ]);
+
+    return true; // Item and its details added successfully
   } catch (err) {
     console.error("Error on add item:", err);
     throw err;
@@ -111,18 +107,17 @@ const getAllItems = async () => {
 };
 
 const changeItemQuantity = async (itemId, quantity) => {
-    try {
-      const query = `UPDATE item SET quantity = ? WHERE id = ?;`;
-    
-      console.log('Before query')
-      const reult = await dbConnection.promise().query(query, [quantity, itemId]);
-      console.log('After query');
-    } catch (err) {
-      console.error("Error updating item quantity:", err);
-      throw err;
-    }
-  };
-  
+  try {
+    const query = `UPDATE item SET quantity = ? WHERE id = ?;`;
+
+    console.log("Before query");
+    const reult = await dbConnection.promise().query(query, [quantity, itemId]);
+    console.log("After query");
+  } catch (err) {
+    console.error("Error updating item quantity:", err);
+    throw err;
+  }
+};
 
 const getItemDetailsByName = async (name) => {
   try {
@@ -324,5 +319,5 @@ module.exports = {
   checkItemAvailability,
   getItemById,
   changeItemQuantity,
-  editItem
+  editItem,
 };
