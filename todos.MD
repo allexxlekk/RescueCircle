@@ -49,7 +49,7 @@
         items: [itemId1, itemId2, ...]
     }
 
-   
-quantity
-name
+    PATCH /api/items/change-quantity?quantity=&id= 
+ 
+
 
