@@ -154,6 +154,28 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+//CHANGE ITEM QUANTITY
+router.patch('/change-quantity', async (req, res) => {
+    try {
+        // Extract the item ID from the query parameter
+        const itemId = req.query.id;
+        const newQuantity = req.query.quantity;
+
+        console.log(itemId);
+        console.log(newQuantity);
+        // Retrieve and update the single item using the ID
+        await itemService.changeItemQuantity(itemId, newQuantity);
+
+        // Send a success response back to the client
+        res.status(200).json({ message: 'Item quantity updated successfully' });
+    } catch (error) {
+        console.error(error);
+        // Send an error response back to the client
+        res.status(500).json({ error: 'Error changing the item quantity' });
+    }
+});
+
+
 //TODO: add endpoint to see if the item already exists while
 // typing the item name in the frontend
 
