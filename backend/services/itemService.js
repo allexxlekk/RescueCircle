@@ -57,6 +57,44 @@ const addItem = async (item) => {
   }
 };
 
+/**
+ * Adds a new item and its details.
+ * @param {{name: string, description: string, quantity: number, offer_quantity: number, category: string}} item - The item to add.
+ */
+ const editItem = async (item) => {
+  try {
+    if (!(await itemExists(item))) {
+      const category = await getCategoryByName(item.category);
+
+      if (!category) {
+        console.error("Category not found:", item.category);
+        return false; // Handle category not found
+      }
+
+      const categoryId = category.id;
+
+      const insertItemQuery =
+        "UPDATE INTO rescue_circle.item (name, description, quantity, offer_quantity, category_id) VALUES(?, ?, ?, ?, ?)";
+      const itemResult = await dbConnection
+        .promise()
+        .query(insertItemQuery, [
+          item.name,
+          item.description,
+          item.quantity,
+          item.offer_quantity,
+          categoryId,
+        ]);
+
+      return true; // Item and its details added successfully
+    } else {
+      return false; // Item already exists
+    }
+  } catch (err) {
+    console.error("Error on add item:", err);
+    throw err;
+  }
+};
+
 const getAllItems = async () => {
   try {
     const query = `
@@ -286,4 +324,5 @@ module.exports = {
   checkItemAvailability,
   getItemById,
   changeItemQuantity,
+  editItem
 };

@@ -138,6 +138,13 @@ async function synchronizeItemList() {
 
 // EVENT LISTENERS //
 
+const editButton = document.getElementById("edit-button");
+const saveButton = document.getElementById("save-button");
+const form = document.getElementById("item-form");
+const cancelButton = document.getElementById("cancel-button");
+let selectedItemId;
+let originalItemDetails = {};
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Show items at the start
   let items = await fetchItems();
@@ -150,6 +157,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   const categoryFilter = document.getElementById("category-filter");
   const searchFilter = document.getElementById("search-filter");
   const syncButton = document.getElementById("synchronize-button");
+
+  // Initial state: editable
+  toggleEditState(false);
+
+  // Edit button click event handler
+  editButton.addEventListener("click", function () {
+    toggleEditState(true);
+  });
+
+  // Form submit event handler
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    // Here you can handle form submission, for example, by sending data to the server via AJAX
+    toggleEditState(false); // Switch back to read-only mode after saving
+  });
+
+  // Cancel button click event handler
+  cancelButton.addEventListener("click", function () {
+    // Reset form fields to original values
+    document.getElementById("detail-name").value = originalItemDetails.name;
+    document.getElementById("detail-category").value =
+      originalItemDetails.category_name;
+    document.getElementById("detail-description").value =
+      originalItemDetails.description;
+    document.getElementById("detail-quantity").value =
+      originalItemDetails.quantity;
+
+    // Switch back to read-only mode
+    toggleEditState(false);
+  });
 
   categoryFilter.addEventListener("change", async (e) => {
     await filterItemsByCategory(e.target.value);
@@ -189,17 +226,32 @@ function showItems(items) {
   });
 }
 
+function toggleEditState(editable) {
+  const inputs = form.querySelectorAll("input, textarea");
+  inputs.forEach((input) => {
+    input.readOnly = !editable;
+  });
+
+  // Toggle visibility of buttons
+  editButton.style.display = editable ? "none" : "inline";
+  saveButton.style.display = editable ? "inline" : "none";
+  cancelButton.style.display = editable ? "inline" : "none";
+}
+
 async function showItemDetails(itemId) {
   try {
     // Fetch item details using the correct endpoint with the itemId parameter
     const item = await fetchItemById(itemId);
 
-    // Populate item details on the page
-    document.getElementById("detail-name").textContent = item.name;
-    document.getElementById("detail-category").textContent = item.category_name;
-    document.getElementById("detail-description").textContent =
-      item.description;
-    document.getElementById("detail-quantity").textContent = item.quantity;
+    // Store original item details
+    originalItemDetails = { ...item };
+    selectedItemId = itemId;
+
+    // Populate item details in the form fields
+    document.getElementById("detail-name").value = item.name;
+    document.getElementById("detail-category").value = item.category_name;
+    document.getElementById("detail-description").value = item.description;
+    document.getElementById("detail-quantity").value = item.quantity;
   } catch (error) {
     // Handle errors during the fetch
     console.error("Error fetching the item:", error);

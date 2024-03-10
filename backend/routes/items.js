@@ -22,6 +22,23 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.put('/', async (req, res) => {
+
+    try {
+        const item = req.body;
+        //1) 
+        const itemAdded = await itemService.editItem(item);
+        if (itemAdded) {
+            res.status(201).json({ message: 'Item added successfully' });
+        } else {
+            res.status(409).json({ error: 'Item already exists' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error adding item' });
+    }
+});
+
 //GET ALL ITEMS
 router.get('/', async (req, res) => {
     try {

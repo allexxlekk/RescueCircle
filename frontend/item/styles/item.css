@@ -124,40 +124,65 @@ footer {
 }
 
 #item-details {
-  /*  */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-self: center;
-  background-color: rgb(225, 236, 174, 0.7); /* Set the background color */
-  padding: 20px;
-  margin: 10px;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
-  height: 220px;
-  width: 20rem;
-}
-
-#item-details h1 {
-  text-align: center;
-  color: #2b2e4a;
-}
-
-#item-details p {
-  margin: 10px 0;
-}
-
-#item-details strong {
-  font-weight: bold;
-}
-
-#detail-name,
-#detail-category,
-#detail-description,
-#detail-quantity {
-  color: #333;
-  font-weight: normal;
-}
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    background-color: rgb(225, 236, 174, 0.7);
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    height: auto; /* Change height to auto for dynamic content */
+    max-width: 20rem; /* Limit the maximum width */
+  }
+  
+  #item-details h1 {
+    text-align: center;
+    color: #2b2e4a;
+    margin-bottom: 10px; /* Add margin bottom for spacing */
+  }
+  
+  #item-details p {
+    margin: 10px 0;
+  }
+  
+  #item-details strong {
+    font-weight: bold;
+  }
+  
+  #detail-name,
+  #detail-category,
+  #detail-description,
+  #detail-quantity {
+    color: #333;
+    font-weight: normal;
+    width: calc(100% - 20px); /* Adjust width for input fields */
+    margin-bottom: 10px; /* Add margin bottom for spacing */
+  }
+  
+  #edit-button,
+  #save-button,
+  #cancel-button {
+    margin-top: 10px; /* Add margin top for spacing */
+    width: calc(100% - 20px); /* Make buttons full width */
+  }
+  
+  #button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  #edit-button,
+  #cancel-button {
+    flex: 1; /* Divide space equally */
+    margin-right: 5px; /* Add spacing between buttons */
+  }
+  
+  #save-button {
+    flex: 2; /* Save button takes more space */
+  }
+  
 
 #container {
   display: flex;
