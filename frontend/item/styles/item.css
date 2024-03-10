@@ -127,3 +127,32 @@ footer {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+
+#item-details {
+  background-color: rgb(225, 236, 174, 0.7); /* Set the background color */
+  padding: 20px;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+#item-details h1 {
+  text-align: center;
+  color: #2b2e4a;
+}
+
+#item-details p {
+  margin: 10px 0;
+}
+
+#item-details strong {
+  font-weight: bold;
+}
+
+#detail-name,
+#detail-category,
+#detail-description,
+#detail-quantity {
+  color: #333;
+  font-weight: normal;
+}
