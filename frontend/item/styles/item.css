@@ -91,3 +91,31 @@ footer {
 #item-list .item:hover {
     background-color:  rgb(225, 236, 174);
 }
+#item-details {
+    background-color: rgb(225, 236, 174, 0.7); /* Set the background color */
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+#item-details h1 {
+    text-align: center;
+    color: #2B2E4A;
+}
+
+#item-details p {
+    margin: 10px 0;
+}
+
+#item-details strong {
+    font-weight: bold;
+}
+
+#detail-name,
+#detail-category,
+#detail-description,
+#detail-quantity {
+    color: #333;
+    font-weight: normal;
+}

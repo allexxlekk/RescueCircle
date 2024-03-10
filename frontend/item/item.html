@@ -1,49 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Items</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="./styles/item.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./styles/item.css" />
+  </head>
 
-<body>
-
+  <body>
     <header>
-        <a href="../adminpage/announcements.html">Announcements</a>
-        <a href="../adminpage/adminpage.html">Admin page</a>
-        <a href="../adminpage/rescuerRegister.html">Create Rescuer</a>
-        <a href="addItem.html">Create Item</a>
-        <a href="item.html">See Item</a>
-
+      <a href="../adminpage/announcements.html">Announcements</a>
+      <a href="../adminpage/adminpage.html">Admin page</a>
+      <a href="../adminpage/rescuerRegister.html">Create Rescuer</a>
+      <a href="addItem.html">Create Item</a>
+      <a href="item.html">See Item</a>
     </header>
     <div id="main">
-    <div id="header-container">
+      <div id="header-container">
         <h1>Items in the base</h1>
 
         <!-- Category Filtering -->
         <label for="category-filter">Filter Category:</label>
         <select id="category-filter"></select>
+      </div>
+
+      <!-- Search Filtering -->
+      <label for="search-filter">Search: </label
+      ><input
+        type="text"
+        id="search-filter"
+        placeholder="e.g. Water, Shoes, ..."
+      />
+
+      <!-- Synchronize Button -->
+      <button id="synchronize-button">Synchronize</button>
+
+      <!-- File Upload for JSON -->
+      <label for="file-upload">Upload JSON File:</label>
+      <input type="file" id="file-upload" accept=".json" />
+
+      <!-- Item List -->
+      <ul id="item-list"></ul>
+    </div>
+    <div id="item-details">
+      <h1>Item Details</h1>
+
+      <p><strong>Name:</strong> <span id="detail-name"></span></p>
+      <p><strong>Category:</strong> <span id="detail-category"></span></p>
+      <p><strong>Description:</strong> <span id="detail-description"></span></p>
+      <p><strong>Quantity:</strong> <span id="detail-quantity"></span></p>
     </div>
 
-    <!-- Search Filtering -->
-    <label for="search-filter">Search: </label><input type="text" id="search-filter"
-        placeholder="e.g. Water, Shoes, ...">
-
-    <!-- Synchronize Button -->
-    <button id="synchronize-button">Synchronize</button>
-
-    <!-- File Upload for JSON -->
-    <label for="file-upload">Upload JSON File:</label>
-    <input type="file" id="file-upload" accept=".json">
-
-    <!-- Item List -->
-    <ul id="item-list"></ul>
-</div>
-
     <script src="item.js"></script>
-</body>
-
+  </body>
 </html>
