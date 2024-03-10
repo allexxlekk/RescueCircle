@@ -1,0 +1,93 @@
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #7976a0; /* Set the background color */
+}
+
+/* Header Styling */
+header {
+    background-color: #2B2E4A;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
+
+header a {
+    text-decoration: none;
+    color: #fff;
+    margin: 0 10px;
+}
+
+/* Container Styles */
+#header-container {
+    padding: 20px;
+    background-color: #e9dede;
+    margin: 10px; /* Add margin for spacing */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow to the container */
+}
+
+/* Form Styles */
+label {
+    font-weight: bold;
+}
+
+input[type="text"], select {
+    padding: 10px;
+    width: 20%;
+    margin-bottom: 10px;
+}
+input[type="text"]{
+    background-color: rgb(225, 236, 174);
+
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #2B2E4A;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* Item List Styling */
+#item-list {
+    list-style: none;
+    height: 500px;
+    padding: 0;
+    background-color: #2B2E4A;
+    box-shadow: 0px 3px 10px 1px rgba(0, 0, 0, 0.8); /* Add box shadow to the container */
+}
+
+.item {
+    margin: 10px;
+    padding: 15px;
+    background-color: #e9dede;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow to each item */
+}
+
+/* Footer Styling */
+footer {
+    background-color: #2B2E4A;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#item-list .item:hover {
+    background-color:  rgb(225, 236, 174);
+}
