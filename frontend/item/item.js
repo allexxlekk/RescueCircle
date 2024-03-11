@@ -167,8 +167,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // Form submit event handler
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
+    await editItem();
+    items = await fetchItems();
+    showItems(items);
     // Here you can handle form submission, for example, by sending data to the server via AJAX
     toggleEditState(false); // Switch back to read-only mode after saving
   });
@@ -177,13 +180,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   cancelButton.addEventListener("click", function () {
     // Reset form fields to original values
     document.getElementById("detail-name").value = originalItemDetails.name;
-    document.getElementById("detail-category").value =
-      originalItemDetails.category_name;
+    
     document.getElementById("detail-description").value =
       originalItemDetails.description;
     document.getElementById("detail-quantity").value =
       originalItemDetails.quantity;
+    document.getElementById("detail-offer-quantity").value =
+      originalItemDetails.offer_quantity;
 
+    const categoryDropdown = document.getElementById("detail-category");
+    const options = categoryDropdown.options;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].text === originalItemDetails.category_name) {
+            options[i].selected = true;
+            break;
+        }
+    }
     // Switch back to read-only mode
     toggleEditState(false);
   });
@@ -213,6 +225,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // HELPER FUNCTIONS //
+
+const editItem = async () => {
+  const name = document.getElementById("detail-name").value;
+  const description = document.getElementById("detail-description").value;
+  const quantity = document.getElementById("detail-quantity").value;
+  const offer_quantity = document.getElementById("detail-offer-quantity").value;
+  const categoryDropdown = document.getElementById("detail-category");
+  const category =
+    categoryDropdown.options[categoryDropdown.selectedIndex].text;
+
+  const newItem = {
+    id: selectedItemId,
+    name: name,
+    description: description,
+    quantity: quantity,
+    category: category,
+    offer_quantity: offer_quantity,
+  };
+
+  const postResponse = await fetch("http://localhost:3000/items", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newItem),
+  });
+
+  await showItemDetails(selectedItemId);
+};
+
 function showItems(items) {
   const itemListElement = document.getElementById("item-list");
   itemListElement.innerHTML = "";
@@ -227,9 +269,13 @@ function showItems(items) {
 }
 
 function toggleEditState(editable) {
-  const inputs = form.querySelectorAll("input, textarea");
+  const inputs = form.querySelectorAll("input, textarea, select");
   inputs.forEach((input) => {
-    input.readOnly = !editable;
+    if (input.tagName.toLowerCase() === "select") {
+      input.disabled = !editable;
+    } else {
+      input.readOnly = !editable;
+    }
   });
 
   // Toggle visibility of buttons
@@ -249,9 +295,30 @@ async function showItemDetails(itemId) {
 
     // Populate item details in the form fields
     document.getElementById("detail-name").value = item.name;
-    document.getElementById("detail-category").value = item.category_name;
+
+    // Fetch categories from API and populate the dropdown
+    const categories = await fetchCategories();
+    const categoryDropdown = document.getElementById("detail-category");
+    categoryDropdown.innerHTML = ""; // Clear previous options
+    categories.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category.id;
+      option.text = category.name;
+      categoryDropdown.appendChild(option);
+    });
+
+    // Preselect the category based on item's category name
+    const preselectedCategory = categories.find(
+      (category) => category.name === item.category_name
+    );
+    if (preselectedCategory) {
+      categoryDropdown.value = preselectedCategory.id;
+    }
+
     document.getElementById("detail-description").value = item.description;
     document.getElementById("detail-quantity").value = item.quantity;
+    document.getElementById("detail-offer-quantity").value =
+      item.offer_quantity;
   } catch (error) {
     // Handle errors during the fetch
     console.error("Error fetching the item:", error);

@@ -154,6 +154,7 @@ footer {
   #detail-name,
   #detail-category,
   #detail-description,
+  #detail-offer-quantity,
   #detail-quantity {
     color: #333;
     font-weight: normal;

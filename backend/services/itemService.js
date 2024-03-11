@@ -146,7 +146,7 @@ const getItemDetailsByName = async (name) => {
 const getItemById = async (id) => {
   try {
     const query = `
-            SELECT item.id, item.name, item.description, item.category_id, item.quantity, item_category.name AS category_name
+            SELECT item.id, item.name, item.description, item.category_id, item.quantity, item_category.name AS category_name, item.offer_quantity
             FROM item
                      INNER JOIN item_category ON item.category_id = item_category.id
             WHERE item.id = ?;
