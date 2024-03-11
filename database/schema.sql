@@ -106,6 +106,18 @@ CREATE TABLE rescue_vehicle
     FOREIGN KEY (rescuer_id) REFERENCES user (id)
 );
 
+CREATE TABLE rescuer_inventory
+(
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    rescuer_id      INT NOT NULL,
+    item_id         INT NOT NULL,
+    amount          INT DEFAULT 0,
+    UNIQUE INDEX idx_rescuer_item (rescuer_id, item_id), -- Add composite unique index
+    FOREIGN KEY (rescuer_id) REFERENCES user (id),
+    FOREIGN KEY (item_id) REFERENCES item (id)
+);
+
+
 CREATE TRIGGER before_insert_item
     BEFORE INSERT ON item
     FOR EACH ROW
