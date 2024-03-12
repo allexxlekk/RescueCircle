@@ -139,7 +139,6 @@ async function synchronizeItemList() {
 // EVENT LISTENERS //
 
 const editButton = document.getElementById("edit-button");
-const addButton = document.getElementById("add-button");
 const saveButton = document.getElementById("save-button");
 const form = document.getElementById("item-form");
 const cancelButton = document.getElementById("cancel-button");
@@ -162,15 +161,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Initial state: editable
   toggleEditState(false);
 
-
   // Edit button click event handler
   editButton.addEventListener("click", function () {
     toggleEditState(true);
-  });
-
-  addButton.addEventListener("click", function () {
-
-    console.log('state true')
   });
 
   // Form submit event handler
@@ -181,7 +174,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     showItems(items);
     // Here you can handle form submission, for example, by sending data to the server via AJAX
     toggleEditState(false); // Switch back to read-only mode after saving
-
   });
 
   // Cancel button click event handler
@@ -263,38 +255,6 @@ const editItem = async () => {
   await showItemDetails(selectedItemId);
 };
 
-const AddItem = async () => {
-  const name = document.getElementById("detail-name").value;
-  name.value = 0;
-  const description = document.getElementById("detail-description").value;
-  description.value = 0;
-  const quantity = document.getElementById("detail-quantity").value;
-  const offer_quantity = document.getElementById("detail-offer-quantity").value;
-  const categoryDropdown = document.getElementById("detail-category");
-  const category =
-    categoryDropdown.options[categoryDropdown.selectedIndex].text;
-
-
-  const newItem = {
-    id: selectedItemId,
-    name: name,
-    description: description,
-    quantity: quantity,
-    category: category,
-    offer_quantity: offer_quantity,
-  };
-
-  const postResponse = await fetch("http://localhost:3000/items", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newItem),
-  });
-
-  await showItemDetails(selectedItemId);
-};
-
 function showItems(items) {
   const itemListElement = document.getElementById("item-list");
   itemListElement.innerHTML = "";
@@ -322,15 +282,6 @@ function toggleEditState(editable) {
   editButton.style.display = editable ? "none" : "inline";
   saveButton.style.display = editable ? "inline" : "none";
   cancelButton.style.display = editable ? "inline" : "none";
-}
-
-function toggleAddState() {
-  const inputs = form.querySelectorAll("input, textarea, select");
-
-  inputs.forEach(input => {
-    input.value = '';
-
-  });
 }
 
 async function showItemDetails(itemId) {
