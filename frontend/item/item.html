@@ -41,24 +41,29 @@
 
             <div id="item-details">
                 <h1>Item Details</h1>
-            
+
                 <form id="item-form" action="#" method="post">
                     <p><strong>Name:</strong> <input type="text" id="detail-name" name="name"></p>
-                    <p><strong>Category:</strong> <select id="detail-category" name="category"></select></p>                    <p><strong>Description:</strong> <textarea id="detail-description" name="description"></textarea></p>
+                    <p><strong>Category:</strong> <select id="detail-category" name="category"></select></p>
+                    <p><strong>Description:</strong> <textarea id="detail-description" name="description"></textarea>
+                    </p>
                     <p><strong>Quantity:</strong> <input type="number" id="detail-quantity" name="quantity"></p>
-                    <p><strong>Offer Quantity:</strong> <input type="number" id="detail-offer-quantity" name="offer-quantity"></p>
+                    <p><strong>Offer Quantity:</strong> <input type="number" id="detail-offer-quantity"
+                            name="offer-quantity"></p>
 
-            
+
                     <!-- Buttons -->
                     <div id="button-container">
                         <button type="button" id="edit-button">Edit</button>
+                        <button type="button" id="add-button">Add</button>
+
                         <button type="submit" id="save-button" style="display:none;">Save</button>
                         <button type="button" id="cancel-button" style="display:none;">Cancel</button>
                     </div>
                 </form>
             </div>
-            
-            
+
+
             <ul id="item-list"></ul>
         </span>
 
