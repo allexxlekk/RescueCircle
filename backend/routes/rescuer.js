@@ -24,6 +24,16 @@ router.get("/active-tasks", async (req, res) => {
   }
 });
 
+router.get("/can-complete-request", async (req, res) => {
+  const rescuerId = req.query.rescuer;
+  const requestId = req.query.request;
+  const canComplete = await rescuerService.canCompleteRequest(
+      rescuerId,
+      requestId
+  );
+  res.status(200).json(canComplete);
+});
+
 router.post("/load", async (req, res) => {
   try {
     const inventory = req.body;
@@ -68,6 +78,45 @@ router.put("/accept-request", async (req, res) => {
     res.status(500).json({ error: "Error accepting request" });
   }
 });
+
+router.put("/complete-request", async (req, res) => {
+  try {
+    const rescuerId = req.query.rescuer;
+    const requestId = req.query.request;
+    const requestAccepted = await rescuerService.completeRequest(
+        rescuerId,
+        requestId
+    );
+    if (requestAccepted) {
+      res.status(201).json({ message: "Request completed" });
+    } else {
+      res.status(409).json({ message: "You can't complete this request" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error completing request" });
+  }
+});
+
+router.put("/complete-offer", async (req, res) => {
+  try {
+    const rescuerId = req.query.rescuer;
+    const offerId = req.query.offer;
+    const requestAccepted = await rescuerService.completeOffer(
+        rescuerId,
+        offerId
+    );
+    if (requestAccepted) {
+      res.status(201).json({ message: "Offer completed" });
+    } else {
+      res.status(409).json({ message: "You can't complete this offer" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error completing offer" });
+  }
+});
+
 
 router.put("/cancel-request", async (req, res) => {
   try {

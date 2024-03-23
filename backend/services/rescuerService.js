@@ -1,4 +1,5 @@
 const dbConnection = require("../config/db");
+const locationService = require('./locationService');
 
 const loadInventory = async (inventory) => {
     try {
@@ -119,10 +120,94 @@ const acceptRequest = async (rescuerId, requestId) => {
     }
 };
 
+const completeRequest = async (rescuerId, requestId) => {
+    try {
+        const citizenIdQuery = "SELECT citizen_id FROM request WHERE id = ? ;";
+        const citizenResult = await dbConnection
+            .promise()
+            .query(citizenIdQuery, [requestId]);
+
+        const citizenId = citizenResult[0][0].citizen_id;
+
+        if (await isNearCitizen(rescuerId, citizenId)) {
+            // Unload the item
+            // Get amount
+            const itemAmountQuery = "SELECT quantity, item_id FROM request WHERE id = ?";
+            const amountResult = await dbConnection
+                .promise()
+                .query(itemAmountQuery, [requestId]);
+
+            const itemQuantity = amountResult[0][0].quantity;
+            const itemId = amountResult[0][0].item_id;
+
+            const unloadItemQuery = "UPDATE rescuer_inventory SET amount = amount - ? WHERE item_id = ? AND rescuer_id = ?";
+            await dbConnection
+                .promise()
+                .query(unloadItemQuery, [itemQuantity, itemId, rescuerId]);
+
+            const acceptRequestQuery =
+                "UPDATE request SET rescuer_id = ?, status = 'COMPLETED', completed_at = NOW() WHERE id = ?";
+            await dbConnection
+                .promise()
+                .query(acceptRequestQuery, [rescuerId, requestId]);
+
+            const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = active_tasks-1 WHERE rescuer_id = ?";
+            await dbConnection
+                .promise()
+                .query(updateActiveTaskQuery, [rescuerId]);
+            return true;
+        }
+    } catch (err) {
+        console.error("Error on completing request:", err);
+        throw err;
+    }
+};
+
+const completeOffer = async (rescuerId, offerId) => {
+    try {
+        const citizenIdQuery = "SELECT citizen_id FROM offer WHERE id = ? ;";
+        const citizenResult = await dbConnection
+            .promise()
+            .query(citizenIdQuery, [offerId]);
+
+        const citizenId = citizenResult[0][0].citizen_id;
+
+        if (await isNearCitizen(rescuerId, citizenId)) {
+            // Unload the item
+            // Get amount
+            const itemAmountQuery = "SELECT quantity, item_id FROM offer WHERE id = ?";
+            const amountResult = await dbConnection
+                .promise()
+                .query(itemAmountQuery, [offerId]);
+
+            const itemQuantity = amountResult[0][0].quantity;
+            const itemId = amountResult[0][0].item_id;
+
+            const loadItemQuery = "UPDATE rescuer_inventory SET amount = amount + ? WHERE item_id = ? AND rescuer_id = ?";
+            await dbConnection
+                .promise()
+                .query(loadItemQuery, [itemQuantity, itemId, rescuerId]);
+
+            const acceptOfferQuery =
+                "UPDATE offer SET rescuer_id = ?, status = 'COMPLETED', completed_at = NOW() WHERE id = ?";
+            await dbConnection
+                .promise()
+                .query(acceptOfferQuery, [rescuerId, offerId]);
+
+            const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = active_tasks-1 WHERE rescuer_id = ?";
+            await dbConnection
+                .promise()
+                .query(updateActiveTaskQuery, [rescuerId]);
+            return true;
+        }
+    } catch (err) {
+        console.error("Error on completing offer:", err);
+        throw err;
+    }
+};
+
 const cancelRequest = async (rescuerId, requestId) => {
     try {
-        const activeTasks = await fetchActiveTasks(rescuerId);
-
         // Check if there is enough quantity available in rescuer's inventory
         const cancelRequestQuery =
             "UPDATE request SET rescuer_id = NULL, status = 'PENDING', assumed_at = NULL WHERE id = ? AND rescuer_id = ?";
@@ -130,10 +215,10 @@ const cancelRequest = async (rescuerId, requestId) => {
             .promise()
             .query(cancelRequestQuery, [requestId, rescuerId]);
 
-        const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = ? WHERE rescuer_id = ?";
+        const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = active_tasks -1 WHERE rescuer_id = ?";
         await dbConnection
             .promise()
-            .query(updateActiveTaskQuery, [activeTasks - 1, rescuerId]);
+            .query(updateActiveTaskQuery, [rescuerId]);
 
         return true;
     } catch (err) {
@@ -170,8 +255,6 @@ const acceptOffer = async (rescuerId, offerId) => {
 
 const cancelOffer = async (rescuerId, requestId) => {
     try {
-        const activeTasks = await fetchActiveTasks(rescuerId);
-
         // Check if there is enough quantity available in rescuer's inventory
         const cancelOfferQuery =
             "UPDATE offer SET rescuer_id = NULL, status = 'PENDING', assumed_at = NULL WHERE id = ? AND rescuer_id = ?";
@@ -179,10 +262,10 @@ const cancelOffer = async (rescuerId, requestId) => {
             .promise()
             .query(cancelOfferQuery, [requestId, rescuerId]);
 
-        const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = ? WHERE rescuer_id = ?";
+        const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = active_tasks - 1 WHERE rescuer_id = ?";
         await dbConnection
             .promise()
-            .query(updateActiveTaskQuery, [activeTasks - 1, rescuerId]);
+            .query(updateActiveTaskQuery, [rescuerId]);
 
         return true;
     } catch (err) {
@@ -204,6 +287,44 @@ const fetchActiveTasks = async (rescuerId) => {
     }
 };
 
+const isNearCitizen = async (rescuerId, citizenId) => {
+    const distInMeters = await locationService.getDistanceBetweenUsers(rescuerId, citizenId);
+    // return distInMeters <= 50;
+    //TODO remove this, it is only for testing;
+    return true;
+};
+
+const canCompleteRequest = async (rescuerId, requestId) => {
+    const citizenIdQuery = "SELECT citizen_id FROM request WHERE id = ? ;";
+    const citizenResult = await dbConnection
+        .promise()
+        .query(citizenIdQuery, [requestId]);
+
+    const citizenId = citizenResult[0][0].citizen_id;
+
+    const nearCitizen = await isNearCitizen(rescuerId, citizenId);
+    const itemAmountQuery = "SELECT quantity, item_id FROM request WHERE id = ?";
+    const quantityResult = await dbConnection
+        .promise()
+        .query(itemAmountQuery, [requestId]);
+
+    const itemQuantity = quantityResult[0][0].quantity;
+    const itemId = quantityResult[0][0].item_id;
+
+    const enoughItemsQuery = "SELECT amount FROM rescuer_inventory WHERE rescuer_id = ? AND item_id = ?";
+    const amountResult = await dbConnection
+        .promise()
+        .query(enoughItemsQuery, [rescuerId, itemId]);
+
+    try {
+        const itemAmount = amountResult[0][0].amount;
+
+        return nearCitizen && (itemAmount >= itemQuantity);
+    }catch (e){
+        return false;
+    }
+
+};
 const deliver = async (inventory) => {
     try {
         // Check if there is enough quantity available in rescuer's inventory
@@ -248,8 +369,12 @@ module.exports = {
     deliver,
     fetchInventory,
     acceptRequest,
+    completeRequest,
     cancelRequest,
     acceptOffer,
     cancelOffer,
     fetchActiveTasks,
+    isNearCitizen,
+    completeOffer,
+    canCompleteRequest
 };

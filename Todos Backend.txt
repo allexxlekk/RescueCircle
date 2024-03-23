@@ -2,10 +2,11 @@ RESCUER:
 1) View Inventory                   -- DONE
 2) Load Inventory from Base         -- DONE
 3) Unload All Inventory to Base     -- DONE
-4) Deliver Inventory to Citizen
-5) Pickup Inventory from Citizen
+4) Deliver Items to Citizen         -- DONE
+5) Pickup Items from Citizen        -- DONE
 6) Accept Request                   -- DONE
 7) Cancel Request                   -- DONE
-8) Accept Offer
-9) Cancel Offer
+8) Accept Offer                     -- DONE
+9) Cancel Offer                     -- DONE
 10) Fetch active tasks              -- DONE
+11) Check citizen proximity         -- DONE
