@@ -4,7 +4,8 @@ RESCUER:
 3) Unload All Inventory to Base     -- DONE
 4) Deilver Inventory to Citizen
 5) Pickup Inventory from Citizen
-6) Accept Request
+6) Accept Request                   -- DONE
 7) Cancel Request
 8) Accept Offer
 9) Cancel Offer
+10) Fetch active tasks              -- DONE

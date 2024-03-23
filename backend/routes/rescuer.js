@@ -2,6 +2,17 @@ const express = require("express");
 const rescuerService = require("../services/rescuerService.js");
 const router = express.Router();
 
+router.get("/inventory", async (req, res) => {
+  try {
+    const rescuerId = req.query.id;
+    const inventory = await rescuerService.fetchInventory(rescuerId);
+    res.status(200).json(inventory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching inventory" });
+  }
+});
+
 router.post("/load", async (req, res) => {
   try {
     const inventory = req.body;
@@ -15,19 +26,6 @@ router.post("/load", async (req, res) => {
   }
 });
 
-router.get("/inventory", async (req, res) => {
-  try {
-
-    const rescuerId = req.query.id;
-    const inventory = await rescuerService.fetchInventory(rescuerId);
-    res.status(200).json(inventory);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error fetching inventory" });
-  }
-});
-
 router.get("/unload", async (req, res) => {
   try {
     const rescuerId = req.query.id;
@@ -38,6 +36,36 @@ router.get("/unload", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error unloading inventory" });
+  }
+});
+
+router.get("/accept-request", async (req, res) => {
+  try {
+    const rescuerId = req.query.rescuer;
+    const requestId = req.query.request;
+    const requestAccepted = await rescuerService.acceptRequest(
+      rescuerId,
+      requestId
+    );
+    if (requestAccepted) {
+      res.status(201).json({ message: "Request accepted" });
+    } else {
+      res.status(409).json({ message: "You can't accept this request" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error accepting request" });
+  }
+});
+
+router.get("/active-tasks", async (req, res) => {
+  try {
+    const rescuerId = req.query.id;
+    const activeTasks = await rescuerService.fetchTasks(rescuerId);
+    res.status(200).json(activeTasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching ative tasks" });
   }
 });
 

@@ -91,6 +91,46 @@ const fetchInventory = async () => {
   }
 };
 
+const acceptRequest = async (rescuerId, requestId) => {
+  try {
+    // Check if the rescuer has less than 4 tasks
+    const activeTasks = await fetchTasks(rescuerId);
+    if(activeTasks >= 4){
+      return false;
+    }
+
+    // Check if there is enough quantity available in rescuer's inventory
+    const acceptOfferQuery =
+      "UPDATE request SET rescuer_id = ?, status = 'ASSUMED', assumed_at = NOW() WHERE id = ?";
+    await dbConnection
+      .promise()
+      .query(acceptOfferQuery, [rescuerId, requestId]);
+
+    const updateActiveTaskQuery = "UPDATE rescue_vehicle SET active_tasks = ? WHERE rescuer_id = ?";
+    await dbConnection
+    .promise()
+    .query(updateActiveTaskQuery, [activeTasks +1, rescuerId]);
+
+    return true; // Inventory delivered successfully
+  } catch (err) {
+    console.error("Error on accepting request:", err);
+    throw err;
+  }
+};
+
+const fetchTasks = async (rescuerId) => {
+  const rescuerTaskQuery =
+    "SELECT active_tasks FROM rescue_vehicle WHERE rescuer_id = ?";
+  const [results] = await dbConnection
+    .promise()
+    .query(rescuerTaskQuery, [rescuerId]);
+  if (results.length > 0) {
+    return results[0].active_tasks;
+  } else {
+    return 0;
+  }
+};
+
 const deliver = async (inventory) => {
   try {
     // Check if there is enough quantity available in rescuer's inventory
@@ -191,6 +231,7 @@ const fetchCitizenRequests = async () => {
     const formattedResults = results.map((row) => ({
       userId: row.userId,
       fullName: row.fullName,
+      unloading,
       item: { name: row.itemName },
       status: row.status,
       numberOfPeople: row.numberOfPeople,
@@ -211,4 +252,6 @@ module.exports = {
   unloadInventory,
   deliver,
   fetchInventory,
+  acceptRequest,
+  fetchTasks,
 };

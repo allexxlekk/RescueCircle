@@ -102,6 +102,7 @@ CREATE TABLE rescue_vehicle
     id         INT AUTO_INCREMENT PRIMARY KEY,
     type       ENUM('PERSONAL USE','VAN','PICKUP TRUCK') NOT NULL,
     status     ENUM ('WAITING', 'ACTIVE' ,'UNAVAILABLE') DEFAULT 'WAITING',
+    active_tasks INT DEFAULT 0,
     rescuer_id INT,
     FOREIGN KEY (rescuer_id) REFERENCES user (id)
 );
