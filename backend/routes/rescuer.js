@@ -13,6 +13,17 @@ router.get("/inventory", async (req, res) => {
   }
 });
 
+router.get("/active-tasks", async (req, res) => {
+  try {
+    const rescuerId = req.query.id;
+    const activeTasks = await rescuerService.fetchTasks(rescuerId);
+    res.status(200).json(activeTasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching ative tasks" });
+  }
+});
+
 router.post("/load", async (req, res) => {
   try {
     const inventory = req.body;
@@ -39,7 +50,7 @@ router.get("/unload", async (req, res) => {
   }
 });
 
-router.get("/accept-request", async (req, res) => {
+router.put("/accept-request", async (req, res) => {
   try {
     const rescuerId = req.query.rescuer;
     const requestId = req.query.request;
@@ -58,14 +69,56 @@ router.get("/accept-request", async (req, res) => {
   }
 });
 
-router.get("/active-tasks", async (req, res) => {
+router.put("/cancel-request", async (req, res) => {
   try {
-    const rescuerId = req.query.id;
-    const activeTasks = await rescuerService.fetchTasks(rescuerId);
-    res.status(200).json(activeTasks);
+    const rescuerId = req.query.rescuer;
+    const requestId = req.query.request;
+    const requestCanceled = await rescuerService.cancelRequest(
+        rescuerId,
+        requestId
+    );
+    if (requestCanceled) {
+      res.status(201).json({ message: "Request cancelled" });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error fetching ative tasks" });
+    res.status(500).json({ error: "Error cancelling request" });
+  }
+});
+
+router.put("/accept-offer", async (req, res) => {
+  try {
+    const rescuerId = req.query.rescuer;
+    const offerId = req.query.offer;
+    const offerAccepted = await rescuerService.acceptOffer(
+        rescuerId,
+        offerId
+    );
+    if (offerAccepted) {
+      res.status(201).json({ message: "Offer accepted" });
+    } else {
+      res.status(409).json({ message: "You can't accept this offer" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error accepting offer" });
+  }
+});
+
+router.put("/cancel-offer", async (req, res) => {
+  try {
+    const rescuerId = req.query.rescuer;
+    const offerId = req.query.offer;
+    const offerCanceled = await rescuerService.cancelOffer(
+        rescuerId,
+        offerId
+    );
+    if (offerCanceled) {
+      res.status(201).json({ message: "Offer cancelled" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error cancelling offer" });
   }
 });
 

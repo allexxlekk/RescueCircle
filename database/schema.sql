@@ -83,16 +83,18 @@ CREATE TABLE announcements_needs
 CREATE TABLE offer
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    user_id         INT,
+    citizen_id       INT,
+    rescuer_id       INT,
     item_id         INT,
     announcement_id INT,
     quantity        INT,
-    status          ENUM ('PENDING', 'COMPLETED') DEFAULT 'PENDING',
+    status          ENUM ('PENDING','ASSUMED', 'COMPLETED') DEFAULT 'PENDING',
     created_at      DATETIME                      DEFAULT CURRENT_TIMESTAMP,
     assumed_at      DATETIME,
     completed_at    DATETIME,
-    FOREIGN KEY (user_id) REFERENCES user (id),
+    FOREIGN KEY (citizen_id) REFERENCES user (id),
     FOREIGN KEY (item_id) REFERENCES item (id),
+    FOREIGN KEY (rescuer_id) REFERENCES user (id),
     FOREIGN KEY (announcement_id) REFERENCES announcement (id)
 );
 
