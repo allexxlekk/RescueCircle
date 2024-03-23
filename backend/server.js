@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/users');
-const rescuerRouter = require('./routes/rescuer');
+const rescuersRouter = require('./routes/rescuers');
+const offersRouter = require('./routes/offers');
 const categoriesRouter = require('./routes/categories');
 const itemsRouter = require('./routes/items');
 const requestsRouter = require('./routes/requests');
@@ -22,7 +23,8 @@ app.use('/categories', categoriesRouter)
 app.use('/items', itemsRouter)
 app.use('/requests', requestsRouter)
 app.use('/announcements', announcementsRouter)
-app.use('/rescuers', rescuerRouter)
+app.use('/rescuers', rescuersRouter)
+app.use('/offers', offersRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

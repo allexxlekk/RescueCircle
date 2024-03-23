@@ -29,4 +29,15 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:announcementId", async (req, res) => {
+  try {
+    const announcementId = req.params.announcementId;
+    const announcements = await announcementService.getAnnouncement(announcementId);
+    res.status(200).json({ announcements });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching categories" });
+  }
+});
+
 module.exports = router;

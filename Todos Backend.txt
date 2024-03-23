@@ -1,3 +1,8 @@
+GENERAL:
+1) Login
+2) Logout
+3) Authentication/Authorization
+
 RESCUER:
 1) View Inventory                   -- DONE
 2) Load Inventory from Base         -- DONE
@@ -10,3 +15,18 @@ RESCUER:
 9) Cancel Offer                     -- DONE
 10) Fetch active tasks              -- DONE
 11) Check citizen proximity         -- DONE
+12) Can Complete Request Check      -- DONE
+13) Can Complete Request Check      -- DONE
+
+CITIZEN:
+1) View Request History             -- DONE
+2) Make Offer                       -- DONE
+3) Cancel Offer                     -- DONE
+4) View Offer History               -- DONE
+5) View Announcements               -- DONE
+6) View Announcement Needs          -- DONE
+
+ADMIN:
+1) View Inventory
+2) View Requests/Offers Date
+

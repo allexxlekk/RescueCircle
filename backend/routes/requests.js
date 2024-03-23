@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 router.get('/citizens', async (req, res) => {
   try {
     // Extract the citizenId from the route parameters
-    // Call your service function with the extracted citizenId
+    // Call service function with the extracted citizenId
     const requests = await requestService.fetchCitizenRequests();
 
     // Send the fetched requests as a JSON response
@@ -35,13 +35,10 @@ router.get('/citizens', async (req, res) => {
 // // GET 
 router.get('/citizen/:citizenId', async (req, res) => {
   try {
-    // Extract the citizenId from the route parameters
     const citizenId = req.params.citizenId;
 
-    // Call your service function with the extracted citizenId
     const requests = await requestService.fetchRequestsForCitizen(citizenId);
 
-    // Send the fetched requests as a JSON response
     res.status(200).json(requests);
   } catch (error) {
     console.error(error);

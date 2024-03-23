@@ -320,7 +320,7 @@ const canCompleteRequest = async (rescuerId, requestId) => {
         const itemAmount = amountResult[0][0].amount;
 
         return nearCitizen && (itemAmount >= itemQuantity);
-    }catch (e){
+    } catch (e) {
         return false;
     }
 
