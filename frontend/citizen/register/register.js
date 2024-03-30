@@ -69,9 +69,19 @@ const registerUser = async () => {
     longitude: position.lng,
     latitude: position.lat,
   };
-  console.log(registerObject);
-  await postRegister(registerObject);
+
+  try {
+    await postRegister(registerObject);
+    alert("Register Confirmed");
+    // Redirect to the login page after successful registration
+    window.location.href = '../login.html'; // Adjust '/login' to the path of your login page if different
+  } catch (error) {
+    // Handle or log the error
+    console.error("Registration failed", error);
+    alert("Registration failed. Please try again.");
+  }
 };
+
 
 async function getBaseLocation() {
   try {
