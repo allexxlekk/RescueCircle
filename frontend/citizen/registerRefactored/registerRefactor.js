@@ -1,4 +1,4 @@
-import apiUtils from "../utils/apiUtils.mjs";
+import apiUtils from "../../utils/apiUtils.mjs";
 
 let mymap = L.map("mapid").setView([51.505, -0.09], 13);
 let theMarker = null;
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const registerButton = document.getElementById("register-button");
   registerButton.addEventListener('click', registerUser);
 
+
 });
 
 function onMapClick(e) {
@@ -46,7 +47,7 @@ function onMapClick(e) {
 
 const registerUser = async () => {
 
-  if(await validateDetails()) {
+  if (await validateDetails()) {
     let position = theMarker.getLatLng();
     const registerObject = {
       username: document.getElementById("username").value,
@@ -59,7 +60,11 @@ const registerUser = async () => {
       latitude: position.lat,
     };
     await apiUtils.register(registerObject);
+
     //TODO show alert and go to the login page
+    alert("Register Completed Successfully");
+
+    window.location.href = '../login.html';
   }
 };
 
@@ -95,8 +100,8 @@ const validateDetails = async () => {
     isValid = false;
   }
   else if (!emailPattern.test(email)) {
-        document.getElementById('val-error-email').textContent = 'Please enter a valid email address.';
-        isValid = false;
+    document.getElementById('val-error-email').textContent = 'Please enter a valid email address.';
+    isValid = false;
   }
   else if (!await apiUtils.emailAvailable(email)) {
     document.getElementById("val-error-email").innerHTML = "Email is not available"
@@ -128,7 +133,7 @@ const validateDetails = async () => {
   }
 
   // Marker validation
-  if(!theMarker){
+  if (!theMarker) {
     document.getElementById("val-error-map").innerHTML = "Choose your location on the map"
   }
 
