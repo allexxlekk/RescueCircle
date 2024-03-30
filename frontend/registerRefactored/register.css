@@ -1,0 +1,91 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column; /* Added to display elements vertically */
+}
+
+/* Header Styling */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+img {
+    margin: 0 auto; /* Center the image */
+}
+
+/* Form Styles */
+#userRegistrationForm {
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Add space between header and form */
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.validation-error-message {
+    margin-top: 5px;
+}
+
+/* Map Styles */
+#mapid {
+    width: 100%;
+    height: 300px;
+    margin-top: 20px;
+}
+
+/* Button Styles */
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #6096B4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #93BFCF;
+}
+
+/* Validation Error Message Style */
+.validation-error-message {
+    color: red;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 600px) {
+    #userRegistrationForm {
+        padding: 10px;
+    }
+
+    input {
+        padding: 8px;
+    }
+}
