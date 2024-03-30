@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen page</title>
+    <link rel="stylesheet" href="citizenPage.css">
+</head>
+
+<body>
+
+
+    <div id="request-list">
+        <ul>
+
+        </ul>
+    </div>
+
+    <div id="requestForm">
+        <h1>Create a request</h1>
+
+        <label for="select-item">Select item:</label>
+        <select id="select-item" name="select-item">
+        </select>
+
+        <label for="number-of-people">Number of People:</label>
+        <input type="number" id="number-of-people" name="number-of-people" min="1" max=10 value="1">
+
+        <button id="request-button">Add request</button>
+        <button id="hide-request-button">Hide</button>
+    </div>
+
+    <button id="create-request-button">Create request</button>
+    <script src="citizenPage.js"></script>
+</body>
+
+</html>

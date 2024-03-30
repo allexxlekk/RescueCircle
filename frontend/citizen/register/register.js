@@ -43,13 +43,13 @@ function onMapClick(e) {
 
 //API CALLS
 
-async function postRegister(register) {
+async function postRegister(registerUser) {
   const postRegister = await fetch("http://localhost:3000/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(register),
+    body: JSON.stringify(registerUser),
   });
 }
 
@@ -58,7 +58,7 @@ async function postRegister(register) {
 const registerUser = async () => {
   let position = theMarker.getLatLng();
 
-  console.log(username, fullname, email, password);
+
   const registerObject = {
     username: document.getElementById("username").value,
     fullname: document.getElementById("fullname").value,
@@ -74,7 +74,7 @@ const registerUser = async () => {
     await postRegister(registerObject);
     alert("Register Confirmed");
     // Redirect to the login page after successful registration
-    window.location.href = '../login.html'; // Adjust '/login' to the path of your login page if different
+    // window.location.href = '../login.html'; // Adjust '/login' to the path of your login page if different
   } catch (error) {
     // Handle or log the error
     console.error("Registration failed", error);

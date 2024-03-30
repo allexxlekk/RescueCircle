@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', loginUser);
     const loginButton = document.getElementById("loginButton");
     loginButton.addEventListener('click', loginUser);
-    console.log();
+
 
 });
 
@@ -19,8 +21,6 @@ async function postLogin(loginObject) {
 
 }
 
-//
-
 const loginUser = async () => {
 
     const loginObject = {
@@ -30,8 +30,8 @@ const loginUser = async () => {
 
     try {
         await postLogin(loginObject);
-        alert("Login Confirmed");
-
+        alert("Login successful");
+        window.location.href = './citizenPage.html';
     } catch (error) {
 
         console.error("Registration failed", error);
