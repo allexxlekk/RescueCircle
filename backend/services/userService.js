@@ -1,7 +1,8 @@
+require('dotenv').config();
 const bcrypt = require("bcrypt");
 const dbConnection = require("../config/db");
 const locationService = require("./locationService")
-const { sign } = require("jsonwebtoken");
+const { sign ,verify} = require("jsonwebtoken");
 
 /**
  * Represents a JSON request for user registration.
@@ -168,19 +169,27 @@ const getMarkersByRole = async (role) => {
 
 function generateJwtToken(user) {
   // Use the secret key as a plain string
-  const secretKey = "mysecretkey";
+  const secretKey = process.env.JWT_SECRET;
 
   // Sign the JWT token with the secret key and set an expiration time
-  return sign(
+  const token =  sign(
     {
       id: user.id,
-      username: user.username,
-      email: user.email,
       role: user.role,
     },
     secretKey,
     { expiresIn: "24h" }
   );
+
+  try {
+    const decoded = verify(token, secretKey);
+    console.log(token)
+    console.log(decoded); // Successfully verified and decoded token
+  } catch (error) {
+    console.error('Invalid token:', error.message);
+  }
+
+  return token;
 }
 
 module.exports = {
