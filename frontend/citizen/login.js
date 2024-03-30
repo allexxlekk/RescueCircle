@@ -17,7 +17,8 @@ async function postLogin(loginObject) {
         },
         body: JSON.stringify(loginObject),
     });
-    console.log(loginObject);
+    let jwt = await postLogin.json();
+    console.log(jwt);
 
 }
 

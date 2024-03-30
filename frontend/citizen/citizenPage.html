@@ -19,6 +19,12 @@
 
     <div id="requestForm">
         <h1>Create a request</h1>
+        <label for="search-filter">Search: </label><input type="text" id="search-filter"
+            placeholder="e.g. Water, Shoes, ..." />
+
+        <label for="category-filter">Filter Category:</label>
+        <select id="category-filter"></select>
+
 
         <label for="select-item">Select item:</label>
         <select id="select-item" name="select-item">
@@ -32,7 +38,9 @@
     </div>
 
     <button id="create-request-button">Create request</button>
-    <script src="citizenPage.js"></script>
+
+
+    <script src="citizenPage.js" type="module"></script>
 </body>
 
 </html>

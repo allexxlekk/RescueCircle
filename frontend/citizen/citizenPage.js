@@ -1,3 +1,5 @@
+import apiUtils from "../utils/apiUtils.mjs";
+
 //API CALLS
 async function fetchRequests(citizenId) {
     try {
@@ -32,6 +34,70 @@ async function fetchItems() {
     }
 }
 
+async function filterItemsByCategory(categoryId) {
+    let items;
+
+    if (categoryId === "all") items = await apiUtils.fetchItems();
+    else items = await apiUtils.fetchItemsByCategoryId(categoryId);
+
+    showItems(items);
+}
+
+async function filterItemsBySearch(searchString, categoryId) {
+    let items;
+    if (categoryId === "all") {
+        items = await apiUtils.fetchItemsBySearch(searchString);
+    } else {
+        items = await apiUtils.fetchItemsByCategoryIdAndSearch(
+            categoryId,
+            searchString
+        );
+    }
+    showItems(items);
+}
+
+
+async function showItemDetails(itemId) {
+    try {
+        // Fetch item details using the correct endpoint with the itemId parameter
+        const item = await apiUtils.fetchItemById(itemId);
+
+        // Store original item details
+        originalItemDetails = { ...item };
+        selectedItemId = itemId;
+
+        // Populate item details in the form fields
+        document.getElementById("detail-name").value = item.name;
+
+        // Fetch categories from API and populate the dropdown
+        const categories = await apiUtils.fetchCategories();
+        const categoryDropdown = document.getElementById("detail-category");
+        categoryDropdown.innerHTML = ""; // Clear previous options
+        categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.id;
+            option.text = category.name;
+            categoryDropdown.appendChild(option);
+        });
+
+        // Preselect the category based on item's category name
+        const preselectedCategory = categories.find(
+            (category) => category.name === item.category_name
+        );
+        if (preselectedCategory) {
+            categoryDropdown.value = preselectedCategory.id;
+        }
+
+        document.getElementById("detail-description").value = item.description;
+        document.getElementById("detail-quantity").value = item.quantity;
+        document.getElementById("detail-offer-quantity").value =
+            item.offer_quantity;
+    } catch (error) {
+        // Handle errors during the fetch
+        console.error("Error fetching the item:", error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
 
     const requestForm = document.getElementById("requestForm");
@@ -40,13 +106,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const citizenId = 8;
 
     let requests = await fetchRequests(citizenId);
-    console.log(requests);
+
     showRequests(requests);
 
-    let items = await fetchItems();
+    let items = await apiUtils.fetchItems();
+    let categories = await apiUtils.fetchCategories();
+    createCategoryFilterElement(categories);
 
-    // Assuming createItemDropdownElement is a function that populates the item dropdown
-    createItemDropdownElement(items);
+    const categoryFilter = document.getElementById("category-filter");
+    const searchFilter = document.getElementById("search-filter");
+
+    // Assuming showItems is a function that populates the item dropdown
+    showItems(items);
 
     const selectItem = document.getElementById('select-item');
     const numberOfPeople = document.getElementById('number-of-people');
@@ -67,6 +138,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     });
 
+    categoryFilter.addEventListener("change", async (e) => {
+        await filterItemsByCategory(e.target.value);
+        searchFilter.value = "";
+    });
+
+    searchFilter.addEventListener(
+        "input",
+        apiUtils.debounce(async (e) => {
+            const searchString = e.target.value;
+            const categoryId = categoryFilter.value;
+            await filterItemsBySearch(searchString, categoryId);
+        }, 300)
+    );
+
+
     hideRequestButton.addEventListener('click', () => {
         requestForm.style.display = 'none';
         createRequestButton.style.display = 'block';
@@ -78,6 +164,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
 
 });
+
+function createCategoryFilterElement(categories) {
+    const categoryFilter = document.getElementById("category-filter");
+    categoryFilter.innerHTML = "";
+
+    const option = document.createElement("option");
+    option.value = "all";
+    option.textContent = "All Categories";
+
+    categoryFilter.appendChild(option);
+    categories.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.id;
+        option.textContent = category.name;
+        categoryFilter.appendChild(option);
+    });
+}
 
 // Helper Functions
 function showRequests(requests) {
@@ -152,7 +255,7 @@ function createRequestCardElement(request) {
 
 }
 
-function createItemDropdownElement(items) {
+function showItems(items) {
     const selectItem = document.getElementById('select-item');
     selectItem.innerHTML = '';
     const option = document.createElement('option');
