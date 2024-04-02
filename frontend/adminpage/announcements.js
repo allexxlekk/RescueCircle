@@ -165,15 +165,18 @@ function addAnnouncementToList() {
 }
 
 function createAnnouncementCardElement(announcement) {
+
     const li = document.createElement('li');
     li.className = `announcement-card ${announcement.name}`; // Add status-based class for styling, though using the name here might be unique for each card
 
     const announcementNameDiv = document.createElement('div');
     announcementNameDiv.className = "announcementName";
-    announcementNameDiv.textContent = announcement.name;
+    announcementNameDiv.textContent = `Announcement Name: ${announcement.name}`;
+
 
     const descriptionDiv = document.createElement('div');
     descriptionDiv.className = "description";
+
     descriptionDiv.textContent = announcement.description;
 
     // Assemble the card

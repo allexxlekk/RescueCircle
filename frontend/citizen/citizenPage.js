@@ -1,5 +1,79 @@
 import apiUtils from "../utils/apiUtils.mjs";
 
+
+//main
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    const requestForm = document.getElementById("requestForm");
+    requestForm.style.display = "none";
+
+    const citizenId = 8;
+
+    let requests = await fetchRequests(citizenId);
+
+    showRequests(requests);
+
+    let items = await apiUtils.fetchItems();
+    let categories = await apiUtils.fetchCategories();
+    createCategoryFilterElement(categories);
+
+    const categoryFilter = document.getElementById("category-filter");
+    const searchFilter = document.getElementById("search-filter");
+
+    // Assuming showItems is a function that populates the item dropdown
+    showItems(items);
+
+    const selectItem = document.getElementById('select-item');
+    const numberOfPeople = document.getElementById('number-of-people');
+    const requestButton = document.getElementById('request-button');
+    const hideRequestButton = document.getElementById('hide-request-button');
+    const createRequestButton = document.getElementById('create-request-button');
+
+    let announcements = await fetchAnnouncements();
+    console.log(announcements);
+    showAnnouncements(announcements);
+
+    requestButton.addEventListener('click', async () => {
+        const selectedItemId = selectItem.value; // Use 'value' to get the selected option value
+        const numberOfPeopleValue = numberOfPeople.value;
+        const requestObject = {
+            itemId: selectedItemId,
+            numberOfPeople: numberOfPeopleValue,
+            citizenId: citizenId
+        }
+        await postRequest(requestObject);
+        showRequests(await fetchRequests(citizenId));
+
+    });
+
+    categoryFilter.addEventListener("change", async (e) => {
+        await filterItemsByCategory(e.target.value);
+        searchFilter.value = "";
+    });
+
+    searchFilter.addEventListener(
+        "input",
+        apiUtils.debounce(async (e) => {
+            const searchString = e.target.value;
+            const categoryId = categoryFilter.value;
+            await filterItemsBySearch(searchString, categoryId);
+        }, 300)
+    );
+
+
+    hideRequestButton.addEventListener('click', () => {
+        requestForm.style.display = 'none';
+        createRequestButton.style.display = 'block';
+    })
+
+    createRequestButton.addEventListener("click", () => {
+        requestForm.style.display = 'block';
+        createRequestButton.style.display = 'none';
+    })
+
+});
+
 //API CALLS
 async function fetchRequests(citizenId) {
     try {
@@ -112,18 +186,9 @@ async function fetchAnnouncements() {
 function showAnnouncements(data) {
     // Access the announcements array directly from the data object
     const announcements = data.announcements;
-
     const announcementListContainer = document.getElementById('announcements');
-    if (!announcementListContainer) {
-        console.error('Announcement list container not found');
-        return;
-    }
 
     let announcementListElement = announcementListContainer.querySelector('ul');
-    if (!announcementListElement) {
-        announcementListElement = document.createElement('ul');
-        announcementListContainer.appendChild(announcementListElement);
-    }
 
     let titleDiv = announcementListContainer.querySelector('.announcement-list-title');
     if (!titleDiv) {
@@ -131,30 +196,16 @@ function showAnnouncements(data) {
         titleDiv.className = 'announcement-list-title';
         announcementListContainer.insertBefore(titleDiv, announcementListElement);
     }
-
-    // Update the title with the total number of announcements
     titleDiv.textContent = `Announcements (${announcements.length})`;
 
-    // Clear existing items in the list
-    announcementListElement.innerHTML = '';
 
+    announcementListElement.innerHTML = '';
     // Iterate over the announcements array and create elements for each
     announcements.forEach(announcement => {
         let announcementCardElement = createAnnouncementCardElement(announcement);
         console.log(announcementCardElement);
         announcementListElement.appendChild(announcementCardElement);
     });
-}
-
-
-function updateAnnouncementCount() {
-    const announcementList = document.getElementById('announcement-list');
-    const announcements = announcementList.getElementsByTagName('li');
-    const announcementCount = announcements.length; // Get the current number of <li> elements
-
-    // Update the title with the new count
-    const titleDiv = document.getElementById('announcement-list-title');
-    titleDiv.textContent = `Announcements (${announcementCount})`;
 }
 
 function addAnnouncementToList() {
@@ -198,78 +249,6 @@ function createAnnouncementCardElement(announcement) {
     return li;
 }
 
-//main
-
-document.addEventListener('DOMContentLoaded', async () => {
-
-    const requestForm = document.getElementById("requestForm");
-    requestForm.style.display = "none";
-
-    const citizenId = 8;
-
-    let requests = await fetchRequests(citizenId);
-
-    showRequests(requests);
-
-    let items = await apiUtils.fetchItems();
-    let categories = await apiUtils.fetchCategories();
-    createCategoryFilterElement(categories);
-
-    const categoryFilter = document.getElementById("category-filter");
-    const searchFilter = document.getElementById("search-filter");
-
-    // Assuming showItems is a function that populates the item dropdown
-    showItems(items);
-
-    const selectItem = document.getElementById('select-item');
-    const numberOfPeople = document.getElementById('number-of-people');
-    const requestButton = document.getElementById('request-button');
-    const hideRequestButton = document.getElementById('hide-request-button');
-    const createRequestButton = document.getElementById('create-request-button');
-
-    let announcements = await fetchAnnouncements();
-    console.log(announcements);
-    showAnnouncements(announcements);
-
-    requestButton.addEventListener('click', async () => {
-        const selectedItemId = selectItem.value; // Use 'value' to get the selected option value
-        const numberOfPeopleValue = numberOfPeople.value;
-        const requestObject = {
-            itemId: selectedItemId,
-            numberOfPeople: numberOfPeopleValue,
-            citizenId: citizenId
-        }
-        await postRequest(requestObject);
-        showRequests(await fetchRequests(citizenId));
-
-    });
-
-    categoryFilter.addEventListener("change", async (e) => {
-        await filterItemsByCategory(e.target.value);
-        searchFilter.value = "";
-    });
-
-    searchFilter.addEventListener(
-        "input",
-        apiUtils.debounce(async (e) => {
-            const searchString = e.target.value;
-            const categoryId = categoryFilter.value;
-            await filterItemsBySearch(searchString, categoryId);
-        }, 300)
-    );
-
-
-    hideRequestButton.addEventListener('click', () => {
-        requestForm.style.display = 'none';
-        createRequestButton.style.display = 'block';
-    })
-
-    createRequestButton.addEventListener("click", () => {
-        requestForm.style.display = 'block';
-        createRequestButton.style.display = 'none';
-    })
-
-});
 
 function createCategoryFilterElement(categories) {
     const categoryFilter = document.getElementById("category-filter");
