@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 
-    document.getElementById('addButton').addEventListener('click', createAnnouncement);
-    document.getElementById('add-item-button').addEventListener('click', async () => {
+    document.getElementById('createAnnouncementButton').addEventListener('click', createAnnouncement);
+    document.getElementById('addAnotherAnnouncementButton').addEventListener('click', async () => {
         let itemList = await fetchItems();
         addItemToList(itemList);
     });

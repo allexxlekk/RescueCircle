@@ -98,6 +98,108 @@ async function showItemDetails(itemId) {
     }
 }
 
+async function fetchAnnouncements() {
+    try {
+        const response = await fetch('http://localhost:3000/announcements');
+
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+}
+
+function showAnnouncements(data) {
+    // Access the announcements array directly from the data object
+    const announcements = data.announcements;
+
+    const announcementListContainer = document.getElementById('announcements');
+    if (!announcementListContainer) {
+        console.error('Announcement list container not found');
+        return;
+    }
+
+    let announcementListElement = announcementListContainer.querySelector('ul');
+    if (!announcementListElement) {
+        announcementListElement = document.createElement('ul');
+        announcementListContainer.appendChild(announcementListElement);
+    }
+
+    let titleDiv = announcementListContainer.querySelector('.announcement-list-title');
+    if (!titleDiv) {
+        titleDiv = document.createElement('div');
+        titleDiv.className = 'announcement-list-title';
+        announcementListContainer.insertBefore(titleDiv, announcementListElement);
+    }
+
+    // Update the title with the total number of announcements
+    titleDiv.textContent = `Announcements (${announcements.length})`;
+
+    // Clear existing items in the list
+    announcementListElement.innerHTML = '';
+
+    // Iterate over the announcements array and create elements for each
+    announcements.forEach(announcement => {
+        let announcementCardElement = createAnnouncementCardElement(announcement);
+        console.log(announcementCardElement);
+        announcementListElement.appendChild(announcementCardElement);
+    });
+}
+
+
+function updateAnnouncementCount() {
+    const announcementList = document.getElementById('announcement-list');
+    const announcements = announcementList.getElementsByTagName('li');
+    const announcementCount = announcements.length; // Get the current number of <li> elements
+
+    // Update the title with the new count
+    const titleDiv = document.getElementById('announcement-list-title');
+    titleDiv.textContent = `Announcements (${announcementCount})`;
+}
+
+function addAnnouncementToList() {
+    const announcementName = document.getElementById('newAnnouncementName').value;
+    const announcementDescription = document.getElementById('newAnnouncementDescription').value;
+
+    if (!announcementName || !announcementDescription) {
+        alert('Both name and description are required.');
+        return;
+    }
+
+    const announcement = { name: announcementName, description: announcementDescription };
+    const announcementCardElement = createAnnouncementCardElement(announcement);
+    const announcementList = document.getElementById('announcement-list');
+    announcementList.appendChild(announcementCardElement);
+
+    // Update the count after adding
+    updateAnnouncementCount();
+
+    // Optionally clear the input fields
+    document.getElementById('newAnnouncementName').value = '';
+    document.getElementById('newAnnouncementDescription').value = '';
+}
+
+function createAnnouncementCardElement(announcement) {
+    const li = document.createElement('li');
+    li.className = `announcement-card ${announcement.name}`; // Add status-based class for styling, though using the name here might be unique for each card
+
+    const announcementNameDiv = document.createElement('div');
+    announcementNameDiv.className = "announcementName";
+    announcementNameDiv.textContent = announcement.name;
+
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.className = "description";
+    descriptionDiv.textContent = announcement.description;
+
+    // Assemble the card
+    li.appendChild(announcementNameDiv);
+    li.appendChild(descriptionDiv);
+
+    return li;
+}
+
+//main
+
 document.addEventListener('DOMContentLoaded', async () => {
 
     const requestForm = document.getElementById("requestForm");
@@ -124,6 +226,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const requestButton = document.getElementById('request-button');
     const hideRequestButton = document.getElementById('hide-request-button');
     const createRequestButton = document.getElementById('create-request-button');
+
+    let announcements = await fetchAnnouncements();
+    console.log(announcements);
+    showAnnouncements(announcements);
 
     requestButton.addEventListener('click', async () => {
         const selectedItemId = selectItem.value; // Use 'value' to get the selected option value
