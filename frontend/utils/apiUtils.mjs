@@ -37,7 +37,7 @@ const apiUtils = {
         try {
             let response;
             if (name === "" || name === undefined || name === null) {
-                response = await fetchItems();
+                response = await apiUtils.fetchItems();
                 return response;
             } else {
                 response = await fetch(
@@ -56,9 +56,7 @@ const apiUtils = {
                 `http://localhost:3000/items/byCategory?id=${categoryId}`
             );
 
-            const data = await response.json();
-            console.log("Data received:", data);
-            return data; // Return the data
+            return await response.json(); // Return the data
         } catch (error) {
             console.error("Fetch error:", error);
             throw error; // Re-throw the error to be caught in the higher level
@@ -68,8 +66,8 @@ const apiUtils = {
         try {
             let response;
             console.log("SearchString:", searchString);
-            if (searchString === "" || searchString === undefined) {
-                response = await fetchItemsByCategoryId(categoryId);
+            if (searchString === "" || searchString === undefined || searchString === null) {
+                response = await apiUtils.fetchItemsByCategoryId(categoryId);
                 return response;
             } else {
                 response = await fetch(
@@ -157,13 +155,27 @@ const apiUtils = {
         }
     }
     , async register(register) {
-        const postRegister = await fetch("http://localhost:3000/register", {
+        await fetch("http://localhost:3000/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(register),
         });
+    },
+    async postRequest(newRequest) {
+        await fetch('http://localhost:3000/requests', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newRequest),
+        });
+    },
+    async fetchCitizensRequests(citizenId) {
+        const response = await fetch("http://localhost:3000/requests/citizen/" + citizenId);
+
+        return await response.json(); // Return the data
     },
     debounce(func, delay) {
         let timer;
