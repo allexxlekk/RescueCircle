@@ -11,28 +11,35 @@ async function fetchCategories() {
 }
 
 function renderCategories(categoriesCount) {
-  const container = document.querySelector('#container');
-  container.textContent = '';
+  const rowsContainer = document.querySelector('#category-rows');
+  rowsContainer.textContent = ''; // Clear previous content
 
+  // Dynamically create and add the header row
+  const headerRow = document.createElement('div');
+  headerRow.classList.add('category-row'); // For semantic grouping, no styling
+  headerRow.innerHTML = `
+      <div class="header-item category-name"><strong>Category</strong></div>
+      <div class="header-item item-count"><strong>Items</strong></div>
+  `;
+  rowsContainer.appendChild(headerRow);
+
+  // Populate categories
   categoriesCount.forEach(categoryInfo => {
-    const myList = document.createElement('ul');
-    myList.classList.add('category-list');
-    container.appendChild(myList);
-
     const categoryRow = document.createElement('div');
-    categoryRow.classList.add('category-row');
-    myList.appendChild(categoryRow);
+    categoryRow.classList.add('category-row'); // Again, for semantic grouping
 
-    const category = document.createElement('div');
-    category.classList.add('category');
+    const categoryName = document.createElement('div');
+    categoryName.classList.add('category-name');
+    categoryName.textContent = categoryInfo.category;
+
     const itemCount = document.createElement('div');
     itemCount.classList.add('item-count');
+    itemCount.textContent = `${categoryInfo.itemCount}`;
 
-    categoryRow.appendChild(category);
+    categoryRow.appendChild(categoryName);
     categoryRow.appendChild(itemCount);
 
-    category.textContent = `Category: ${categoryInfo.category}`;
-    itemCount.textContent = `Number of items: ${categoryInfo.itemCount}`;
+    rowsContainer.appendChild(categoryRow);
   });
 }
 
