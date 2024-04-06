@@ -186,7 +186,6 @@ function createAnnouncementCardElement(announcement) {
     return li;
 }
 
-
 // API CALLS
 async function fetchItems() {
     try {

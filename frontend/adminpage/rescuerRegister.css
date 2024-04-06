@@ -1,95 +1,113 @@
+/* General Styles */
 body {
-    font-family: 'Helvetica', sans-serif;
-    background-color: #D0CFC3;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column; /* Added to display elements vertically */
 }
 
+/* Header Styling */
 h1 {
-    text-align: center;
-    color: #4caf50;
-    font-size: 2em;
-    margin-bottom: 20px;
-    transition: color 0.3s ease;
+  text-align: center;
+  color: #333;
 }
 
-h1:hover {
-    color: #45a049;
+img {
+  margin: 0 auto; /* Center the image */
 }
 
+/* Form Styles */
 #rescuerRegistrationForm {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    width: 400px;
-    text-align: left;
-    transition: box-shadow 0.3s ease;
-}
-
-#rescuerRegistrationForm:hover {
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Add space between header and form */
 }
 
 label {
-    display: block;
-    margin-bottom: 8px;
-    color: #333;
-    font-weight: bold;
-    transition: color 0.3s ease;
+  font-weight: bold;
+  margin-bottom: 5px; /* Ensure spacing between the label and the select box */
+  color: #333; /* Maintain text color consistency */
 }
 
-input,
+/* Style for select dropdown to match the form */
 select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    color: #333;
-    font-size: 16px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+  width: 100%;
+  padding: 10px; /* Adds padding for visual comfort */
+  margin-top: 5px; /* Keeps consistent spacing with other form elements */
+  border: 1px solid #ccc; /* Matches the border style of input elements */
+  border-radius: 5px; /* Rounded corners to match the form aesthetics */
+  background-color: #fff; /* Ensures a clean, bright background */
+  font-family: Arial, sans-serif; /* Keeps font consistent with the body */
+  cursor: pointer; /* Indicates the element is interactive */
 }
 
-input:hover,
+/* Hover effect for select element to improve user experience */
 select:hover {
-    background-color: #e0e0e0;
-    border-color: #4caf50;
+  border-color: #6096b4; /* Changes the border color on hover for feedback */
 }
 
+/* Focus effect to highlight the active field */
+select:focus {
+  border-color: #6096b4; /* Highlights the select box when it is active */
+  outline: none; /* Removes the default focus outline to maintain the custom style */
+  box-shadow: 0 0 5px rgba(96, 150, 180, 0.5); /* Adds a soft glow to indicate focus */
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.validation-error-message {
+  margin-top: 5px;
+}
+
+/* Button Styles */
 button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
+  display: flex;
+
+  width: 100%;
+  padding: 10px;
+  background-color: #6096b4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 button:hover {
-    background-color: #45a049;
+  background-color: #93bfcf;
+}
+#register-button {
+  text-align: center;
 }
 
-#rescuerRegistrationForm select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px top 50%;
-    padding-right: 25px;
+/* Validation Error Message Style */
+.validation-error-message {
+  color: red;
 }
 
-#rescuerRegistrationForm select:hover {
-    background-color: #e0e0e0;
-    border-color: #4caf50;
+/* Responsive Styles */
+@media only screen and (max-width: 600px) {
+  #rescuerRegistrationForm {
+    padding: 10px;
+  }
+
+  input {
+    padding: 8px;
+  }
 }

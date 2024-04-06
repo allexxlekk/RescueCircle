@@ -19,6 +19,21 @@
         <a href="../item/item.html">See Item</a>
 
     </header>
+
+    <h1>Admin Page</h1>
+    <div id="section-selector">
+        <label for="section-select">Select Section:</label>
+        <select id="section-select">
+            <option value="map-request-div">Requests</option>
+            <option value="item-div">Item Details</option>
+            <option value="create-announcement">Create Announcement</option>
+            <option value="announcements">See Announcements</option>
+
+
+            <!-- Add more options here if needed -->
+        </select>
+    </div>
+
     <div id="map-request-div">
         <div id="mapid" style="width: 600px; height: 400px;"></div>
 
@@ -28,7 +43,94 @@
             </ul>
         </div>
     </div>
-    <script src="adminpage.js"></script>
+
+
+    <div id="item-div">
+        <div id="header-container">
+            <h1>Items in the base</h1>
+
+            <!-- Category Filtering -->
+            <label for="category-filter">Filter Category:</label>
+            <select id="category-filter"></select>
+        </div>
+
+        <!-- Search Filtering -->
+        <label for="search-filter">Search: </label><input type="text" id="search-filter"
+            placeholder="e.g. Water, Shoes, ..." />
+
+        <!-- Synchronize Button -->
+        <button id="synchronize-button">Synchronize</button>
+
+        <!-- File Upload for JSON -->
+        <label for="file-upload">Upload JSON File:</label>
+        <input type="file" id="file-upload" accept=".json" />
+
+        <span id="item-container">
+
+            <div id="add-category">
+                <label for="new-category">New Category:</label>
+                <input type="text" id="new-category" name="new-category">
+                <button id="add-button">Add Category</button>
+
+            </div>
+
+            <div id="item-details">
+
+                <h1>Item Details</h1>
+
+                <form id="item-form" action="#" method="post">
+                    <p><strong>Name:</strong> <input type="text" id="detail-name" name="name"></p>
+                    <p><strong>Category:</strong> <select id="detail-category" name="category"></select></p>
+                    <p><strong>Description:</strong> <textarea id="detail-description" name="description"></textarea>
+                    </p>
+                    <p><strong>Quantity:</strong> <input type="number" id="detail-quantity" name="quantity"></p>
+                    <p><strong>Offer Quantity:</strong> <input type="number" id="detail-offer-quantity"
+                            name="offer-quantity"></p>
+
+
+                    <!-- Buttons -->
+                    <div id="button-container">
+                        <button type="button" id="edit-button">Edit</button>
+                        <button type="submit" id="save-button" style="display:none;">Save</button>
+                        <button type="button" id="cancel-button" style="display:none;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+
+            <ul id="item-list"></ul>
+        </span>
+
+
+    </div>
+    <div id="create-announcement">
+        <label for="name">Announcement Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="description">Announcement Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+        <div id="announcement-items">
+            <ul id="item-list">
+                <label for="item">Item Needed:</label>
+                <select id="item" name="item"></select>
+            </ul>
+            <button id="addAnotherAnnouncementButton">Add another item</button>
+            <br><br>
+        </div>
+
+
+        <button id="createAnnouncementButton">Create Announcemnet</button>
+    </div>
+
+    <div id="announcements">
+        <ul id="announcement-list">
+
+        </ul>
+    </div>
+
+
+
+    <script src="adminpage.js" type="module"></script>
 </body>
 
 </html>

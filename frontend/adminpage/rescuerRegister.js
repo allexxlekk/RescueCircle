@@ -11,10 +11,8 @@ async function postRegister(register) {
 //
 document.addEventListener("DOMContentLoaded", async () => {
 
-
     const registerButton = document.getElementById("register-button");
     registerButton.addEventListener('click', registerUser);
-
 });
 
 const registerUser = async () => {
@@ -32,6 +30,7 @@ const registerUser = async () => {
     };
     console.log(registerObject);
     await postRegister(registerObject);
+    alert("Registration Confirmed!");
 };
 
 async function getBaseLocation() {
