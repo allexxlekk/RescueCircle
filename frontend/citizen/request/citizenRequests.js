@@ -50,7 +50,6 @@ const initAddRequest = async () => {
                 citizenId: citizenId
             })
 
-            alert("Request Added");
             await initViewRequests();
         }
     )
