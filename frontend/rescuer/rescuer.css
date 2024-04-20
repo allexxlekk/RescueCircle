@@ -1,30 +1,166 @@
-/* General body styling */
-body {
-  font-family: Arial, sans-serif; /* Sets the font for the page */
-  margin: 0;
-  padding: 20px;
-  background-color: #f4f4f4; /* Sets a light grey background color */
+h1 {
+  text-align: center;
+}
+
+#mapid {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  align-self: center;
+}
+#map-request-div {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.request-list-title {
+  display: flex;
+  align-self: center;
+}
+#request-list {
   display: flex;
   flex-direction: column;
 }
 
-/* Header styling */
-h1 {
-  color: #333; /* Dark grey text color for the header */
-  text-align: center; /* Centers the header text */
+#request-list ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  gap: 3%;
+  margin-inline: 5%;
 }
 
-/* Container styling */
-div {
-  width: 100%; /* Adjust width of the div containing the list */
-  max-width: 600px; /* Maximum width for larger screens */
+.request-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Styling for the ul element */
+.request-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.request-card .item {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.request-card .details {
+  margin-top: 10px;
+}
+
+.request-card .details div {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+/* Status-based background colors */
+.request-card.pending {
+  background-color: #fff3cd !important;
+  /* light yellow for pending */
+  border-color: #ffeeba !important;
+}
+
+.request-card.assumed {
+  background-color: #d1ecf1 !important;
+  /* light blue for assumed */
+  border-color: #bee5eb !important;
+}
+
+.request-card.completed {
+  background-color: #c3e6cb !important;
+  /* light green for completed */
+  border-color: #b1dfbb !important;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#request-list {
+  margin-top: 20px;
+}
+
+#request-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+#request-list ul li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.selected-marker {
+  filter: brightness(1.2);
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
+}
+
+header {
+  background-color: #2b2e4a;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
+
+header a {
+  text-decoration: none;
+  color: #fff;
+  margin: 0 10px;
+}
+
+/* Container Styles */
+#header-container {
+  padding: 20px;
+  background-color: #e9dede;
+  margin: 10px; /* Add margin for spacing */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 25px; /* Add box shadow to the container */
+}
+
+/* Form Styles */
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+select {
+  padding: 10px;
+  width: 20%;
+  margin-bottom: 10px;
+  border-radius: 25px;
+}
+input[type="text"] {
+  background-color: rgb(225, 236, 174);
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #2b2e4a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 #item-list {
   max-height: 400px; /* Maximum height of 400px as requested */
   overflow-y: auto; /* Adds a scrollbar if the content exceeds 400px */
@@ -32,6 +168,9 @@ div {
   border: 1px solid #ccc; /* Grey border around the list */
   padding: 10px; /* Padding inside the list */
   list-style-type: none; /* Removes default list item bullets */
+  width: 50%;
+  margin-inline: 25%;
+  align-self: center;
 }
 
 /* List item styling */
@@ -80,4 +219,8 @@ input[type="number"] {
 /* Adding some space between items in list */
 li > div {
   margin-right: 10px;
+}
+
+h3 {
+  text-align: center;
 }
