@@ -6,7 +6,9 @@ const searchFilter = document.getElementById("search-filter");
 const addRequestButton = document.getElementById("add-request-button");
 const cancelRequestButton = document.getElementById("cancel-request-button");
 const createRequestButton = document.getElementById("create-request-button");
-let categoryFilter = null;
+let categoryFilter = "all-categories";
+let statusFilter = "all-statuses";
+let requests;
 let numberOfPeople = 1;
 const viewRequestsContainer = document.getElementById("view-request-container");
 const selectedCategoryText = document.getElementById("selected-category-text");
@@ -22,19 +24,8 @@ const statusPriority = {
 document.addEventListener("DOMContentLoaded", async () => {
     // Show items at the start
     await createCategoryDropdown();
+    createStatusDropdown();
     await initViewRequests();
-});
-
-const initAddRequest = async () => {
-    viewRequestsContainer.style.display = "none";
-    addRequestContainer.style.display = "inline";
-    selectedCategoryText.innerHTML = "All";
-    selectedItemId = null;
-    categoryFilter = null;
-    numberOfPeople = 1;
-    let items = await apiUtils.fetchItems();
-    showItems(items);
-    createPeopleDropdown();
 
     searchFilter.addEventListener(
         "input",
@@ -57,16 +48,31 @@ const initAddRequest = async () => {
             await initViewRequests();
         }
     )
+    createRequestButton.addEventListener("click", async () => {
+        await initAddRequest()
+    });
+});
+
+const initAddRequest = async () => {
+    viewRequestsContainer.style.display = "none";
+    addRequestContainer.style.display = "inline";
+    selectedCategoryText.innerHTML = "All";
+    selectedItemId = null;
+    categoryFilter = "all-categories";
+    numberOfPeople = 1;
+    let items = await apiUtils.fetchItems();
+    showItems(items);
+    createPeopleDropdown();
+
+
 }
 
 const initViewRequests = async () => {
     viewRequestsContainer.style.display = "inline";
     addRequestContainer.style.display = "none";
-    let requests = await apiUtils.fetchCitizensRequests(citizenId);
+    requests = await apiUtils.fetchCitizensRequests(citizenId);
     showRequests(requests);
-    createRequestButton.addEventListener("click", async () => {
-        await initAddRequest()
-    });
+
 }
 
 function showItems(items) {
@@ -134,7 +140,7 @@ function createRequestElement(request) {
     // Add classes to the div
     requestElement.className = 'd-flex w-100 justify-content-between list-group-item list-group-item-action flex-column align-items-start';
 
-    requestElement.classList.add(request.status.toLowerCase()+"-request")
+    requestElement.classList.add(request.status.toLowerCase() + "-request")
 
     // Set the innerHTML of the div with the item's details
     requestElement.innerHTML = `
@@ -187,6 +193,37 @@ const createCategoryDropdown = async () => {
         });
 
         categoryDropdown.appendChild(categoryDropDownElement);
+    });
+
+}
+
+const createStatusDropdown = () => {
+
+    const statusDropdown = document.getElementById("status-dropdown");
+    const selectedStatusText = document.getElementById("selected-request-text");
+    const allStatusDropDownChoice = document.getElementById("all-status");
+
+    statusFilter = "all-statuses";
+
+    const statuses = ["PENDING", "ASSUMED", "COMPLETED"];
+    statuses.forEach((status) => {
+        const statusDropdownElement = document.createElement("div");
+        statusDropdownElement.className = 'dropdown-item dropdown-status-name';
+        statusDropdownElement.id = status
+        statusDropdownElement.innerHTML = status
+
+        statusDropdownElement.addEventListener("click", () => {
+            const filteredRequests = requests.filter(req => req.status === status);
+            showRequests(filteredRequests);
+            selectedStatusText.textContent = ` ${status}`;
+        });
+
+        allStatusDropDownChoice.addEventListener("click", () => {
+            showRequests(requests);
+            selectedStatusText.textContent = "All";
+        });
+
+        statusDropdown.appendChild(statusDropdownElement);
     });
 
 }
