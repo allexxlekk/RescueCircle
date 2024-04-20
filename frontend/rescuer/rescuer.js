@@ -28,6 +28,7 @@ const loadInventory = async (itemId, amount, rescuerId) => {
 
     const response = await postResponse.json();
     console.log(response);
+    alert('Item Loaded Successfully');
 };
 
 function showItems(items) {
@@ -71,6 +72,11 @@ function createItemElement(item) {
     itemQuantityDiv.textContent = "Quantity: ";
     itemQuantityDiv.appendChild(itemQuantity);
 
+    itemElement.appendChild(itemNameDiv);
+    itemElement.appendChild(itemCategoryDiv);
+    itemElement.appendChild(itemQuantityDiv);
+
+
     if (item.quantity > 0) {
         let quantityInput = document.createElement("input");
         quantityInput.type = "number";
@@ -91,9 +97,7 @@ function createItemElement(item) {
         itemElement.appendChild(loadButton);
     }
 
-    itemElement.appendChild(itemNameDiv);
-    itemElement.appendChild(itemCategoryDiv);
-    itemElement.appendChild(itemQuantityDiv);
+
 
     return itemElement;
 }

@@ -1,0 +1,83 @@
+/* General body styling */
+body {
+  font-family: Arial, sans-serif; /* Sets the font for the page */
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f4f4; /* Sets a light grey background color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styling */
+h1 {
+  color: #333; /* Dark grey text color for the header */
+  text-align: center; /* Centers the header text */
+}
+
+/* Container styling */
+div {
+  width: 100%; /* Adjust width of the div containing the list */
+  max-width: 600px; /* Maximum width for larger screens */
+}
+
+/* Styling for the ul element */
+#item-list {
+  max-height: 400px; /* Maximum height of 400px as requested */
+  overflow-y: auto; /* Adds a scrollbar if the content exceeds 400px */
+  background-color: #fff; /* White background for the list */
+  border: 1px solid #ccc; /* Grey border around the list */
+  padding: 10px; /* Padding inside the list */
+  list-style-type: none; /* Removes default list item bullets */
+}
+
+/* List item styling */
+#item-list li {
+  padding: 8px; /* Padding for each list item */
+  border-bottom: 1px solid #eee; /* Light grey border under each item */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Last child border removal */
+#item-list li:last-child {
+  border-bottom: none; /* Removes the border from the last list item */
+}
+
+/* Button styling */
+button.load {
+  background-color: #007bff; /* Blue background color */
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 6px 12px; /* Padding around the text */
+  text-transform: uppercase; /* Uppercase text */
+  font-weight: bold; /* Bold text */
+  cursor: pointer; /* Cursor indicates button */
+}
+
+button.load:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
+}
+
+/* Input styling */
+input[type="number"] {
+  padding: 4px;
+  width: 60px; /* Fixed width for number input */
+  margin-right: 8px; /* Spacing between input and button */
+}
+
+/* Styling for name, category, and quantity spans */
+.name,
+.category,
+.quantity {
+  font-weight: bold; /* Makes text bold */
+}
+
+/* Adding some space between items in list */
+li > div {
+  margin-right: 10px;
+}
