@@ -186,6 +186,35 @@ const apiUtils = {
             }, delay);
         }
     },
+    async fetchAnnouncements() {
+        try {
+            const response = await fetch('http://localhost:3000/announcements');
+
+            return await response.json();
+        } catch (error) {
+            console.error('Fetch error:', error);
+            throw error;
+        }
+    },
+    async fetchAnnouncement(announcementId) {
+        try {
+            const response = await fetch('http://localhost:3000/announcements/'+announcementId);
+
+            return await response.json();
+        } catch (error) {
+            console.error('Fetch error:', error);
+            throw error;
+        }
+    },
+    async postOffer(newOffer) {
+        await fetch('http://localhost:3000/offers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newOffer),
+        });
+    },
 };
 
 export default apiUtils;

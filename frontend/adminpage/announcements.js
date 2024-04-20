@@ -91,9 +91,8 @@ const addItemToList = (items) => {
     itemList.appendChild(newLi);
 }
 
-function showAnnouncements(data) {
+function showAnnouncements(announcements) {
     // Access the announcements array directly from the data object
-    const announcements = data.announcements;
 
     const announcementListContainer = document.getElementById('announcements');
     if (!announcementListContainer) {

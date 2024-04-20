@@ -53,6 +53,8 @@ const getAnnouncement = async (announcementId) => {
         const query = `
             SELECT i.name                                       AS itemName,
                    i.id                                         AS itemId,
+                   c.name                                       AS itemCategory,
+                   i.description                                AS itemDescription,
                    a.id                                         AS announcementId,
                    a.description                                AS announcementDescription,
                    a.name                                       AS announcementName,
@@ -60,6 +62,7 @@ const getAnnouncement = async (announcementId) => {
             FROM announcement a
                      JOIN announcements_needs an ON a.id = an.announcement_id
                      JOIN item i ON i.id = an.item_id
+                     INNER JOIN item_category c ON i.category_id = c.id
             WHERE a.id = ?
         `;
 
@@ -78,7 +81,9 @@ const getAnnouncement = async (announcementId) => {
             date: results[0].announcementDate,
             items: results.map(row => ({
                 id: row.itemId,
-                name: row.itemName
+                name: row.itemName,
+                description: row.itemDescription,
+                category: row.itemCategory
             }))
         };
     } catch (err) {

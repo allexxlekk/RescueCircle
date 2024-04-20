@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const announcements = await announcementService.getAllAnnouncements();
-    res.status(200).json({ announcements });
+    res.status(200).json(announcements);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error fetching categories" });
@@ -33,7 +33,7 @@ router.get("/:announcementId", async (req, res) => {
   try {
     const announcementId = req.params.announcementId;
     const announcements = await announcementService.getAnnouncement(announcementId);
-    res.status(200).json({ announcements });
+    res.status(200).json(announcements);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error fetching categories" });
