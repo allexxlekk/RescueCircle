@@ -1,4 +1,5 @@
 const rescuerId = 9; // Get from logged in rescuer
+
 let mymap = L.map("mapid").setView([38.242, 21.727], 12);
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -49,7 +50,6 @@ async function fetchItems() {
 }
 const loadInventory = async (itemId, amount, rescuerId) => {
 
-
     const inventory = {
         itemId: itemId,
         amount: amount,
@@ -69,6 +69,20 @@ const loadInventory = async (itemId, amount, rescuerId) => {
     console.log(response);
     alert('Item Loaded Successfully');
 };
+
+//Check if is correct
+const unloadInventory = async (rescuerId) => {
+    try {
+        const response = await fetch('http://localhost:3000/rescuers/unload/' + rescuerId);
+
+        return await response.json(); // Return the data
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+
 
 function showItems(items) {
     const itemListElement = document.getElementById('item-list');
@@ -177,6 +191,8 @@ async function fetchMarkers(role) {
     }
 }
 
+
+
 //HELPER FUNCTIONS////////////////////////////////
 
 function showRequests(requests) {
@@ -229,6 +245,7 @@ function createRequestCardElement(request) {
     nameDiv.className = "item";
     nameDiv.textContent = request.fullName;
 
+
     const itemDiv = document.createElement('div');
     itemDiv.className = "item";
     itemDiv.textContent = request.item.name;
@@ -258,6 +275,7 @@ function createRequestCardElement(request) {
 
     // Assemble the details
     detailsDiv.appendChild(nameDiv);
+
     detailsDiv.appendChild(statusDiv);
     detailsDiv.appendChild(numberOfPeopleDiv);
     detailsDiv.appendChild(quantityDiv);
