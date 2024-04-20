@@ -4,6 +4,13 @@
     /* Adding overflow-x as hidden to prevent horizontal scrollbar */
     overflow-x: hidden;
 }
+
+#view-request-container .list-group#request-list {
+    max-height: 680px; /* Adjust based on your preference */
+    overflow-y: auto;
+    /* Adding overflow-x as hidden to prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
 body {
     background-color: #f5f5f5;
     font-family: 'Lato', sans-serif;

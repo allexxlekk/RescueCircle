@@ -20,15 +20,18 @@
 
     <div id="view-request-container">
         <h3>Requests</h3>
-        <div class="list-group" id="request-list">
-            <div class="d-flex w-100 justify-content-between list-group-item list-group-item-action flex-column align-items-start pending-request">
-                <h5 class="mb-1 request-item-name">Bread</h5>
-                <small class="request-item-quantity">Quantity: 8</small>
-                <p class="mb-1 request-status">Pending</p>
-                <p class="mb-1 request-date">Request Date: <span class="request-date-value"> 06/04/24</span></p>
-                <p class="mb-1 assumed-date">Assumed Date: <span class="assume-date-value"> - </span></p>
-                <p class="mb-1 completed-date">Completed Date:  <span class="assume-date-value"> - </span></p>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-status"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Status: <span id="selected-request-text">All</span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-status" id="status-dropdown">
+                <div class="dropdown-item dropdown-status-name" id="all-status">All</div>
+                <div class="dropdown-divider"></div>
             </div>
+
+        </div>
+        <div class="list-group" id="request-list">
         </div>
         <button id="create-request-button" class="btn btn-primary">Create New Request</button>
     </div>
@@ -53,8 +56,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Search Items</span>
                 </div>
-                <input type="text" class="form-control" placeholder="Bread, Medicine, Shoes, ..." id="search-filter"
-                       aria-describedby="basic-addon1">
+                <label for="search-filter"></label><input type="text" class="form-control" placeholder="Bread, Medicine, Shoes, ..." id="search-filter"
+                                                          aria-describedby="basic-addon1">
             </div>
             <div class="list-group" id="item-list"></div>
         </div>
