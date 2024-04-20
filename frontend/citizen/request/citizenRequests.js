@@ -12,6 +12,7 @@ let requests;
 let numberOfPeople = 1;
 const viewRequestsContainer = document.getElementById("view-request-container");
 const selectedCategoryText = document.getElementById("selected-category-text");
+const selectedStatusText = document.getElementById("selected-request-text");
 const addRequestContainer = document.getElementById("add-request-container");
 
 
@@ -63,13 +64,13 @@ const initAddRequest = async () => {
     let items = await apiUtils.fetchItems();
     showItems(items);
     createPeopleDropdown();
-
-
 }
 
 const initViewRequests = async () => {
     viewRequestsContainer.style.display = "inline";
     addRequestContainer.style.display = "none";
+    statusFilter = "all-statuses";
+    selectedStatusText.innerHTML = "All";
     requests = await apiUtils.fetchCitizensRequests(citizenId);
     showRequests(requests);
 
