@@ -10,22 +10,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 
-    document.getElementById('createAnnouncementButton').addEventListener('click', createAnnouncement);
     document.getElementById('addAnotherAnnouncementButton').addEventListener('click', async () => {
         let itemList = await fetchItems();
         addItemToList(itemList);
     });
-
-    let headerLinks = document.querySelectorAll('header a');
-    headerLinks.forEach(function (link) {
-
-        link.addEventListener('click', function () {
-
-        });
-    });
+    document.getElementById('createAnnouncementButton').addEventListener('click', createAnnouncement);
 
     let announcements = await fetchAnnouncements();
     console.log(announcements);
+    updateAnnouncementCount();
     showAnnouncements(announcements);
 
 });
@@ -48,8 +41,6 @@ async function createAnnouncement() {
 
     // Use querySelectorAll to get all select elements within itemList
     const selectElements = itemList.querySelectorAll('select');
-
-    // Convert the NodeList to an array (if needed)
     const selectArray = Array.from(selectElements);
     const selectedItemIds = []
     selectArray.forEach(selectedItem =>
@@ -73,6 +64,7 @@ async function createAnnouncement() {
 
         const result = await response.json();
         console.log(result);
+
     } catch (error) {
         console.error('Create announcement error:', error);
     }
@@ -89,9 +81,14 @@ const addItemToList = (items) => {
         newSelect.appendChild(option);
     });
     const newLi = document.createElement("li");
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Remove item";
+    removeButton.addEventListener("click", () => {
+        newLi.remove();
+    });
     newLi.appendChild(newSelect);
+    newLi.appendChild(removeButton);
     itemList.appendChild(newLi);
-
 }
 
 function showAnnouncements(data) {
@@ -129,20 +126,20 @@ function showAnnouncements(data) {
         console.log(announcementCardElement);
         announcementListElement.appendChild(announcementCardElement);
     });
+
 }
 
-
-function updateAnnouncementCount() {
+async function updateAnnouncementCount() {
     const announcementList = document.getElementById('announcement-list');
     const announcements = announcementList.getElementsByTagName('li');
     const announcementCount = announcements.length; // Get the current number of <li> elements
 
     // Update the title with the new count
     const titleDiv = document.getElementById('announcement-list-title');
-    titleDiv.textContent = `Announcements (${announcementCount})`;
+    titleDiv.value = `Announcements (${announcementCount})`;
 }
 
-function addAnnouncementToList() {
+async function addAnnouncementToList() {
     const announcementName = document.getElementById('newAnnouncementName').value;
     const announcementDescription = document.getElementById('newAnnouncementDescription').value;
 
@@ -177,7 +174,7 @@ function createAnnouncementCardElement(announcement) {
     const descriptionDiv = document.createElement('div');
     descriptionDiv.className = "description";
 
-    descriptionDiv.textContent = announcement.description;
+    descriptionDiv.textContent = `Description: ${announcement.description}`;
 
     // Assemble the card
     li.appendChild(announcementNameDiv);
