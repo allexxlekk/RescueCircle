@@ -59,6 +59,3 @@ INSERT INTO location (id, latitude, longitude, distance_to_base) VALUES(1, 38.24
 
 INSERT INTO user (id, username, password, role, full_name, email, phone, location_id)
 VALUES(1, 'admin', 'admin', 'ADMIN', '', 'admin.base0@system.gov', '', 1);
-
-INSERT INTO user (username, password, role, full_name, email, phone, location_id)
-VALUES ('citizen1', 'password123', 'CITIZEN', 'John Doe', 'john@example.com', '1234567890', null);
