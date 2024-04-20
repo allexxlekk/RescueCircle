@@ -22,28 +22,8 @@ const statusPriority = {
 
 document.addEventListener("DOMContentLoaded", async () => {
     await initViewAnnouncements();
-    // Show items at the start
-    // await createCategoryDropdown();
     createStatusDropdown();
-    // await initViewRequests();
 
-    // searchFilter.addEventListener(
-    //     "input",
-    //     apiUtils.debounce(async (e) => {
-    //         const searchString = e.target.value;
-    //         await filterItemsBySearch(searchString, categoryFilter);
-    //     }, 300)
-    // );
-    // addRequestButton.addEventListener("click", async () => {
-    //         await apiUtils.postRequest({
-    //             itemId: selectedItemId,
-    //             numberOfPeople: numberOfPeople,
-    //             citizenId: citizenId
-    //         })
-    //
-    //         await initViewRequests();
-    //     }
-    // )
     seeOffersButton.addEventListener("click", async () => {
             await initViewOffers();
         }
@@ -65,6 +45,10 @@ const initViewAnnouncements = async () => {
 const initViewOffers = async () => {
     viewOffersContainer.style.display = "inline";
     viewAnnouncementsContainer.style.display = "none";
+    statusFilter = "all-statuses";
+    selectedStatusText.innerHTML = "All";
+    offers = await apiUtils.fetchCitizensOffers(citizenId);
+    showOffers(offers);
 }
 
 function showAnnouncements(announcements) {
@@ -172,108 +156,41 @@ function createItemElement(item) {
 }
 
 
-// const initAddRequest = async () => {
-//     viewRequestsContainer.style.display = "none";
-//     addRequestContainer.style.display = "inline";
-//     selectedCategoryText.innerHTML = "All";
-//     selectedItemId = null;
-//     categoryFilter = "all-categories";
-//     numberOfPeople = 1;
-//     let items = await apiUtils.fetchItems();
-//     showItems(items);
-//     createPeopleDropdown();
-// }
-//
-// const initViewRequests = async () => {
-//     viewRequestsContainer.style.display = "inline";
-//     addRequestContainer.style.display = "none";
-//     statusFilter = "all-statuses";
-//     selectedStatusText.innerHTML = "All";
-//     requests = await apiUtils.fetchCitizensRequests(citizenId);
-//     showRequests(requests);
-//
-// }
-//
-// function showItems(items) {
-//     const itemListElement = document.getElementById("item-list");
-//     itemListElement.innerHTML = "";
-//
-//     items.forEach((item) => {
-//         // Create the list item
-//         let itemElement = createItemElement(item);
-//         // Add it to the list
-//         itemListElement.appendChild(itemElement);
-//         itemListElement.appendChild(document.createElement("br"));
-//     });
-// }
-//
-//
-// function createItemElement(item) {
-//     const itemElement = document.createElement("div");
-//     itemElement.className = "item";
-//     itemElement.id = "item-" + item.id;
-//
-//     // Add classes to the div
-//     itemElement.className = 'd-flex w-100 justify-content-between list-group-item list-group-item-action flex-column align-items-start';
-//
-//     // Set the innerHTML of the div with the item's details
-//     itemElement.innerHTML = `
-//         <h5 class="mb-1 list-item-name">${item.name}</h5>
-//         <small class="list-item-category">${item.category_name}</small>
-//         <p class="mb-1">${item.description}</p>
-//     `;
-//
-//     itemElement.addEventListener("click", async () => {
-//         if (selectedItemId !== null) {
-//             let selectedItem = document.getElementById("item-" + selectedItemId);
-//             if (selectedItemId) { // Check if the element exists
-//                 selectedItem.classList.remove("active");
-//             }
-//         }
-//         itemElement.classList.add("active");
-//         selectedItemId = item.id;
-//         addRequestButton.disabled = false;
-//     });
-//
-//     return itemElement;
-// }
-//
-// function showRequests(requests) {
-//     requests.sort((a, b) => statusPriority[a.status] - statusPriority[b.status]);
-//     const requestListElement = document.getElementById("request-list");
-//     requestListElement.innerHTML = "";
-//
-//     requests.forEach((request) => {
-//         // Create the list request
-//         let requestElement = createRequestElement(request);
-//         // Add it to the list
-//         requestListElement.appendChild(requestElement);
-//         requestListElement.appendChild(document.createElement("br"));
-//     });
-// }
-//
-// function createRequestElement(request) {
-//     const requestElement = document.createElement("div");
-//     requestElement.id = "req-" + request.requestId;
-//
-//     // Add classes to the div
-//     requestElement.className = 'd-flex w-100 justify-content-between list-group-item list-group-item-action flex-column align-items-start';
-//
-//     requestElement.classList.add(request.status.toLowerCase() + "-request")
-//
-//     // Set the innerHTML of the div with the item's details
-//     requestElement.innerHTML = `
-//        <h5 class="mb-1 request-item-name">${request.item.name}</h5>
-//                 <small class="request-item-quantity">Quantity: ${request.quantity}</small>
-//                 <p class="mb-1 request-status">Status: ${request.status.substring(0, 1).toUpperCase() + request.status.substring(1).toUpperCase()}</p>
-//                 <p class="mb-1 request-date">Request Date: <span class="request-date-value"> ${request.createdAt}</span></p>
-//                 <p class="mb-1 assumed-date">Assumed Date: <span class="assume-date-value"> ${request.assumedAt}</span></p>
-//                 <p class="mb-1 completed-date">Completed Date:  <span class="assume-date-value"> ${request.completedAt}</span></p>
-//     `;
-//
-//
-//     return requestElement;
-// }
+function showOffers(offers) {
+    offers.sort((a, b) => statusPriority[a.status] - statusPriority[b.status]);
+    const offerListElement = document.getElementById("offer-list");
+    offerListElement.innerHTML = "";
+
+    offers.forEach((request) => {
+        let offerElement = createOfferElement(request);
+        // Add it to the list
+        offerListElement.appendChild(offerElement);
+        offerListElement.appendChild(document.createElement("br"));
+    });
+}
+
+function createOfferElement(offer) {
+    const offerElement = document.createElement("div");
+    offerElement.id = "offer-" + offer.offerId;
+
+    // Add classes to the div
+    offerElement.className = 'd-flex w-100 justify-content-between list-group-item list-group-item-action flex-column align-items-start';
+
+    offerElement.classList.add(offer.status.toLowerCase() + "-offer")
+
+    // Set the innerHTML of the div with the item's details
+    offerElement.innerHTML = `
+       <h5 class="mb-1 offer-item-name">${offer.item.name}</h5>
+                <small class="request-item-quantity">Quantity: ${offer.quantity}</small>
+                <p class="mb-1 offer-status">Status: ${offer.status.substring(0, 1).toUpperCase() + offer.status.substring(1).toUpperCase()}</p>
+                <p class="mb-1 offer-date">Request Date: <span class="offer-date-value"> ${offer.createdAt}</span></p>
+                <p class="mb-1 assumed-date">Assumed Date: <span class="assume-date-value"> ${offer.assumedAt}</span></p>
+                <p class="mb-1 completed-date">Completed Date:  <span class="assume-date-value"> ${offer.completedAt}</span></p>
+    `;
+
+
+    return offerElement;
+}
 
 const createStatusDropdown = () => {
 
@@ -291,13 +208,13 @@ const createStatusDropdown = () => {
         statusDropdownElement.innerHTML = status
 
         statusDropdownElement.addEventListener("click", () => {
-            const filteredRequests = offers.filter(req => req.status === status);
-            showRequests(filteredRequests);
+            const filteredOffers = offers.filter(off => off.status === status);
+            showOffers(filteredOffers);
             selectedStatusText.textContent = ` ${status}`;
         });
 
         allStatusDropDownChoice.addEventListener("click", () => {
-            showRequests(offers);
+            showOffers(offers);
             selectedStatusText.textContent = "All";
         });
 

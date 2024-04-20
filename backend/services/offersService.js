@@ -46,15 +46,12 @@ const fetchOffersForCitizen = async (citizenId) => {
                    o.quantity,
                    o.id                                    AS requestId,
                    u.full_name                             AS fullName,
-                   a.id                                    AS announcementId,
-                   a.name                                  AS announcementName,
                    DATE_FORMAT(o.created_at, '%d/%m/%y')   AS createdAt,
                    DATE_FORMAT(o.assumed_at, '%d/%m/%y')   AS assummedAt,
                    DATE_FORMAT(o.completed_at, '%d/%m/%y') AS completedAt
             FROM offer o
                      JOIN item i ON o.item_id = i.id
                      JOIN user u ON o.citizen_id = u.id
-                     JOIN announcement a ON o.announcement_id = a.id
             WHERE o.citizen_id = ?
         `;
 
@@ -66,7 +63,7 @@ const fetchOffersForCitizen = async (citizenId) => {
         return results.map((row) => ({
             userId: row.citizenId,
             rescuerId: row.rescuerId,
-            requestId: row.requestId,
+            requestId: row.offerId,
             fullName: row.fullName,
             item: {id: row.itemId, name: row.itemName},
             announcement: {id: row.announcementId, name: row.announcementName},

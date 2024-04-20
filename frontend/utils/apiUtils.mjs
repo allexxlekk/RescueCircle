@@ -177,6 +177,11 @@ const apiUtils = {
 
         return await response.json(); // Return the data
     },
+    async fetchCitizensOffers(citizenId) {
+        const response = await fetch("http://localhost:3000/offers/citizen/" + citizenId);
+
+        return await response.json(); // Return the data
+    },
     debounce(func, delay) {
         let timer;
         return function (...args) {

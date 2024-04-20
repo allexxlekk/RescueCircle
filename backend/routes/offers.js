@@ -32,7 +32,6 @@ router.delete('/:offerId', async (req, res) => {
 router.get('/citizen/:citizenId', async (req, res) => {
     try {
         const citizenId = req.params.citizenId;
-
         const offers = await offersService.fetchOffersForCitizen(citizenId);
 
         res.status(200).json(offers);
