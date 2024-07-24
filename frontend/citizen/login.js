@@ -32,6 +32,7 @@ const loginUser = async (event) => {
     try {
         await postLogin(loginObject);
         alert("Login successful");
+        //TODO go to page based on role
         window.location.href = './citizenPage.html';
     } catch (error) {
 

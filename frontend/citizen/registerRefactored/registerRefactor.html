@@ -1,50 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <title>Register To Rescue Circle</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="register.css">
 </head>
-
 <body>
+<div class="container">
+    <h1 class="text-center mb-4">Register To Rescue Circle</h1>
+    <form id="userRegistrationForm">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+            <div class="validation-error-message" id="val-error-username"></div>
+        </div>
 
-    <h1>Register To Rescue Circle<img src="../../resources/rescue_circle_logo.webp" alt="" width="100px"></h1>
-    <div id=" userRegistrationForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <div class="validation-error-message" id="val-error-username" style="color: red"></div>
+        <div class="form-group">
+            <label for="fullname">Full Name:</label>
+            <input type="text" class="form-control" id="fullname" name="fullname" required>
+            <div class="validation-error-message" id="val-error-fullname"></div>
+        </div>
 
-        <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" required>
-        <div class="validation-error-message" id="val-error-fullname" style="color: red"></div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="validation-error-message" id="val-error-email"></div>
+        </div>
 
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+            <div class="validation-error-message" id="val-error-password"></div>
+        </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <div class="validation-error-message" id="val-error-email" style="color: red"></div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+            <div class="validation-error-message" id="val-error-phone"></div>
+        </div>
 
+        <div class="form-group">
+            <div id="mapid" style="width: 100%; height: 400px;"></div>
+            <div class="validation-error-message" id="val-error-map"></div>
+        </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <div class="validation-error-message" id="val-error-password" style="color: red"></div>
+        <button id="register-button" type="button" class="btn btn-primary btn-block">Register</button>
+    </form>
+</div>
 
-
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required>
-        <div class="validation-error-message" id="val-error-phone" style="color: red"></div>
-
-
-        <div id="mapid" style="width: 600px; height: 400px;"></div>
-        <div class="validation-error-message" id="val-error-map" style="color: red"></div>
-
-        <button id="register-button" type="submit">Register</button>
-    </div>
-
-    <script type="module" src="registerRefactor.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script type="module" src="registerRefactor.js"></script>
 </body>
-
 </html>
