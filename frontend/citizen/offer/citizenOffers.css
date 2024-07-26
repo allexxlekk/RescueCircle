@@ -1,128 +1,142 @@
+#view-announcements-container .announcement-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This will place the elements at opposite ends */
+}
+
 #item-list-container .list-group#item-list {
-    max-height: 400px; /* Adjust based on your preference */
-    overflow-y: auto;
-    /* Adding overflow-x as hidden to prevent horizontal scrollbar */
-    overflow-x: hidden;
+  max-height: 400px; /* Adjust based on your preference */
+  overflow-y: auto;
+  overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
 }
 
 #view-offer-container .list-group#request-list {
-    max-height: 680px; /* Adjust based on your preference */
-    overflow-y: auto;
-    /* Adding overflow-x as hidden to prevent horizontal scrollbar */
-    overflow-x: hidden;
+  max-height: 680px; /* Adjust based on your preference */
+  overflow-y: auto;
+  overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
 }
 
 #view-announcements-container .list-group#announcement-list {
-    max-height: 680px; /* Adjust based on your preference */
-    overflow-y: auto;
-    /* Adding overflow-x as hidden to prevent horizontal scrollbar */
-    overflow-x: hidden;
-}
-body {
-    background-color: #f5f5f5;
-    font-family: 'Lato', sans-serif;
+  max-height: 680px; /* Adjust based on your preference */
+  overflow-y: auto;
+  overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
 }
 
-h3, h4 {
-    font-family: 'Roboto', sans-serif;
-    color: #333;
+body {
+  background-color: #f5f5f5;
+  font-family: "Lato", sans-serif;
+}
+
+h3,
+h4 {
+  font-family: "Roboto", sans-serif;
+  color: #333;
 }
 
 #offer-container {
-    max-width: 700px;
-    margin: 40px auto;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 20px;
+  max-width: 700px;
+  margin: 40px auto;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
-h3, h4 {
-    color: #333;
+h3,
+h4 {
+  color: #333;
 }
 
-#add-offer-container, #item-list-container {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #fafafa;
+#add-offer-container,
+#item-list-container {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #fafafa;
 }
 
-.input-group-text, .form-select, .form-control {
-    border-radius: 0.375rem;
+.input-group-text,
+.form-select,
+.form-control {
+  border-radius: 0.375rem;
 }
 
 .input-group-prepend .input-group-text {
-    border-right: 0;
+  border-right: 0;
 }
 
 .form-control {
-    border-left: 0;
+  border-left: 0;
 }
 
 .list-group-item-action {
-    border-radius: 0.375rem;
-    margin-top: 8px;
-    transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 0.375rem;
+  margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .list-group-item-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 #selected-category-text {
-    display: inline-block; /* Allows the application of width */
-    min-width: 100px; /* Or any width that suits your layout */
-    max-width: 100%; /* Prevents it from overflowing its container */
-}
-.btn-primary, .btn-secondary {
-    margin: 5px 0; /* Adjusts spacing */
-    width: calc(50% - 10px); /* Ensures buttons are next to each other with a small gap */
+  display: inline-block; /* Allows the application of width */
+  min-width: 100px; /* Or any width that suits your layout */
+  max-width: 100%; /* Prevents it from overflowing its container */
 }
 
-.btn-primary:hover, .btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.btn-primary,
+.btn-secondary {
+  margin: 5px 0; /* Adjusts spacing */
+  width: calc(
+    50% - 10px
+  ); /* Ensures buttons are next to each other with a small gap */
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Flex container for buttons to sit side-by-side */
 #button-container {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .dropdown .dropdown-menu {
-    border-radius: 0.375rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-item:hover {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 .dropdown-toggle {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal; /* Allows the text to wrap */
-    max-width: 100%; /* Use max-width to prevent overflow */
-    height: auto; /* Lets the button grow in height as needed */
-    line-height: 1.5; /* Adjust line height for better readability of wrapped text */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Allows the text to wrap */
+  max-width: 100%; /* Use max-width to prevent overflow */
+  height: auto; /* Lets the button grow in height as needed */
+  line-height: 1.5; /* Adjust line height for better readability of wrapped text */
 }
 
 .pending-offer {
-    background-color: #ffc107; /* Bootstrap's warning color for pending, or choose your own */
-    color: #000; /* Text color */
+  background-color: #ffc107; /* Bootstrap's warning color for pending, or choose your own */
+  color: #000; /* Text color */
 }
 
 .assumed-offer {
-    background-color: #17a2b8; /* Bootstrap's info color for assumed, or choose your own */
-    color: #fff; /* Text color */
+  background-color: #17a2b8; /* Bootstrap's info color for assumed, or choose your own */
+  color: #fff; /* Text color */
 }
 
 .completed-offer {
-    background-color: #28a745; /* Bootstrap's success color for completed, or choose your own */
-    color: #fff; /* Text color */
+  background-color: #28a745; /* Bootstrap's success color for completed, or choose your own */
+  color: #fff; /* Text color */
 }

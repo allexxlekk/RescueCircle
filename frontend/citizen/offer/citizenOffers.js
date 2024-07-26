@@ -1,7 +1,7 @@
 import apiUtils from "../../utils/apiUtils.mjs";
 
-let selectedAnnouncementId = null;
-let citizenId = 3; //TODO: take this from jwt
+let selectedAnnouncementId = 1;
+let citizenId = 7; //TODO: take this from jwt
 let announcements = null;
 const createOfferButton = document.getElementById("create-offer-button");
 const seeOffersButton = document.getElementById("see-offers-button");
@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     createStatusDropdown();
 
     seeOffersButton.addEventListener("click", async () => {
-            await initViewOffers();
-        }
+        await initViewOffers();
+    }
     )
     createOfferButton.addEventListener("click", async () => {
         await initViewAnnouncements()
@@ -120,7 +120,7 @@ function createItemElement(item) {
     <button class="btn btn-primary submit-button">Submit</button>
 `;
 
-// Get references to the newly created input and button
+    // Get references to the newly created input and button
     const inputElement = itemElement.querySelector('.input-quantity');
     const buttonElement = itemElement.querySelector('.submit-button');
 
@@ -132,7 +132,7 @@ function createItemElement(item) {
         event.stopPropagation();
     });
 
-// Add event listener to the button
+    // Add event listener to the button
     buttonElement.addEventListener('click', async (event) => {
 
         event.stopPropagation();

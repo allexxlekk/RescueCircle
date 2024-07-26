@@ -70,6 +70,8 @@ const loadInventory = async (itemId, amount, rescuerId) => {
     alert('Item Loaded Successfully');
 };
 
+
+
 //Check if is correct
 const unloadInventory = async (rescuerId) => {
     try {
@@ -81,7 +83,6 @@ const unloadInventory = async (rescuerId) => {
         throw error; // Re-throw the error to be caught in the higher level
     }
 }
-
 
 
 function showItems(items) {
@@ -155,7 +156,6 @@ function createItemElement(item) {
     return itemElement;
 }
 
-
 ///////////Map code//////
 //API CALLS////
 async function fetchRequests(citizenId) {
@@ -168,6 +168,16 @@ async function fetchRequests(citizenId) {
         throw error;
     }
 }
+
+// window.acceptRequest = function (requestId) {
+
+//     console.log("Accepting request:", requestId);
+//     console.log("Rescuer ID:", rescuerId);
+// };
+
+
+
+
 
 async function fetchCitizenRequests() {
     try {
@@ -190,8 +200,6 @@ async function fetchMarkers(role) {
         throw error;
     }
 }
-
-
 
 //HELPER FUNCTIONS////////////////////////////////
 
@@ -224,18 +232,84 @@ function showRequests(requests) {
 function showUserMarkers(map, users) {
     users.forEach(function (user) {
         // Create a marker for each user
-        let marker = L.marker([user.latitude, user.longitude])
-            .addTo(map)
-
-        // You can also store the user id as a property of the marker
+        let marker = L.marker([user.latitude, user.longitude]).addTo(map);
         marker.userId = user.id;
 
-        marker.addEventListener('click', async () => {
-            showRequests(await fetchRequests(marker.userId))
-        });
+        // Event listener for marker click to fetch and display requests
+        marker.on('click', async () => {
+            try {
+                const requests = await fetchRequests(marker.userId);
+                if (requests && requests.length > 0) {
+                    let popupContent = `<div><h3>User: ${requests[0].fullName}</h3>`;
+                    requests.forEach(request => {
+                        if (request.status !== "COMPLETED") {
+                            popupContent += `<div style="margin-top: 10px;">
+                                <p><strong>Item:</strong> ${request.item.name}</p>
+                                <p><strong>Status:</strong> ${request.status}</p>
+                                <p><strong>Quantity:</strong> ${request.quantity}</p>
+                                <p><strong>Date:</strong> ${request.createdAt}</p>
+                                <button class="accept-btn" data-rescuer-id="${request.rescuerId}" data-request-id="${request.requestId}">Accept Request</button>
+                            </div>`;
 
-    })
+                        }
+                    });
+                    popupContent += '</div>';
+
+                    marker.bindPopup(popupContent).on('popupopen', function () {
+                        document.querySelectorAll('.accept-btn').forEach(button => {
+                            button.addEventListener('click', function () {
+                                const rescuerId = button.getAttribute('data-rescuer-id');
+                                const requestId = button.getAttribute('data-request-id');
+                                acceptRequest(requestId);
+                            });
+                        });
+                    }).openPopup();
+                } else {
+                    let fallbackContent = `<div><p>No active requests for this user found.</p></div>`;
+                    marker.bindPopup(fallbackContent).openPopup();
+                }
+            } catch (error) {
+                console.error('Error fetching requests:', error);
+                let errorContent = `<div>
+                    <h3>User: ${user.fullName}</h3>
+                    <p>Location: ${user.latitude}, ${user.longitude}</p>
+                    <p>User ID: ${user.id}</p>
+                    <p>Error fetching requests.</p>
+                </div>`;
+                marker.bindPopup(errorContent).openPopup();
+            }
+        });
+    });
 }
+
+window.acceptRequest = async function (requestId) {
+    if (!requestId) {
+        console.error("Missing rescuerId or requestId");
+        return false;
+    }
+    try {
+        const url = `http://localhost:3000/rescuers/accept-request?rescuerId=${encodeURIComponent(rescuerId)}&requestId=${encodeURIComponent(requestId)}`;
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);  // Display a message to the user
+            console.log(result.message);
+            return result.message;
+        } else {
+            throw new Error(result.message || 'Failed to accept the request');
+        }
+    } catch (error) {
+        console.error("Error while accepting the request:", error);
+        alert("Failed to accept request due to an error.");  // Notify the user
+        return false;
+    }
+}
+
 
 function createRequestCardElement(request) {
     const li = document.createElement('li');

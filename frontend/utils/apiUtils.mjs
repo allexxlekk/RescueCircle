@@ -135,7 +135,7 @@ const apiUtils = {
 
             return await response.json(); // Return the data
         } catch
-            (error) {
+        (error) {
             console.error("Fetch error:", error);
             throw error; // Re-throw the error to be caught in the higher level
         }
@@ -149,7 +149,7 @@ const apiUtils = {
 
             return await response.json(); // Return the data
         } catch
-            (error) {
+        (error) {
             console.error("Fetch error:", error);
             throw error; // Re-throw the error to be caught in the higher level
         }
@@ -203,7 +203,7 @@ const apiUtils = {
     },
     async fetchAnnouncement(announcementId) {
         try {
-            const response = await fetch('http://localhost:3000/announcements/'+announcementId);
+            const response = await fetch('http://localhost:3000/announcements/' + announcementId);
 
             return await response.json();
         } catch (error) {

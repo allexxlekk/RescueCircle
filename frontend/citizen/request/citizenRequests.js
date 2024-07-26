@@ -1,7 +1,7 @@
 import apiUtils from "../../utils/apiUtils.mjs";
 
 let selectedItemId = null;
-let citizenId = 6; //TODO: take this from jwt
+let citizenId = 7; //TODO: take this from jwt
 const searchFilter = document.getElementById("search-filter");
 const addRequestButton = document.getElementById("add-request-button");
 const cancelRequestButton = document.getElementById("cancel-request-button");
