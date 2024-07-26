@@ -1,7 +1,16 @@
 import apiUtils from "../utils/apiUtils.mjs";
 
 // GLOBALS
-let mymap = L.map("mapid").setView([38.242, 21.727], 12);
+let mymap = L.map("mapid").setView([38.242, 21.727], 17);
+
+//base marker 
+const baseIcon = L.divIcon({
+    html: '<i class="material-icons" style="color: red; font-size: 52px;">location_on</i>',
+    className: 'custom-div-icon', // Add any additional classes here
+    iconSize: [32, 32], // Size of the icon (optional, adjust as needed)
+    iconAnchor: [16, 32], // Point of the icon which will correspond to marker's location
+    popupAnchor: [0, -32] // Point from which the popup should open relative to the iconAnchor
+});
 
 // MAIN
 document.addEventListener("DOMContentLoaded", async () => {
@@ -10,11 +19,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     let baseLocation = await getBaseLocation();
     baseLocation = baseLocation[0];
 
+
+
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 18,
     }).addTo(mymap);
+
+    L.marker([baseLocation.latitude, baseLocation.longitude], { icon: baseIcon }).addTo(mymap)
+
+        .openPopup();
 
     mymap.setView([baseLocation.latitude, baseLocation.longitude], 12);
     let center = [baseLocation.latitude, baseLocation.longitude];
@@ -83,6 +98,7 @@ function showRequests(requests) {
     }
 
     // Set the title and total number of requests
+
     titleDiv.textContent = `Requests (${requests.length})`;
 
     requestListElement.innerHTML = ''; // Clear existing items
@@ -128,7 +144,7 @@ function createRequestCardElement(request) {
 
     const statusDiv = document.createElement('div');
     statusDiv.className = "status";
-    statusDiv.textContent = `Status: ${request.status}`;
+    statusDiv.textContent = `${request.status}`;
 
     const numberOfPeopleDiv = document.createElement('div');
     numberOfPeopleDiv.className = "number-of-people";

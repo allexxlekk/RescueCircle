@@ -1,4 +1,31 @@
-h1 {
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header .container-fluid {
+  display: flex;
+  align-items: center;
+}
+
+header .btn-danger {
+  background-color: #ff0000; /* Red color */
+  border: none;
+}
+
+header .btn-danger:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+h1,
+h3 {
   text-align: center;
 }
 
@@ -76,12 +103,6 @@ h1 {
   border-color: #b1dfbb !important;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 #request-list {
   margin-top: 20px;
 }
@@ -101,14 +122,6 @@ body {
 .selected-marker {
   filter: brightness(1.2);
   box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
-}
-
-header {
-  background-color: #2b2e4a;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
 }
 
 header a {

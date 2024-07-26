@@ -6,45 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rescuer</title>
     <link rel="stylesheet" href="rescuer.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 
 
 <body>
-<h1>Rescuer page</h1>
-<h3>See requests and offers on the map</h3>
-<div id="map-request-div">
-    <div id="mapid" style="width: 600px; height: 400px;"></div>
+    <header>
+        <div class="container-fluid">
+            <div class="row align-items-center">
 
-    <div id="request-list">
-        <ul>
+                <div class="col-auto ml-auto">
+                    <button id="logout-button" class="btn btn-danger">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <h1>Rescuer page</h1>
+    <h3>See requests and offers on the map</h3>
+    <div id="map-request-div">
+        <div id="mapid" style="width: 600px; height: 400px;"></div>
+
+        <div id="request-list">
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+    <h1>Inventory</h1>
+    <div>
+        <ul id="inventory-list">
 
         </ul>
     </div>
-</div>
-<h1>Inventory</h1>
-<div>
-    <ul id="inventory-list">
 
-    </ul>
-</div>
+    <button type="submit" id="load-button" style="display:none;">Load</button>
+    <h3>Choose item to load</h3>
+    <div>
+        <ul id="item-list">
 
-<button type="submit" id="load-button" style="display:none;">Load</button>
-<h3>Choose item to load</h3>
-<div>
-    <ul id="item-list">
-
-    </ul>
-</div>
+        </ul>
+    </div>
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script src="rescuer.js" type="module"></script>
-<script src="rescuerInventory.js" type="module"></script>
+    <script src="rescuer.js" type="module"></script>
+    <script src="rescuerInventory.js" type="module"></script>
 </body>
 
 </html>
