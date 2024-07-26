@@ -1,7 +1,7 @@
 import apiUtils from "../../utils/apiUtils.mjs";
 
 let selectedItemId = null;
-let citizenId = 3; //TODO: take this from jwt
+let citizenId = 6; //TODO: take this from jwt
 const searchFilter = document.getElementById("search-filter");
 const addRequestButton = document.getElementById("add-request-button");
 const cancelRequestButton = document.getElementById("cancel-request-button");
@@ -36,18 +36,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 300)
     );
     addRequestButton.addEventListener("click", async () => {
-            await apiUtils.postRequest({
-                itemId: selectedItemId,
-                numberOfPeople: numberOfPeople,
-                citizenId: citizenId
-            })
+        await apiUtils.postRequest({
+            itemId: selectedItemId,
+            numberOfPeople: numberOfPeople,
+            citizenId: citizenId
+        })
 
-            await initViewRequests();
-        }
+        await initViewRequests();
+    }
     )
     cancelRequestButton.addEventListener("click", async () => {
-            await initViewRequests();
-        }
+        await initViewRequests();
+    }
     )
     createRequestButton.addEventListener("click", async () => {
         await initAddRequest()
@@ -200,9 +200,9 @@ const createCategoryDropdown = async () => {
 
 const createStatusDropdown = () => {
 
-    const statusDropdown = document.getElementById("status-dropdown");
+    const statusDropdown = document.getElementById("status-dropdown-request");
     const selectedStatusText = document.getElementById("selected-request-text");
-    const allStatusDropDownChoice = document.getElementById("all-status");
+    const allStatusDropDownChoice = document.getElementById("all-status-request");
 
     statusFilter = "all-statuses";
 

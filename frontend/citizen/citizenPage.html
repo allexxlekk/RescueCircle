@@ -5,39 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Citizen page</title>
-    <link rel="stylesheet" href="citizenPage.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- <link rel="stylesheet" href="citizenPage.css"> -->
+    <link rel="stylesheet" href="./request/citizenRequests.css">
+    <link rel="stylesheet" href="./offer/citizenOffers.css">
+
+
 </head>
 
 <body>
 
-
-    <div id="request-list">
-        <ul>
-
-        </ul>
+    <div id="view-announcements-container">
+        <h3>Announcements</h3>
+        <h6>Select an announcement to contribute!</h6>
+        <div class="list-group" id="announcement-list">
+        </div>
+        <button id="see-offers-button" class="btn btn-primary">See Offers</button>
     </div>
-
-    <div id="requestForm">
-        <h1>Create a request</h1>
-        <label for="search-filter">Search: </label><input type="text" id="search-filter"
-            placeholder="e.g. Water, Shoes, ..." />
-
-        <label for="category-filter">Filter Category:</label>
-        <select id="category-filter"></select>
-
-
-        <label for="select-item">Select item:</label>
-        <select id="select-item" name="select-item">
-        </select>
-
-        <label for="number-of-people">Number of People:</label>
-        <input type="number" id="number-of-people" name="number-of-people" min="1" max=10 value="1">
-
-        <button id="request-button">Add request</button>
-        <button id="hide-request-button">Hide</button>
-    </div>
-
-    <button id="create-request-button">Create request</button>
 
     <div id="announcements">
         <ul id="announcement-list">
@@ -45,11 +33,100 @@
         </ul>
     </div>
 
+    <div id="view-offers-container">
+        <h3>Offers</h3>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-status"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Status: <span id="selected-offers-text">All</span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-status" id="status-dropdown">
+                <div class="dropdown-item dropdown-status-name" id="all-status">All</div>
+                <div class="dropdown-divider"></div>
+            </div>
+
+        </div>
+        <div class="list-group" id="offer-list">
+        </div>
+        <button id="create-offer-button" class="btn btn-primary">Create New Offer</button>
+    </div>
+
+
+
+    <div id="request-container">
+
+        <div id="view-request-container">
+            <h3>Requests</h3>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-status-request"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Status: <span id="selected-request-text">All</span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-status" id="status-dropdown-request">
+                    <div class="dropdown-item dropdown-status-name" id="all-status-request">All</div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+            </div>
+            <div class="list-group" id="request-list">
+            </div>
+            <button id="create-request-button" class="btn btn-primary">Create New Request</button>
+        </div>
+
+        <div id="add-request-container">
+            <h3>Create A New Request</h3>
+            <div id="item-list-container">
+                <h4>Available Items</h4>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Category: <span id="selected-category-text">All</span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="category-dropdown">
+                        <div class="dropdown-item dropdown-category-name" id="all-categories">All Categories</div>
+                        <div class="dropdown-divider"></div>
+                    </div>
+
+                </div>
+                <br>
+                <div class="input-group mb-3" id="item-search-box">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Search Items</span>
+                    </div>
+                    <label for="search-filter"></label><input type="text" class="form-control"
+                        placeholder="Bread, Medicine, Shoes, ..." id="search-filter" aria-describedby="basic-addon1">
+                </div>
+                <div class="list-group" id="item-list"></div>
+            </div>
+            <br>
+            <div id="number-of-people">
+            </div>
+            <button id="cancel-request-button" class="btn btn-secondary">Cancel</button>
+            <button id="add-request-button" class="btn btn-primary" disabled>Add Request</button>
+        </div>
+    </div>
 
 
 
 
-    <script src="citizenPage.js" type="module"></script>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script type="module" src="./offer/citizenOffers.js"></script>
+
+    <script type="module" src="./request/citizenRequests.js"></script>
+    <!-- <script src="citizenPage.js" type="module"></script> -->
 </body>
 
 </html>
