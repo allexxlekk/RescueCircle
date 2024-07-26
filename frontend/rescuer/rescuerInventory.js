@@ -59,13 +59,13 @@ function createInventoryItemElement(inventory) {
     itemNameDiv.textContent = "Name: ";
     itemNameDiv.appendChild(inventoryItemNameElement);
 
-    let inventoryItemcategoryNameElement = document.createElement("span");
-    inventoryItemcategoryNameElement.className = "name";
-    inventoryItemcategoryNameElement.textContent = `${inventory.category_name}`;
+    let inventoryItemCategoryNameElement = document.createElement("span");
+    inventoryItemCategoryNameElement.className = "name";
+    inventoryItemCategoryNameElement.textContent = `${inventory.category_name}`;
 
     const itemCategoryNameDiv = document.createElement("div");
     itemCategoryNameDiv.textContent = "Category Name: ";
-    itemCategoryNameDiv.appendChild(inventoryItemcategoryNameElement);
+    itemCategoryNameDiv.appendChild(inventoryItemCategoryNameElement);
 
     let inventoryItemAmountElement = document.createElement("span");
     inventoryItemAmountElement.className = "amount";

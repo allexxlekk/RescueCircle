@@ -224,3 +224,51 @@ li > div {
 h3 {
   text-align: center;
 }
+
+h1 {
+  text-align: center;
+}
+
+div {
+  width: 80%; /* Control the width of the div container to your preference */
+  margin: auto; /* Center the container horizontally */
+  max-width: 1000px; /* Max width can be adjusted based on design needs */
+}
+
+#inventory-list {
+  padding: 0;
+  list-style-type: none; /* Removes default list item bullets */
+}
+
+/* List item styling */
+#inventory-list li {
+  display: flex;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+/* Column styling to ensure alignment */
+#inventory-list li > div {
+  flex: 1; /* Each div takes equal space */
+  display: flex;
+  align-items: center;
+}
+
+#inventory-list li > div:first-child {
+  flex: 3; /* Allocate more space to the name column if needed */
+}
+
+#inventory-list li > div:nth-child(2) {
+  flex: 2; /* Adjust flex value based on content size */
+}
+
+#inventory-list li > div:nth-child(3) {
+  flex: 1;
+  justify-content: flex-end; /* Align amount to the right */
+}
+
+/* Optional: Additional styling for visual aesthetics */
+#inventory-list li > div:not(:last-child) {
+  margin-right: 10px; /* Adds margin to the right of each column except the last one */
+}

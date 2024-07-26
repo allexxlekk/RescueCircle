@@ -1,4 +1,4 @@
-const rescuerId = 9; // Get from logged in rescuer
+const rescuerId = 4; // Get from logged in rescuer
 
 let mymap = L.map("mapid").setView([38.242, 21.727], 12);
 
