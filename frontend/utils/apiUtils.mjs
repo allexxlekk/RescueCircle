@@ -220,6 +220,23 @@ const apiUtils = {
             body: JSON.stringify(newOffer),
         });
     },
+
+    async cancelOffer(offerId) {
+        try {
+            const response = await fetch(`http://localhost:3000/offers/${offerId}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete the offer.');
+            }
+            return true;
+        } catch (error) {
+            console.error("Error on cancel offer:", error);
+            throw error;
+        }
+    },
+
+
 };
 
 export default apiUtils;

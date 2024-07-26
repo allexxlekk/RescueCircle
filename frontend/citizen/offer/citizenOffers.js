@@ -1,18 +1,17 @@
 import apiUtils from "../../utils/apiUtils.mjs";
 
 let selectedAnnouncementId = 1;
-let citizenId = 7; //TODO: take this from jwt
+let citizenId = 7; // TODO: take this from jwt
 let announcements = null;
 const createOfferButton = document.getElementById("create-offer-button");
 const seeOffersButton = document.getElementById("see-offers-button");
 let statusFilter = "all-statuses";
 const itemList = document.createElement("div");
-itemList.classList.add("list-group")
+itemList.classList.add("list-group");
 const selectedStatusText = document.getElementById("selected-offers-text");
 let offers;
 const viewOffersContainer = document.getElementById("view-offers-container");
 const viewAnnouncementsContainer = document.getElementById("view-announcements-container");
-
 
 const statusPriority = {
     'ASSUMED': 1,
@@ -26,10 +25,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     seeOffersButton.addEventListener("click", async () => {
         await initViewOffers();
-    }
-    )
+    });
     createOfferButton.addEventListener("click", async () => {
-        await initViewAnnouncements()
+        await initViewAnnouncements();
     });
 });
 
@@ -40,7 +38,7 @@ const initViewAnnouncements = async () => {
     selectedStatusText.innerHTML = "All";
     announcements = await apiUtils.fetchAnnouncements();
     showAnnouncements(announcements);
-}
+};
 
 const initViewOffers = async () => {
     viewOffersContainer.style.display = "inline";
@@ -49,7 +47,7 @@ const initViewOffers = async () => {
     selectedStatusText.innerHTML = "All";
     offers = await apiUtils.fetchCitizensOffers(citizenId);
     showOffers(offers);
-}
+};
 
 function showAnnouncements(announcements) {
     const announcementListElement = document.getElementById("announcement-list");
@@ -102,7 +100,6 @@ function createAnnouncementElement(announcement) {
     return announcementElement;
 }
 
-
 function createItemElement(item) {
     const itemElement = document.createElement("div");
     itemElement.className = "item";
@@ -147,14 +144,12 @@ function createItemElement(item) {
             });
             alert("Your offer has been completed successfully! Thank you!");
         } else {
-            alert("You must enter a valid number to complete the donation")
+            alert("You must enter a valid number to complete the donation");
         }
     });
 
-
     return itemElement;
 }
-
 
 function showOffers(offers) {
     offers.sort((a, b) => statusPriority[a.status] - statusPriority[b.status]);
@@ -176,24 +171,39 @@ function createOfferElement(offer) {
     // Add classes to the div
     offerElement.className = 'd-flex w-100 justify-content-between list-group-item list-group-item-action flex-column align-items-start';
 
-    offerElement.classList.add(offer.status.toLowerCase() + "-offer")
+    offerElement.classList.add(offer.status.toLowerCase() + "-offer");
 
     // Set the innerHTML of the div with the item's details
     offerElement.innerHTML = `
        <h5 class="mb-1 offer-item-name">${offer.item.name}</h5>
-                <small class="request-item-quantity">Quantity: ${offer.quantity}</small>
-                <p class="mb-1 offer-status">Status: ${offer.status.substring(0, 1).toUpperCase() + offer.status.substring(1).toUpperCase()}</p>
-                <p class="mb-1 offer-date">Request Date: <span class="offer-date-value"> ${offer.createdAt}</span></p>
-                <p class="mb-1 assumed-date">Assumed Date: <span class="assume-date-value"> ${offer.assumedAt}</span></p>
-                <p class="mb-1 completed-date">Completed Date:  <span class="assume-date-value"> ${offer.completedAt}</span></p>
+       <small class="request-item-quantity">Quantity: ${offer.quantity}</small>
+       <p class="mb-1 offer-status">Status: ${offer.status.substring(0, 1).toUpperCase() + offer.status.substring(1).toLowerCase()}</p>
+       <p class="mb-1 offer-date">Request Date: <span class="offer-date-value">${offer.createdAt}</span></p>
+       <p class="mb-1 assumed-date">Assumed Date: <span class="assume-date-value">${offer.assumedAt}</span></p>
+       <p class="mb-1 completed-date">Completed Date: <span class="assume-date-value">${offer.completedAt}</span></p>
+       <button class="btn btn-danger delete-offer-button">Delete</button>
     `;
 
+    // Delete button in each offer element 
+    const deleteButton = offerElement.querySelector('.delete-offer-button');
+    deleteButton.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        if (confirm('Are you sure you want to delete this offer?')) {
+            try {
+                await apiUtils.cancelOffer(offer.offerId);
+                alert('Offer deleted successfully.');
+
+                offerElement.remove();
+            } catch (err) {
+                alert('Failed to delete the offer. Please try again.');
+            }
+        }
+    });
 
     return offerElement;
 }
 
 const createStatusDropdown = () => {
-
     const statusDropdown = document.getElementById("status-dropdown");
     const selectedStatusText = document.getElementById("selected-offers-text");
     const allStatusDropDownChoice = document.getElementById("all-status");
@@ -204,8 +214,8 @@ const createStatusDropdown = () => {
     statuses.forEach((status) => {
         const statusDropdownElement = document.createElement("div");
         statusDropdownElement.className = 'dropdown-item dropdown-status-name';
-        statusDropdownElement.id = status
-        statusDropdownElement.innerHTML = status
+        statusDropdownElement.id = status;
+        statusDropdownElement.innerHTML = status;
 
         statusDropdownElement.addEventListener("click", () => {
             const filteredOffers = offers.filter(off => off.status === status);
@@ -220,5 +230,4 @@ const createStatusDropdown = () => {
 
         statusDropdown.appendChild(statusDropdownElement);
     });
-
-}
+};
