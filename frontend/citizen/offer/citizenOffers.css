@@ -4,6 +4,12 @@
   justify-content: space-between; /* This will place the elements at opposite ends */
 }
 
+#view-offers-container .offers-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This will place the elements at opposite ends */
+}
+
 #item-list-container .list-group#item-list {
   max-height: 400px; /* Adjust based on your preference */
   overflow-y: auto;

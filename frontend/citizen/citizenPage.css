@@ -1,165 +1,136 @@
-#requestForm {
-  display: none;
+#item-list-container .list-group#item-list {
+  max-height: 400px; /* Adjust based on your preference */
+  overflow-y: auto;
+  overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
 }
 
-#logout-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  margin-left: 5;
+#view-request-container .list-group#request-list {
+  max-height: 680px; /* Adjust based on your preference */
+  overflow-y: auto;
+  overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
 }
 
-#request-list ul {
-  list-style-type: none;
-  padding: 0;
+body {
+  background-color: #f5f5f5;
+  font-family: "Lato", sans-serif;
 }
 
-.request-card {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-
-.request-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.request-card .item {
-  font-size: 18px;
-  font-weight: bold;
+h3,
+h4 {
+  font-family: "Roboto", sans-serif;
   color: #333;
 }
 
-.request-card .details {
-  margin-top: 10px;
-}
-
-.request-card .details div {
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-/* Status-based background colors */
-.request-card.pending {
-  background-color: #fff3cd !important;
-  /* light yellow for pending */
-  border-color: #ffeeba !important;
-}
-
-.request-card.assumed {
-  background-color: #d1ecf1 !important;
-  /* light blue for assumed */
-  border-color: #bee5eb !important;
-}
-
-.request-card.completed {
-  background-color: #c3e6cb !important;
-  /* light green for completed */
-  border-color: #b1dfbb !important;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-#request-list {
-  margin-top: 20px;
-}
-
-#request-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-#request-list ul li {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background-color: #f9f9f9;
-}
-
-#requestForm {
-  max-width: 600px;
-  margin: 20px auto;
+#request-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  border: 1px solid #ddd;
-  background-color: #fff;
 }
 
-#requestForm h1 {
-  font-size: 24px;
+h3,
+h4 {
+  color: #333;
+}
+
+#add-request-container,
+#item-list-container {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
   margin-bottom: 20px;
-}
-
-#requestForm label {
-  display: block;
-  margin-bottom: 8px;
-}
-
-#requestForm select,
-#requestForm input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-}
-
-#request-button {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-#request-button:hover {
-  background-color: #45a049;
-}
-
-/* Base styles for the entire page */
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
-  margin: 0;
-  padding: 20px;
-}
-
-#announcement-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 auto; /* Center the list on the page */
-  width: 800px; /* Set the width of the list */
-  max-height: 500px; /* Set a maximum height to enable scrolling */
-  overflow-y: auto; /* Show vertical scrollbar when needed */
-  background-color: #ffffff; /* Optional: Set a background color */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
-  border-radius: 5px; /* Optional: Round the corners */
-}
-
-.announcement-card {
-  text-align: center;
-  background-color: lightgrey;
-  border-bottom: 1px solid #eaeaea; /* Add a separator between items */
   padding: 15px;
-  font-weight: bold;
+  background: #fafafa;
 }
 
-/* Add some padding inside the list for aesthetics */
-#announcement-list li:first-child {
-  padding-top: 15px;
+.input-group-text,
+.form-select,
+.form-control {
+  border-radius: 0.375rem;
 }
 
-#announcement-list li:last-child {
-  padding-bottom: 15px;
+.input-group-prepend .input-group-text {
+  border-right: 0;
 }
 
-.announcement-list-title {
-  text-align: center;
-  font-weight: Bold;
-  font-size: x-large;
+.form-control {
+  border-left: 0;
+}
+
+.list-group-item-action {
+  border-radius: 0.375rem;
+  margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.list-group-item-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#selected-category-text {
+  display: inline-block; /* Allows the application of width */
+  min-width: 100px; /* Or any width that suits your layout */
+  max-width: 100%; /* Prevents it from overflowing its container */
+}
+
+.btn-primary,
+.btn-secondary {
+  margin: 5px 0; /* Adjusts spacing */
+  width: calc(
+    50% - 10px
+  ); /* Ensures buttons are next to each other with a small gap */
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Flex container for buttons to sit side-by-side */
+#button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown .dropdown-menu {
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-toggle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Allows the text to wrap */
+  max-width: 100%; /* Use max-width to prevent overflow */
+  height: auto; /* Lets the button grow in height as needed */
+  line-height: 1.5; /* Adjust line height for better readability of wrapped text */
+}
+
+.pending-request {
+  background-color: #ffc107; /* Bootstrap's warning color for pending, or choose your own */
+  color: #000; /* Text color */
+}
+
+.assumed-request {
+  background-color: #17a2b8; /* Bootstrap's info color for assumed, or choose your own */
+  color: #fff; /* Text color */
+}
+
+.completed-request {
+  background-color: #28a745; /* Bootstrap's success color for completed, or choose your own */
+  color: #fff; /* Text color */
+}
+
+.request-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Aligns items to opposite ends */
 }
