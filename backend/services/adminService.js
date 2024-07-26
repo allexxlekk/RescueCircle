@@ -1,0 +1,124 @@
+const dbConnection = require('../config/db'); // Adjust this path as needed
+
+const adminService = {
+    getCategories: async (search) => {
+        let query = `
+            SELECT ic.id,
+                   ic.name,
+                   COUNT(i.id) AS items
+            FROM item_category ic
+                     LEFT JOIN
+                 item i ON ic.id = i.category_id
+        `;
+
+        let params = [];
+
+
+        console.log("Search", search)
+        if (search) {
+            query += `WHERE ic.name LIKE ? `;
+            params.push(`%${search}%`);
+        }
+
+        query += `
+            GROUP BY 
+                ic.id, ic.name
+            ORDER BY 
+                ic.name ASC
+        `;
+
+        try {
+            console.log(query)
+            const [results] = await dbConnection.promise().query(query, params);
+            return results;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    addCategory: async (name) => {
+        try {
+            // Check if a category with this name exists (case-insensitive)
+            const [existingCategories] = await dbConnection.promise().query(
+                'SELECT id FROM item_category WHERE LOWER(name) = LOWER(?)',
+                [name]
+            );
+
+            if (existingCategories.length > 0) {
+                return null; // Category already exists
+            }
+
+            // Insert the new category
+            const [result] = await dbConnection.promise().query(
+                'INSERT INTO item_category (name) VALUES (?)',
+                [name]
+            );
+
+            return result.insertId; // Return the ID of the newly inserted category
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    editCategoryName: async (id, name) => {
+        try {
+            // Check if a category with this name exists (case-insensitive)
+            const [existingCategories] = await dbConnection.promise().query(
+                'SELECT id FROM item_category WHERE LOWER(name) = LOWER(?)',
+                [name]
+            );
+
+            if (existingCategories.length > 0) {
+                return null; // Category already exists
+            }
+
+            // Update category name
+            await dbConnection.promise().query(
+                'UPDATE item_category SET name = ? WHERE id = ?',
+                [name, id]
+            );
+
+            return id;
+        } catch (error) {
+            throw error;
+        }
+    },
+    deleteCategory: async (id) => {
+        try {
+            // Check if a category is assigned to items
+            const [assignedItems] = await dbConnection.promise().query(
+                'SELECT id FROM item WHERE category_id = ?',
+                [id]
+            );
+
+            if (assignedItems.length > 0) {
+                return false; // Cannot delete category
+            }
+
+            // Delete Category
+            await dbConnection.promise().query(
+                'DELETE FROM item_category WHERE id = ?',
+                [id]
+            );
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    },
+    isCategoryNameAvailable: async (name) => {
+        try {
+            const [existingCategories] = await dbConnection.promise().query(
+                'SELECT id FROM item_category WHERE LOWER(name) = LOWER(?)',
+                [name]
+            );
+
+            return existingCategories.length <= 0;
+
+        } catch (error) {
+            throw error;
+        }
+    },
+};
+
+module.exports = adminService;

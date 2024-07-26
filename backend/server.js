@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/users');
+const adminRouter = require('./routes/admin')
 const rescuersRouter = require('./routes/rescuers');
 const offersRouter = require('./routes/offers');
 const categoriesRouter = require('./routes/categories');
@@ -15,7 +16,7 @@ const app = express();
 // Use CORS middleware to allow requests from all origins
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 3000;
 
 app.use('/users', userRouter);
@@ -25,6 +26,7 @@ app.use('/requests', requestsRouter)
 app.use('/announcements', announcementsRouter)
 app.use('/rescuers', rescuersRouter)
 app.use('/offers', offersRouter)
+app.use('/admin', adminRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -37,7 +39,7 @@ app.post('/register', async (req, res) => {
 
         // Validate password
         if (!isValidPassword(newUser.password)) {
-            return res.status(400).send({ error: "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character." });
+            return res.status(400).send({error: "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character."});
         }
 
         // Register User
@@ -63,7 +65,7 @@ app.post('/login', async (req, res) => {
             const token = await userService.generateJwtToken(user);
 
             // Send the token as a JSON response
-            res.json({ token });
+            res.json({token});
         }
 
     } catch (err) {
