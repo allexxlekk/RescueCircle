@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let rescuerMarkers = await fetchMarkers(rescuer);
     showRescuerMarkers(mymap, rescuerMarkers);
 
+    await displayActiveTasks(4);
 });
 
 
@@ -290,11 +291,44 @@ async function fetchMarkers(role) {
     }
 }
 
+const fetchActiveTasks = async (rescuerId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/rescuers/active-tasks?id=${encodeURIComponent(rescuerId)}`);
+        const data = await response.json();
+        console.log('Fetch Active Tasks Response:', data);
+        if (response.ok) {
+            return data;
+        } else {
+            console.error('Failed to fetch active tasks:', data.error);
+            return 0;
+        }
+    } catch (error) {
+        console.error('Error fetching active tasks:', error);
+        return 0;
+    }
+};
+
 //HELPER FUNCTIONS////////////////////////////////
 
+
+const displayActiveTasks = async (rescuerId) => {
+    const activeTasks = await fetchActiveTasks(rescuerId);
+    console.log('Active Tasks:', activeTasks); // Debug log
+    if (activeTasks !== undefined) {
+        const activeTasksElement = document.createElement('span');
+        activeTasksElement.id = 'active-tasks-count';
+        activeTasksElement.textContent = activeTasks;
+
+        const activeTasksContainer = document.getElementById('active-tasks');
+        activeTasksContainer.innerHTML = ''; // Clear any existing content
+        activeTasksContainer.appendChild(document.createTextNode('Tasks assigned: '));
+        activeTasksContainer.appendChild(activeTasksElement);
+    } else {
+        console.error('Active tasks is undefined');
+    }
+};
 function showRequests(requests) {
     const requestListContainer = document.getElementById('request-list');
-
     const requestListElement = requestListContainer.querySelector('ul');
 
     // Check if the title and total number div already exists, if not create it
@@ -303,6 +337,15 @@ function showRequests(requests) {
         titleDiv = document.createElement('div');
         titleDiv.className = 'request-list-title';
         requestListContainer.insertBefore(titleDiv, requestListElement);
+
+        // Add click event to toggle visibility of requests
+        titleDiv.addEventListener('click', () => {
+            if (requestListElement.style.display === 'none' || requestListElement.style.display === '') {
+                requestListElement.style.display = 'block';
+            } else {
+                requestListElement.style.display = 'none';
+            }
+        });
     }
 
     // Set the title and total number of requests
@@ -447,6 +490,8 @@ function createRequestCardElement(request) {
     createdAtDiv.className = "created-at";
     createdAtDiv.textContent = `Requested At: ${request.createdAt}`;
 
+
+
     const completedAtDiv = document.createElement('div');
     completedAtDiv.className = "completed-at";
     completedAtDiv.textContent = `Completed at: ${request.completedAt}`;
@@ -458,6 +503,8 @@ function createRequestCardElement(request) {
     detailsDiv.appendChild(numberOfPeopleDiv);
     detailsDiv.appendChild(quantityDiv);
     detailsDiv.appendChild(createdAtDiv);
+
+
     detailsDiv.appendChild(completedAtDiv);
 
 

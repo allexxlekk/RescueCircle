@@ -18,9 +18,14 @@
   -webkit-font-smoothing: antialiased;
 }
 
+#active-tasks {
+  text-align: center;
+  margin-bottom: 20px;
+}
 body {
   font-family: Arial, sans-serif;
   margin: 0;
+  padding-bottom: 5%;
   padding: 0;
 }
 
@@ -55,30 +60,28 @@ h3 {
   align-self: center;
 }
 
-.request-list-title {
-  display: flex;
-  align-self: center;
-}
 #request-list {
-  display: flex;
-  flex-direction: column;
+  margin-top: 20px;
+  max-height: 400px; /* Max height for the request list */
+  overflow-y: auto; /* Scrollbar for overflow content */
+  overflow-x: hidden;
 }
 
 #request-list ul {
-  display: flex;
   list-style-type: none;
   padding: 0;
-  gap: 3%;
-  margin-inline: 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 3fr));
 }
 
 .request-card {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 15px;
-  margin-bottom: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
+  background-color: #f9f9f9;
+  width: 100%;
 }
 
 .request-card:hover {
@@ -100,39 +103,26 @@ h3 {
   font-size: 14px;
 }
 
-/* Status-based background colors */
 .request-card.pending {
-  background-color: #fff3cd !important;
-  /* light yellow for pending */
-  border-color: #ffeeba !important;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
 }
 
 .request-card.assumed {
-  background-color: #d1ecf1 !important;
-  /* light blue for assumed */
-  border-color: #bee5eb !important;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
 }
 
 .request-card.completed {
-  background-color: #c3e6cb !important;
-  /* light green for completed */
-  border-color: #b1dfbb !important;
+  background-color: #c3e6cb;
+  border-color: #b1dfbb;
 }
 
-#request-list {
-  margin-top: 20px;
-}
-
-#request-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-#request-list ul li {
+.request-list-title {
+  cursor: pointer; /* Pointer cursor to indicate clickable title */
+  font-weight: bold;
   margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background-color: #f9f9f9;
+  text-align: center; /* Center the title */
 }
 
 .selected-marker {

@@ -16,7 +16,7 @@ router.get("/inventory", async (req, res) => {
 router.get("/active-tasks", async (req, res) => {
   try {
     const rescuerId = req.query.id;
-    const activeTasks = await rescuerService.fetchTasks(rescuerId);
+    const activeTasks = await rescuerService.fetchActiveTasks(rescuerId);
     res.status(200).json(activeTasks);
   } catch (error) {
     console.error(error);
@@ -28,8 +28,8 @@ router.get("/can-complete-request", async (req, res) => {
   const rescuerId = req.query.rescuer;
   const requestId = req.query.request;
   const canComplete = await rescuerService.canCompleteRequest(
-      rescuerId,
-      requestId
+    rescuerId,
+    requestId
   );
   res.status(200).json(canComplete);
 });
@@ -84,8 +84,8 @@ router.put("/complete-request", async (req, res) => {
     const rescuerId = req.query.rescuer;
     const requestId = req.query.request;
     const requestAccepted = await rescuerService.completeRequest(
-        rescuerId,
-        requestId
+      rescuerId,
+      requestId
     );
     if (requestAccepted) {
       res.status(201).json({ message: "Request completed" });
@@ -103,8 +103,8 @@ router.put("/complete-offer", async (req, res) => {
     const rescuerId = req.query.rescuer;
     const offerId = req.query.offer;
     const requestAccepted = await rescuerService.completeOffer(
-        rescuerId,
-        offerId
+      rescuerId,
+      offerId
     );
     if (requestAccepted) {
       res.status(201).json({ message: "Offer completed" });
@@ -123,8 +123,8 @@ router.put("/cancel-request", async (req, res) => {
     const rescuerId = req.query.rescuer;
     const requestId = req.query.request;
     const requestCanceled = await rescuerService.cancelRequest(
-        rescuerId,
-        requestId
+      rescuerId,
+      requestId
     );
     if (requestCanceled) {
       res.status(201).json({ message: "Request cancelled" });
@@ -140,8 +140,8 @@ router.put("/accept-offer", async (req, res) => {
     const rescuerId = req.query.rescuer;
     const offerId = req.query.offer;
     const offerAccepted = await rescuerService.acceptOffer(
-        rescuerId,
-        offerId
+      rescuerId,
+      offerId
     );
     if (offerAccepted) {
       res.status(201).json({ message: "Offer accepted" });
@@ -159,8 +159,8 @@ router.put("/cancel-offer", async (req, res) => {
     const rescuerId = req.query.rescuer;
     const offerId = req.query.offer;
     const offerCanceled = await rescuerService.cancelOffer(
-        rescuerId,
-        offerId
+      rescuerId,
+      offerId
     );
     if (offerCanceled) {
       res.status(201).json({ message: "Offer cancelled" });
