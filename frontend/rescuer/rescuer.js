@@ -1,22 +1,47 @@
 const rescuerId = 4; // Get from logged in rescuer
 
-let mymap = L.map("mapid").setView([38.242, 21.727], 12);
+let mymap = L.map("mapid").setView([38.242, 21.727], 17);
+
+const baseIcon = L.divIcon({
+    html: '<i class="material-icons" style="color: red; font-size: 52px;">location_on</i>',
+    className: 'custom-div-icon', // Add any additional classes here
+    iconSize: [32, 32], // Size of the icon (optional, adjust as needed)
+    iconAnchor: [16, 32], // Point of the icon which will correspond to marker's location
+    popupAnchor: [0, -32] // Point from which the popup should open relative to the iconAnchor
+});
+
+const rescuerIcon = L.divIcon({
+    html: '<i class="material-icons" style="color: blue; font-size: 52px;">person_pin_circle</i>',
+    className: 'custom-div-icon',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+});
 
 document.addEventListener('DOMContentLoaded', async () => {
+    let baseLocation = await getBaseLocation();
+    baseLocation = baseLocation[0];
 
     let items = await fetchItems();
 
     showItems(items);
 
-    let role = "citizen";
-    let baseLocation = await getBaseLocation();
-    baseLocation = baseLocation[0];
+    let role = "CITIZEN";
+    let rescuer = 'RESCUER';
+
+
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 18,
     }).addTo(mymap);
+
+    L.marker([baseLocation.latitude, baseLocation.longitude], { icon: baseIcon }).addTo(mymap)
+
+        .openPopup();
+
+
 
     mymap.setView([baseLocation.latitude, baseLocation.longitude], 12);
     let center = [baseLocation.latitude, baseLocation.longitude];
@@ -33,6 +58,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     showRequests(await fetchCitizenRequests());
 
+    let rescuerMarkers = await fetchMarkers(rescuer);
+    showRescuerMarkers(mymap, rescuerMarkers);
 
 });
 
@@ -48,28 +75,93 @@ async function fetchItems() {
         throw error; // Re-throw the error to be caught in the higher level
     }
 }
-const loadInventory = async (itemId, amount, rescuerId) => {
 
+async function fetchInventory(rescuerId) {
+    try {
+        const response = await fetch('http://localhost:3000/rescuers/inventory?id=' + rescuerId);
+
+        return await response.json(); // Return the data
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to be caught in the higher level
+    }
+}
+
+
+
+const loadInventory = async (itemId, amount, rescuerId) => {
     const inventory = {
         itemId: itemId,
         amount: amount,
         rescuerId: rescuerId,
-
     };
 
-    const postResponse = await fetch('http://localhost:3000/rescuers/load', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(inventory),
-    });
+    try {
+        const postResponse = await fetch('http://localhost:3000/rescuers/load', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inventory),
+        });
 
-    const response = await postResponse.json();
-    console.log(response);
-    alert('Item Loaded Successfully');
+        const response = await postResponse.json();
+        console.log(response);
+        alert('Item Loaded Successfully');
+        await updateInventoryDisplay(rescuerId);
+    } catch (error) {
+        console.error('Error loading inventory:', error);
+    }
 };
 
+//updateInventoryDisplay after clicking load item button 
+async function updateInventoryDisplay(rescuerId) {
+    try {
+        const inventoryItems = await fetchInventory(rescuerId);
+        const inventoryListElement = document.getElementById('inventory-list');
+        inventoryListElement.innerHTML = ''; // Clear existing items
+
+        inventoryItems.forEach(item => {
+            let itemElement = createInventoryItemElement(item);
+            inventoryListElement.appendChild(itemElement);
+        });
+    } catch (error) {
+        console.error('Error updating inventory display:', error);
+    }
+}
+
+function createInventoryItemElement(item) {
+    const itemElement = document.createElement('li');
+    itemElement.className = "inventory-item";
+    itemElement.id = item.id;
+
+    let itemNameElement = document.createElement("span");
+    itemNameElement.className = "name";
+    itemNameElement.textContent = `${item.name}`;
+    const itemNameDiv = document.createElement("div");
+    itemNameDiv.textContent = "Name: ";
+    itemNameDiv.appendChild(itemNameElement);
+
+    let itemCategoryElement = document.createElement("span");
+    itemCategoryElement.className = "category";
+    itemCategoryElement.textContent = `${item.category_name}`;
+    const itemCategoryDiv = document.createElement("div");
+    itemCategoryDiv.textContent = "Category: ";
+    itemCategoryDiv.appendChild(itemCategoryElement);
+
+    let itemAmountElement = document.createElement("span");
+    itemAmountElement.className = "amount";
+    itemAmountElement.textContent = `${item.amount}`;
+    const itemAmountDiv = document.createElement("div");
+    itemAmountDiv.textContent = "Amount: ";
+    itemAmountDiv.appendChild(itemAmountElement);
+
+    itemElement.appendChild(itemNameDiv);
+    itemElement.appendChild(itemCategoryDiv);
+    itemElement.appendChild(itemAmountDiv);
+
+    return itemElement;
+}
 
 
 //Check if is correct
@@ -99,7 +191,6 @@ function showItems(items) {
     });
 
 }
-
 function createItemElement(item) {
     const itemElement = document.createElement('li');
     itemElement.className = "item";
@@ -130,7 +221,6 @@ function createItemElement(item) {
     itemElement.appendChild(itemCategoryDiv);
     itemElement.appendChild(itemQuantityDiv);
 
-
     if (item.quantity > 0) {
         let quantityInput = document.createElement("input");
         quantityInput.type = "number";
@@ -147,11 +237,10 @@ function createItemElement(item) {
             await loadInventory(item.id, quantityInput.value, rescuerId);
             let items = await fetchItems();
             showItems(items);
+            await updateInventoryDisplay(rescuerId);
         };
         itemElement.appendChild(loadButton);
     }
-
-
 
     return itemElement;
 }
@@ -229,11 +318,11 @@ function showRequests(requests) {
     });
 }
 
-function showUserMarkers(map, users) {
-    users.forEach(function (user) {
+function showUserMarkers(map, citizens) {
+    citizens.forEach(function (citizen) {
         // Create a marker for each user
-        let marker = L.marker([user.latitude, user.longitude]).addTo(map);
-        marker.userId = user.id;
+        let marker = L.marker([citizen.latitude, citizen.longitude]).addTo(map);
+        marker.userId = citizen.id;
 
         // Event listener for marker click to fetch and display requests
         marker.on('click', async () => {
@@ -271,7 +360,7 @@ function showUserMarkers(map, users) {
             } catch (error) {
                 console.error('Error fetching requests:', error);
                 let errorContent = `<div>
-                    <h3>User: ${user.fullName}</h3>
+                    <h3>Citizen: ${user.fullName}</h3>
                     <p>Location: ${user.latitude}, ${user.longitude}</p>
                     <p>User ID: ${user.id}</p>
                     <p>Error fetching requests.</p>
@@ -281,6 +370,24 @@ function showUserMarkers(map, users) {
         });
     });
 }
+
+
+//TODO: BACKEND CReate FetchRESCUERS 
+function showRescuerMarkers(map, rescuers) {
+    rescuers.forEach(function (rescuer) {
+        let marker = L.marker([rescuer.latitude, rescuer.longitude], { icon: rescuerIcon }).addTo(map);
+        marker.rescuerId = rescuer.id;
+
+        marker.bindPopup(`<div>
+            <h3>Rescuer: ${rescuer.fullName}</h3>
+            <p>Location: ${rescuer.latitude}, ${rescuer.longitude}</p>
+        </div>`);
+    });
+}
+
+
+
+
 
 window.acceptRequest = async function (requestId) {
     if (!requestId) {
