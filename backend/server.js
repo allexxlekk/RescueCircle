@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/users');
-const adminRouter = require('./routes/admin')
+const adminWarehouseManagementRouter = require('./routes/admin/wareHouseManagement')
 const rescuersRouter = require('./routes/rescuers');
 const offersRouter = require('./routes/offers');
 const categoriesRouter = require('./routes/categories');
@@ -26,7 +26,7 @@ app.use('/requests', requestsRouter)
 app.use('/announcements', announcementsRouter)
 app.use('/rescuers', rescuersRouter)
 app.use('/offers', offersRouter)
-app.use('/admin', adminRouter)
+app.use('/admin/warehouse-management', adminWarehouseManagementRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
