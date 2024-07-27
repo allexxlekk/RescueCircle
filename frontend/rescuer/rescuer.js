@@ -319,27 +319,23 @@ function showRequests(requests) {
 }
 function showUserMarkers(map, citizens) {
     citizens.forEach(function (citizen) {
-        // Create a marker for each user
         let marker = L.marker([citizen.latitude, citizen.longitude]).addTo(map);
         marker.userId = citizen.id;
 
-        // Event listener for marker click to fetch and display requests
         marker.on('click', async () => {
             try {
                 const requests = await fetchRequests(marker.userId);
                 if (requests && requests.length > 0) {
-                    let popupContent = `<div style="max-height: 160px; width:117%; overflow: auto;">
+                    let popupContent = `<div style="max-height: 160px; width:130%;overflow: auto;">
                                             <h3>User: ${requests[0].fullName}</h3>`;
                     requests.forEach((request, index) => {
                         if (request.status !== "COMPLETED") {
-                            popupContent += `<div style="margin-top: 10px; ">
-                                                
-                                                    <p>Item:  <strong>${request.item.name}</strong></p>
-                                                    <p>Status: <strong>${request.status}</strong></p>
-                                                    <p>Quantity: <strong>${request.quantity}</strong></p>
-                                                    <p>Date: <strong>${request.createdAt}</strong></p>
-                                                    <button class="accept-btn" data-rescuer-id="${request.rescuerId}" data-request-id="${request.requestId}">Accept Request</button>
-                                                
+                            popupContent += `<div style="margin-top: 10px;">
+                                                <p>Item: <strong>${request.item.name}</strong></p>
+                                                <p>Status: <strong>${request.status}</strong></p>
+                                                <p>Quantity: <strong>${request.quantity}</strong></p>
+                                                <p>Date: <strong>${request.createdAt}</strong></p>
+                                                <button class="accept-btn" data-rescuer-id="${request.rescuerId}" data-request-id="${request.requestId}">Accept Request</button>
                                             </div>`;
                         }
                     });
@@ -348,9 +344,11 @@ function showUserMarkers(map, citizens) {
                     marker.bindPopup(popupContent).on('popupopen', function () {
                         document.querySelectorAll('.accept-btn').forEach(button => {
                             button.addEventListener('click', function () {
-                                const rescuerId = button.getAttribute('data-rescuer-id');
+                                // const rescuerId = button.getAttribute('data-rescuer-id');
+                                const rescuerId = 4;
                                 const requestId = button.getAttribute('data-request-id');
-                                acceptRequest(requestId);
+                                console.log(rescuerId);  // Debug line to check rescuerId
+                                acceptRequest(rescuerId, requestId);
                             });
                         });
                     }).openPopup();
@@ -372,7 +370,6 @@ function showUserMarkers(map, citizens) {
     });
 }
 
-
 //TODO: BACKEND CReate FetchRESCUERS 
 function showRescuerMarkers(map, rescuers) {
     rescuers.forEach(function (rescuer) {
@@ -388,15 +385,13 @@ function showRescuerMarkers(map, rescuers) {
 
 
 
-
-
-window.acceptRequest = async function (requestId) {
-    if (!requestId) {
+window.acceptRequest = async function (rescuerId, requestId) {
+    if (!rescuerId || !requestId) {
         console.error("Missing rescuerId or requestId");
         return false;
     }
     try {
-        const url = `http://localhost:3000/rescuers/accept-request?rescuerId=${encodeURIComponent(rescuerId)}&requestId=${encodeURIComponent(requestId)}`;
+        const url = `http://localhost:3000/rescuers/accept-request?rescuer=${encodeURIComponent(rescuerId)}&request=${encodeURIComponent(requestId)}`;
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
@@ -417,6 +412,7 @@ window.acceptRequest = async function (requestId) {
         return false;
     }
 }
+
 
 
 function createRequestCardElement(request) {
