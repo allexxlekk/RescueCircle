@@ -1,6 +1,56 @@
 const dbConnection = require('../config/db'); // Adjust this path as needed
 
-const adminService = {
+const wareHouseManagementService = {
+
+    getItemsByCategory: async (categoryId, search) => {
+        let query = `
+            SELECT id,
+                   name,
+                   description,
+                   quantity,
+                   offer_quantity as offerQuantity
+            FROM item
+            WHERE category_id = ?
+        `;
+
+        const params = [];
+        params.push(categoryId);
+
+        if (search) {
+            query += ` AND name LIKE ?`;
+            params.push(`%${search}%`);
+        }
+
+        query += ` ORDER BY name ASC`;
+
+        try {
+            const [results] = await dbConnection.promise().query(query, params);
+            return results;
+        } catch (error) {
+            console.error('Error fetching items:', error);
+            throw error;
+        }
+    },
+
+    updateItemQuantity: async (itemId, quantity) => {
+        let query = `
+            UPDATE item
+            SET quantity = ?
+            WHERE id = ?
+        `;
+
+        const params = [];
+        params.push(quantity, itemId);
+
+
+        try {
+            await dbConnection.promise().query(query, params);
+        } catch (error) {
+            console.error('Error updating item quantity:', error);
+            throw error;
+        }
+    },
+
     getCategories: async (search) => {
         let query = `
             SELECT ic.id,
@@ -13,8 +63,6 @@ const adminService = {
 
         let params = [];
 
-
-        console.log("Search", search)
         if (search) {
             query += `WHERE ic.name LIKE ? `;
             params.push(`%${search}%`);
@@ -28,9 +76,29 @@ const adminService = {
         `;
 
         try {
-            console.log(query)
             const [results] = await dbConnection.promise().query(query, params);
             return results;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    addItem: async (name,
+                    categoryId,
+                    description,
+                    quantity,
+                    offerQuantity
+    ) => {
+        try {
+
+
+            // Insert the new category
+            const [result] = await dbConnection.promise().query(
+                'INSERT INTO item (name, description, quantity, offer_quantity, category_id) VALUES (?, ?, ?, ?, ?)',
+                [name, description, quantity, offerQuantity, categoryId]
+            );
+
+            return result.insertId; // Return the ID of the newly inserted item
         } catch (error) {
             throw error;
         }
@@ -121,4 +189,4 @@ const adminService = {
     },
 };
 
-module.exports = adminService;
+module.exports = wareHouseManagementService;
