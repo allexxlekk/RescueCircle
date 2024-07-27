@@ -1,7 +1,21 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+.custom-div-icon i {
+  display: block;
+  margin: 0 auto;
+}
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  /* -webkit-font-feature-settings: "liga"; */
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -32,6 +46,8 @@ h3 {
 #mapid {
   display: flex;
   align-self: center;
+  width: 80vw;
+  height: 65vh;
 }
 #map-request-div {
   display: flex;
@@ -249,8 +265,13 @@ div {
 }
 
 #inventory-list {
-  padding: 0;
+  padding: 2;
+
   list-style-type: none; /* Removes default list item bullets */
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 25px;
 }
 
 /* List item styling */
@@ -273,7 +294,7 @@ div {
 }
 
 #inventory-list li > div:nth-child(2) {
-  flex: 2; /* Adjust flex value based on content size */
+  flex: 3; /* Adjust flex value based on content size */
 }
 
 #inventory-list li > div:nth-child(3) {

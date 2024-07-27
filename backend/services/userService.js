@@ -2,7 +2,7 @@ require('dotenv').config();
 const bcrypt = require("bcrypt");
 const dbConnection = require("../config/db");
 const locationService = require("./locationService")
-const { sign ,verify} = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 
 /**
  * Represents a JSON request for user registration.
@@ -26,10 +26,10 @@ const registerUser = async (newUser) => {
     let lat = newUser.latitude;
     let lng = newUser.longitude;
 
-    if(newUser.role === "RESCUER"){
-        const baseCoordinates = await locationService.baseLocation();
-        lat = baseCoordinates[0].latitude;
-        lng = baseCoordinates[0].longitude;
+    if (newUser.role === "RESCUER") {
+      const baseCoordinates = await locationService.baseLocation();
+      lat = baseCoordinates[0].latitude;
+      lng = baseCoordinates[0].longitude;
     }
 
     const locationInsert =
@@ -150,7 +150,7 @@ const getUsersByRole = async (role) => {
 
 const getMarkersByRole = async (role) => {
   try {
-    if (role === "CITIZEN") {
+    if (role === "CITIZEN" || "RESCUER" || "ADMIN") {
       const query =
         "SELECT user.id, user.full_name, location.latitude, location.longitude FROM user JOIN location ON user.location_id = location.id WHERE user.role = ?";
       const [result] = await dbConnection.promise().query(query, [role]);
@@ -172,7 +172,7 @@ function generateJwtToken(user) {
   const secretKey = process.env.JWT_SECRET;
 
   // Sign the JWT token with the secret key and set an expiration time
-  const token =  sign(
+  const token = sign(
     {
       id: user.id,
       role: user.role,
