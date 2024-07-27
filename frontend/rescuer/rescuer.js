@@ -317,7 +317,6 @@ function showRequests(requests) {
         requestListElement.appendChild(requestCardElement);
     });
 }
-
 function showUserMarkers(map, citizens) {
     citizens.forEach(function (citizen) {
         // Create a marker for each user
@@ -329,17 +328,19 @@ function showUserMarkers(map, citizens) {
             try {
                 const requests = await fetchRequests(marker.userId);
                 if (requests && requests.length > 0) {
-                    let popupContent = `<div><h3>User: ${requests[0].fullName}</h3>`;
-                    requests.forEach(request => {
+                    let popupContent = `<div style="max-height: 160px; width:117%; overflow: auto;">
+                                            <h3>User: ${requests[0].fullName}</h3>`;
+                    requests.forEach((request, index) => {
                         if (request.status !== "COMPLETED") {
-                            popupContent += `<div style="margin-top: 10px;">
-                                <p><strong>Item:</strong> ${request.item.name}</p>
-                                <p><strong>Status:</strong> ${request.status}</p>
-                                <p><strong>Quantity:</strong> ${request.quantity}</p>
-                                <p><strong>Date:</strong> ${request.createdAt}</p>
-                                <button class="accept-btn" data-rescuer-id="${request.rescuerId}" data-request-id="${request.requestId}">Accept Request</button>
-                            </div>`;
-
+                            popupContent += `<div style="margin-top: 10px; ">
+                                                
+                                                    <p>Item:  <strong>${request.item.name}</strong></p>
+                                                    <p>Status: <strong>${request.status}</strong></p>
+                                                    <p>Quantity: <strong>${request.quantity}</strong></p>
+                                                    <p>Date: <strong>${request.createdAt}</strong></p>
+                                                    <button class="accept-btn" data-rescuer-id="${request.rescuerId}" data-request-id="${request.requestId}">Accept Request</button>
+                                                
+                                            </div>`;
                         }
                     });
                     popupContent += '</div>';
@@ -360,9 +361,9 @@ function showUserMarkers(map, citizens) {
             } catch (error) {
                 console.error('Error fetching requests:', error);
                 let errorContent = `<div>
-                    <h3>Citizen: ${user.fullName}</h3>
-                    <p>Location: ${user.latitude}, ${user.longitude}</p>
-                    <p>User ID: ${user.id}</p>
+                    <h3>Citizen: ${citizen.fullName}</h3>
+                    <p>Location: ${citizen.latitude}, ${citizen.longitude}</p>
+                    <p>User ID: ${citizen.id}</p>
                     <p>Error fetching requests.</p>
                 </div>`;
                 marker.bindPopup(errorContent).openPopup();
