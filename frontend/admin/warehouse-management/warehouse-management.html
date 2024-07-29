@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="warehouse-management.css">
 </head>
 <body>
+<nav id="main-nav">
+    <ul>
+        <li><a href="#" class="active">Warehouse Management</a></li>
+        <li><a href="../inventory-table/inventory-table.html">Inventory Table</a></li>
+    </ul>
+</nav>
+
 <div id="warehouse-container">
     <h1 class="title">Warehouse Management</h1>
     <div id="main-content">
@@ -23,6 +30,14 @@
                 <label for="add-category-input">Add a new category: </label>
                 <input type="text" id="add-category-input" class="form-control" placeholder="Enter name...">
                 <button id="add-category-button" disabled>Add Category</button>
+            </div>
+            <div id="file-upload-container">
+                <h3>Import JSON Data</h3>
+                <div class="file-input-wrapper">
+                    <input type="file" id="json-file-input" accept=".json">
+                </div>
+                <button id="upload-json-btn">Upload JSON</button>
+                <button id="sync-btn">Synchronize</button>
             </div>
         </div>
         <div id="item-section">
@@ -46,6 +61,8 @@
         </div>
     </div>
 </div>
+
+
 <script src="warehouse-management.js" type="module"></script>
 </body>
 </html>

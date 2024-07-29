@@ -7,6 +7,9 @@ const addCategoryButton = document.getElementById('add-category-button');
 const itemListContainer = document.getElementById('item-list-container');
 const addItemForm = document.getElementById('add-item-form');
 const itemPlaceholder = document.getElementById('item-placeholder');
+const uploadFileInput = document.getElementById('json-file-input');
+const uploadButton = document.getElementById('upload-json-btn');
+const syncButton = document.getElementById('sync-btn');
 
 let selectedCategoryId = null;
 
@@ -73,28 +76,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     searchItemInput.addEventListener('input', debounce(() => refreshItemList(selectedCategoryId), 300));
     addCategoryInput.addEventListener('input', debounce(addCategoryButtonRefresh, 300));
     addCategoryButton.addEventListener('click', addCategory);
+    syncButton.addEventListener('click', async () => {
+        await syncItems();
+        await refreshCategoryList();
+    });
+    uploadButton.addEventListener('click', () => {
+        if (uploadFileInput.files.length > 0) {
+            const file = uploadFileInput.files[0];
+            const reader = new FileReader();
 
-    document.getElementById('add-item-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
+            reader.onload = async (e) => {
+                try {
+                    const jsonData = JSON.parse(e.target.result);
+                    await uploadJsonData(jsonData);
+                    alert('JSON data uploaded successfully!');
+                    uploadFileInput.value = ''; // Clear the file input
+                } catch (error) {
+                    console.error('Error parsing or uploading JSON:', error);
+                    alert('Error uploading JSON data. Please check the console for details.');
+                }
+            };
 
-        const name = document.getElementById('item-name').value;
-        const categoryId = selectedCategoryId;
-        const description = document.getElementById('item-description').value;
-        const quantity = parseInt(document.getElementById('item-quantity').value, 10);
-        const offerQuantity = parseInt(document.getElementById('item-offer-quantity').value, 10);
-
-        try {
-            await addItem(name, categoryId, description, quantity, offerQuantity);
-            // Clear the form
-            event.target.reset();
-            // Refresh the item list
-            await refreshCategoryList();
-            await refreshItemList(selectedCategoryId);
-        } catch (error) {
-            console.error('Failed to add item:', error);
-            // Display error message to user
+            reader.readAsText(file);
+        } else {
+            alert('Please select a JSON file first.');
         }
     });
+});
+
+document.getElementById('add-item-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById('item-name').value;
+    const categoryId = selectedCategoryId;
+    const description = document.getElementById('item-description').value;
+    const quantity = parseInt(document.getElementById('item-quantity').value, 10);
+    const offerQuantity = parseInt(document.getElementById('item-offer-quantity').value, 10);
+
+    try {
+        await addItem(name, categoryId, description, quantity, offerQuantity);
+        // Clear the form
+        event.target.reset();
+        // Refresh the item list
+        await refreshCategoryList();
+        await refreshItemList(selectedCategoryId);
+    } catch (error) {
+        console.error('Failed to add item:', error);
+        // Display error message to user
+    }
 });
 
 // API CALLS
@@ -106,6 +135,31 @@ async function fetchCategories(searchInput) {
         response = await fetch('http://localhost:3000/admin/warehouse-management/categories?search=' + encodeURIComponent(searchInput));
     }
     return await response.json(); // Return the data
+}
+
+async function syncItems() {
+    await fetch("http://localhost:3000/items/sync", {method: 'POST'});
+}
+
+async function uploadJsonData(data) {
+    try {
+        const response = await fetch('http://localhost:3000/items/upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error uploading JSON data:', error);
+        throw error;
+    }
 }
 
 async function fetchItems(searchInput) {
