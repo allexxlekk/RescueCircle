@@ -1,10 +1,10 @@
 const express = require("express");
-const inventoryStatusService = require("../../services/intentoryStatusService.js");
+const inventoryStatus = require("../../services/intentoryStatusService.js");
 const router = express.Router();
 
-router.get("/categories", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
-        const items = await inventoryStatusService.getCategories();
+        const items = await inventoryStatus.getCategories();
 
         res.status(200).json(items);
     } catch (error) {
@@ -14,11 +14,11 @@ router.get("/categories", async (req, res) => {
 });
 
 
-router.post("/items", async (req, res) => {
+router.post("/", async (req, res) => {
     try {
         const search = req.query.search;
         const categories = req.body.categories
-        const items = await inventoryStatusService.getItems(categories, search);
+        const items = await inventoryStatus.getItems(categories, search);
 
         res.status(200).json(items);
     } catch (error) {
