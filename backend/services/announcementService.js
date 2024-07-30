@@ -37,19 +37,15 @@ const createAnnouncement = async (newAnnouncement) => {
 const getAllAnnouncements = async () => {
     try {
         const query = `
-            SELECT 
-                ann.id, 
-                ann.name, 
-                ann.description,
-                COUNT(o.id) AS offerCount
-            FROM 
-                announcement AS ann
-            LEFT JOIN 
-                offer AS o ON ann.id = o.announcement_id
-            GROUP BY 
-                ann.id, ann.name, ann.description
-            ORDER BY 
-                ann.id DESC
+            SELECT ann.id,
+                   ann.name,
+                   ann.description,
+                   COUNT(o.id) AS offerCount
+            FROM announcement AS ann
+                     LEFT JOIN
+                 offer AS o ON ann.id = o.announcement_id
+            GROUP BY ann.id, ann.name, ann.description
+            ORDER BY ann.id DESC
         `;
         const [announcements] = await dbConnection.promise().query(query);
 
