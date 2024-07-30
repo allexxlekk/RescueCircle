@@ -1,29 +1,48 @@
 const express = require("express");
-const inventoryStatus = require("../../services/intentoryStatusService.js");
+const rescuerManagementService = require("../../services/rescuerManagementService.js");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/rescuers", async (req, res) => {
     try {
-        const items = await inventoryStatus.getCategories();
+        const rescuers = await rescuerManagementService.getRescuers();
+
+        res.status(200).json(rescuers);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: "Error fetching rescuers"});
+    }
+});
+
+router.get("/rescuers/:id/inventory", async (req, res) => {
+    try {
+
+        const id = req.params['id']
+        const items = await rescuerManagementService.getRescuerInventory(id);
 
         res.status(200).json(items);
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: "Error fetching categories"});
+        res.status(500).json({error: "Error fetching inventory"});
     }
 });
 
 
-router.post("/", async (req, res) => {
+router.post("/rescuers", async (req, res) => {
     try {
-        const search = req.query.search;
-        const categories = req.body.categories
-        const items = await inventoryStatus.getItems(categories, search);
+        const username = req.body.username;
+        const name = req.body.name;
+        const email = req.body.email;
+        const password = req.body.password;
+        const phone = req.body.phone;
+        const vehicleType = req.body.vehicleType;
 
-        res.status(200).json(items);
+        const newRescuerId = await rescuerManagementService.createRescuer(username, name, email, password, phone, vehicleType);
+
+
+        res.status(200).json({id: newRescuerId, message: "Created rescuer successfully"});
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: "Error fetching items"});
+        res.status(500).json({error: "Error creating rescuer"});
     }
 });
 
