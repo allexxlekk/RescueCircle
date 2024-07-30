@@ -1,5 +1,4 @@
-const dbConnection = require('../config/db'); // Adjust this path as needed
-
+const dbConnection = require('../config/db');
 const wareHouseManagementService = {
 
     getItemsByCategory: async (categoryId, search) => {

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Status</title>
+    <link rel="stylesheet" href="inventory-status.css">
+</head>
+<body>
+<nav id="main-nav">
+    <ul>
+        <li><a href="../warehouse-management/warehouse-management.html">Warehouse Management</a></li>
+        <li><a href="#" class="active">Inventory Status</a></li>
+    </ul>
+</nav>
+
+<div id="inventory-table-container">
+    <h1 class="title">Inventory Status</h1>
+    <div id="filter-container">
+        <input type="text" id="search-input" placeholder="Search items...">
+        <div id="category-filter">
+            <div class="category-option">
+                <input type="checkbox" id="all-categories" value="all" checked>
+                <label for="all-categories">All Categories</label>
+            </div>
+        </div>
+        <table>
+            <thead>
+            <tr class="row100 head">
+                <th class="cell100 column1">Name</th>
+                <th class="cell100 column2">Description</th>
+                <th class="cell100 column3">Category</th>
+                <th class="cell100 column4">Warehouse Quantity</th>
+                <th class="cell100 column5">In Rescuer Vehicles</th>
+                <th class="cell100 column6">Total</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="pagination-controls">
+            <button id="prev-page">Previous</button>
+            <span id="page-info"></span>
+            <button id="next-page">Next</button>
+        </div>
+    </div>
+
+
+    <script src="inventory-status.js" type="module"></script>
+</div>
+</body>
+</html>
