@@ -46,20 +46,42 @@ body {
   background-color: var(--primary-color);
 }
 
-h1 {
+h1,
+h2 {
   text-align: center;
   color: var(--secondary-color);
   margin-top: 20px;
 }
 
-#rescuerRegistrationForm {
-  max-width: 600px;
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
   margin: 20px auto;
+}
+
+#rescuerRegistrationForm {
   background-color: var(--card-background);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  padding: 50px;
+  padding: 20px;
+  max-height: 550px;
+}
+
+#rescuerListContainer {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-height: 550px;
+  overflow-y: auto;
+}
+
+#rescuerRegistrationForm form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align form items */
 }
 
 #rescuerRegistrationForm label {
@@ -67,7 +89,8 @@ h1 {
   margin-bottom: 5px;
   color: var(--secondary-color);
   font-weight: bold;
-  margin-left: 20px; /* Align labels with input and textarea */
+  width: 100%;
+  max-width: 400px;
 }
 
 #rescuerRegistrationForm input[type="text"],
@@ -75,14 +98,13 @@ h1 {
 #rescuerRegistrationForm input[type="password"],
 #rescuerRegistrationForm input[type="tel"],
 #rescuerRegistrationForm select {
-  width: calc(100% - 40px); /* Adjusted for padding */
-  max-width: 500px; /* Maximum width */
+  width: 100%;
+  max-width: 400px; /* Set a maximum width */
   padding: 8px 12px;
-  margin: 0 auto 15px 20px; /* Center alignment and left padding */
+  margin-bottom: 15px;
   border: 1px solid #ced4da;
   border-radius: var(--border-radius);
   font-size: 14px;
-  display: block;
 }
 
 #rescuerRegistrationForm button {
@@ -93,10 +115,9 @@ h1 {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 80%; /* Adjusted width */
-  max-width: 300px; /* Maximum width */
-  margin: 10px auto; /* Center alignment */
-  display: block;
+  width: 100%;
+  max-width: 200px; /* Set a maximum width */
+  margin: 10px 0;
 }
 
 #rescuerRegistrationForm button:hover {
@@ -105,15 +126,100 @@ h1 {
 
 .validation-error-message {
   color: var(--error-color);
-  margin-left: 20px; /* Align error messages with input and textarea */
 }
 
-img {
-  display: block;
-  margin: 20px auto;
+#rescuer-list {
+  padding: 0;
+  list-style-type: none;
 }
 
+.rescuer-item {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.rescuer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.rescuer-info p {
+  margin: 5px 0;
+}
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35%; /* Could be more or less, depending on screen size */
+  max-height: 350px; /* Max height */
+  overflow-y: auto; /* Scrollbar if content overflows */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  position: relative; /* For sticky positioning */
+}
+
+.modal-content h2 {
+  width: 100%;
+
+  background-color: #fefefe;
+  margin: 0;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin-right: 10px;
+  top: 0;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.inventory-item {
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.inventory-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 @media screen and (max-width: 600px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
   #rescuerRegistrationForm {
     padding: 15px;
   }
@@ -121,7 +227,6 @@ img {
   #rescuerRegistrationForm input[type="text"],
   #rescuerRegistrationForm input[type="email"],
   #rescuerRegistrationForm input[type="password"],
-  #rescuerRegistrationForm input[type="tel"],
   #rescuerRegistrationForm select {
     font-size: 12px;
   }

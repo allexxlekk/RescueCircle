@@ -17,40 +17,57 @@
             <li><a href="../announcement-management/announcement-management.html">Announcement Management</a></li>
         </ul>
     </nav>
-    <h1>Register rescuer to Rescue Circle</h1>
+    <h1>Rescuer Management</h1>
 
 
-    <div id="rescuerRegistrationForm">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-        <div class="validation-error-message" id="val-error-username"></div>
+    <div class="container">
+        <div id="rescuerRegistrationForm">
+            <h2>Register Rescuer</h2>
+            <form>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+                <div class="validation-error-message" id="val-error-username"></div>
 
-        <label for="fullname">Full Name</label>
-        <input type="text" id="fullname" name="fullname" required>
-        <div class="validation-error-message" id="val-error-fullname"></div>
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" required>
+                <div class="validation-error-message" id="val-error-fullname"></div>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-        <div class="validation-error-message" id="val-error-email"></div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <div class="validation-error-message" id="val-error-email"></div>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-        <div class="validation-error-message" id="val-error-password"></div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="validation-error-message" id="val-error-password"></div>
 
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" name="phone" required>
-        <div class="validation-error-message" id="val-error-phone"></div>
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" required>
+                <div class="validation-error-message" id="val-error-phone"></div>
 
-        <label for="vehicle_type">Vehicle Type</label>
-        <select id="vehicle_type" name="vehicle_type" required>
-            <option value="PERSONAL USE">PERSONAL USE</option>
-            <option value="VAN">VAN</option>
-            <option value="PICKUP TRUCK">PICKUP TRUCK</option>
-        </select>
-        <button id="register-button" type="submit">Register</button>
+                <label for="vehicle_type">Vehicle Type</label>
+                <select id="vehicle_type" name="vehicle_type" required>
+                    <option value="PERSONAL USE">PERSONAL USE</option>
+                    <option value="VAN">VAN</option>
+                    <option value="PICKUP TRUCK">PICKUP TRUCK</option>
+                </select>
+                <button id="register-button" type="submit">Register</button>
+            </form>
+        </div>
+
+        <div id="rescuerListContainer">
+            <h2>Registered Rescuers</h2>
+            <ul id="rescuer-list"></ul>
+        </div>
+    </div>
+    <div id="inventoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Rescuer's Inventory</h2>
+            <div id="inventory-list" class="inventory-list"></div>
+        </div>
     </div>
 
-    <script src="../../adminpage/rescuerRegister.js"></script>
+    <script src="rescuer-management.js"></script>
 </body>
 
 </html>
