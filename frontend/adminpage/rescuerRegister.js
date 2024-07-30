@@ -109,38 +109,37 @@ async function showInventory(rescuerId) {
             throw new Error("Error fetching inventory");
         }
         const inventory = await response.json();
-        if (inventory.length === 0) {
-            alert("Empty inventory for this rescuer");
-        } else {
-            renderInventory(inventory);
+        renderInventory(inventory);
 
-            // Show the modal
-            const modal = document.getElementById("inventoryModal");
-            modal.style.display = "block";
-        }
+        // Show the modal
+        const modal = document.getElementById("inventoryModal");
+        modal.style.display = "block";
     } catch (error) {
         console.error("Error:", error);
         alert("Error fetching inventory. Please try again.");
     }
 }
-
 function renderInventory(inventory) {
     const inventoryList = document.getElementById("inventory-list");
     inventoryList.innerHTML = ""; // Clear existing list
 
-    inventory.forEach((item) => {
-        const itemElement = document.createElement("div");
-        itemElement.className = "inventory-item";
+    if (inventory.length === 0) {
+        const emptyMessage = document.createElement("h3");
+        emptyMessage.textContent = "Inventory empty";
+        inventoryList.appendChild(emptyMessage);
+    } else {
+        inventory.forEach((item) => {
+            const itemElement = document.createElement("div");
+            itemElement.className = "inventory-item";
 
-        itemElement.innerHTML = `
-            <p><strong>Item:</strong> ${item.item}</p>
-          
-            <p><strong>Amount:</strong> ${item.amount}</p>
-        `;
-        inventoryList.appendChild(itemElement);
-    });
+            itemElement.innerHTML = `
+                <p><strong>Item:</strong> ${item.item}</p>
+                <p><strong>Amount:</strong> ${item.amount}</p>
+            `;
+            inventoryList.appendChild(itemElement);
+        });
+    }
 }
-
 async function getBaseLocation() {
     try {
         const response = await fetch("http://localhost:3000/baseLocation");
