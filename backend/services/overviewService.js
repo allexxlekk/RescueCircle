@@ -118,11 +118,13 @@ const overviewService = {
                    (SELECT JSON_ARRAYAGG(
                                    JSON_OBJECT(
                                            'name', i.name,
-                                           'amount', ri.amount
+                                           'amount', ri.amount,
+                                           'category', ic.name
                                        )
                                )
                     FROM rescuer_inventory ri
                              JOIN item i ON ri.item_id = i.id
+                             JOIN item_category ic on i.category_id = ic.id
                     WHERE ri.rescuer_id = u.id) AS inventory
             FROM user u
                      LEFT JOIN
@@ -157,6 +159,7 @@ const overviewService = {
                    r.assumed_at,
                    r.status,
                    i.name            AS itemName,
+                   ic.name           AS itemCategory,
                    r.quantity        AS quantity,
                    rescuer.id        AS rescuerId,
                    rescuer.username  AS rescuerUsername,
@@ -167,6 +170,7 @@ const overviewService = {
                      LEFT JOIN user citizen on r.citizen_id = citizen.id
                      LEFT JOIN user rescuer on r.rescuer_id = rescuer.id
                      LEFT JOIN item i on i.id = r.item_id
+                     LEFT JOIN item_category ic on i.category_id = ic.id
             WHERE r.id = ?
         `;
 
@@ -191,6 +195,7 @@ const overviewService = {
                    o.assumed_at,
                    o.status,
                    i.name            AS itemName,
+                   ic.name           AS itemCategory,
                    o.quantity        AS quantity,
                    rescuer.id        AS rescuerId,
                    rescuer.username  AS rescuerUsername,
@@ -201,6 +206,7 @@ const overviewService = {
                      LEFT JOIN user citizen on o.citizen_id = citizen.id
                      LEFT JOIN user rescuer on o.rescuer_id = rescuer.id
                      LEFT JOIN item i on i.id = o.item_id
+                     LEFT JOIN item_category ic on i.category_id = ic.id
             WHERE o.id = ?
         `;
 

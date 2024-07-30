@@ -36,7 +36,21 @@ const createAnnouncement = async (newAnnouncement) => {
 
 const getAllAnnouncements = async () => {
     try {
-        const query = "SELECT ann.id, ann.name, ann.description FROM announcement AS ann";
+        const query = `
+            SELECT 
+                ann.id, 
+                ann.name, 
+                ann.description,
+                COUNT(o.id) AS offerCount
+            FROM 
+                announcement AS ann
+            LEFT JOIN 
+                offer AS o ON ann.id = o.announcement_id
+            GROUP BY 
+                ann.id, ann.name, ann.description
+            ORDER BY 
+                ann.id DESC
+        `;
         const [announcements] = await dbConnection.promise().query(query);
 
         // Compare the entered password with the stored password hash
