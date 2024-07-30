@@ -4,6 +4,7 @@ const userRouter = require('./routes/users');
 const adminWarehouseManagementRouter = require('./routes/admin/wareHouseManagement')
 const adminInventoryStatusRouter = require('./routes/admin/inventoryStatus')
 const adminRescuerManagementRouter = require('./routes/admin/rescuerManagement')
+const adminOverviewRouter = require('./routes/admin/overview')
 const rescuersRouter = require('./routes/rescuers');
 const offersRouter = require('./routes/offers');
 const categoriesRouter = require('./routes/categories');
@@ -22,15 +23,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 3000;
 
 app.use('/users', userRouter);
-app.use('/categories', categoriesRouter)
-app.use('/items', itemsRouter)
-app.use('/requests', requestsRouter)
-app.use('/announcements', announcementsRouter)
-app.use('/rescuers', rescuersRouter)
-app.use('/offers', offersRouter)
-app.use('/admin/warehouse-management', adminWarehouseManagementRouter)
-app.use('/admin/inventory-status', adminInventoryStatusRouter)
-app.use('/admin/rescuer-management', adminRescuerManagementRouter)
+app.use('/categories', categoriesRouter);
+app.use('/items', itemsRouter);
+app.use('/requests', requestsRouter);
+app.use('/announcements', announcementsRouter);
+app.use('/rescuers', rescuersRouter);
+app.use('/offers', offersRouter);
+app.use('/admin/warehouse-management', adminWarehouseManagementRouter);
+app.use('/admin/inventory-status', adminInventoryStatusRouter);
+app.use('/admin/rescuer-management', adminRescuerManagementRouter);
+app.use('/admin/overview', adminOverviewRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
