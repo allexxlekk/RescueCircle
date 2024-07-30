@@ -71,6 +71,7 @@ h3 {
   list-style-type: none;
   padding: 0;
   display: grid;
+  gap: 3;
   grid-template-columns: repeat(auto-fill, minmax(200px, 3fr));
 }
 

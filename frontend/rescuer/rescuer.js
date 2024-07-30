@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).addTo(mymap);
 
     L.marker([baseLocation.latitude, baseLocation.longitude], { icon: baseIcon }).addTo(mymap)
-
+        .bindPopup("BASE LOCATION")
         .openPopup();
 
 

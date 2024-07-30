@@ -1,0 +1,215 @@
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --background-color: #ecf0f1;
+  --card-background: #ffffff;
+  --text-color: #333333;
+  --border-radius: 8px;
+  --error-color: #e74c3c;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+#main-nav {
+  background-color: var(--secondary-color);
+  padding: 10px 0;
+}
+
+#main-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+#main-nav li {
+  margin: 0 15px;
+}
+
+#main-nav a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+#main-nav a:hover,
+#main-nav a.active {
+  background-color: var(--primary-color);
+}
+
+#create-announcement {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 50px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--secondary-color);
+  font-weight: bold;
+  margin-left: 20px; /* Align labels with input and textarea */
+}
+
+#create-announcement input[type="text"],
+#create-announcement textarea,
+#create-announcement select {
+  width: calc(100% - 40px); /* Adjusted for padding */
+  max-width: 500px; /* Maximum width */
+  padding: 8px 12px;
+  margin: 0 auto 15px 20px; /* Center alignment and left padding */
+  border: 1px solid #ced4da;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  display: block;
+}
+
+#create-announcement button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 80%; /* Adjusted width */
+  max-width: 300px; /* Maximum width */
+  margin: 10px auto; /* Center alignment */
+  display: block;
+}
+
+#create-announcement button:hover {
+  background-color: #2980b9;
+}
+
+#announcement-items {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+#announcement-items ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none; /* Remove list dots */
+}
+
+.announcement-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.announcement-item-select {
+  flex-grow: 1;
+  width: 70%; /* Adjusted width to make select narrower */
+  max-width: 300px; /* Maximum width */
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+}
+
+.remove-item-button {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 6px 10px; /* Adjusted padding for smaller button */
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: auto;
+}
+
+.remove-item-button:hover {
+  background-color: #c0392b;
+}
+
+#announcements {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+}
+
+#announcements .announcement-list-title {
+  text-align: center;
+  color: var(--secondary-color);
+  padding: 20px 0;
+  margin: 0;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#announcements h2 {
+  text-align: center;
+  color: var(--secondary-color);
+  padding: 20px 0;
+  margin: 0;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#announcement-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#announcement-list li {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#announcement-list li:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+#announcement-list li:hover {
+  background-color: #e9ecef;
+}
+
+@media screen and (max-width: 600px) {
+  #create-announcement,
+  #announcements {
+    padding: 15px;
+  }
+
+  #create-announcement input[type="text"],
+  #create-announcement textarea,
+  #create-announcement select {
+    font-size: 12px;
+  }
+
+  #create-announcement button {
+    padding: 8px 16px;
+  }
+}
+
+.announcementName {
+  margin: 0 0 20px 0; /* Adjust margin-bottom for more space */
+}
+
+.description {
+  margin: 10px 0 0 0; /* Keep the existing margin-top */
+}
+
+#name {
+  margin: 0 0 20px 0;
+}

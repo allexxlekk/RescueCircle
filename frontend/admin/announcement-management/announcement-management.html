@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcement Management</title>
+    <link rel="stylesheet" href="announcement-management.css">
+
+</head>
+
+<body>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="../warehouse-management/warehouse-management.html">Warehouse Management</a></li>
+            <li><a href="../inventory-status/inventory-status.html">Inventory Table</a></li>
+            <li><a href="#" class="active">Announcement Management</a></li>
+
+        </ul>
+    </nav>
+    <div id="create-announcement">
+
+        <label for="name">Announcement Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="description">Announcement Description</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+
+        <div id="announcement-items">
+            <ul id="item-list">
+                <label for="item">Item Needed</label>
+                <select id="item" name="item"></select>
+            </ul>
+            <button id="addAnotherAnnouncementButton">Add another item</button>
+
+        </div>
+
+        <button id="createAnnouncementButton">Create Announcemnet</button>
+    </div>
+
+    <div id="announcements">
+        <div id="announcement-list-title"></div>
+        <ul id="announcement-list">
+
+        </ul>
+    </div>
+
+
+
+
+    <script src="announcement-management.js"></script>
+</body>
+
+</html>
+
+<script src="../../adminpage/announcements.js"></script>
