@@ -132,3 +132,16 @@ BEGIN
         SET NEW.offer_quantity = 2;
     END IF;
 END;
+
+
+CREATE TRIGGER before_update_rescue_vehicle
+    BEFORE UPDATE ON rescue_vehicle
+    FOR EACH ROW
+BEGIN
+    IF NEW.active_tasks > 0 THEN
+        SET NEW.status = "ACTIVE";
+    END IF;
+    IF NEW.active_tasks = 0 THEN
+        SET NEW.status = "WAITING";
+    END IF;
+END;
