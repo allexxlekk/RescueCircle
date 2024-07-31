@@ -122,12 +122,27 @@ function getVehicleClass(vehicleType) {
 
 async function showInventory(rescuerId) {
     try {
-        const response = await fetch(`http://localhost:3000/admin/rescuer-management/rescuers/${rescuerId}/inventory`);
-        if (!response.ok) {
+        // Fetch the list of rescuers
+        const rescuersResponse = await fetch("http://localhost:3000/admin/rescuer-management/rescuers");
+        if (!rescuersResponse.ok) {
+            throw new Error("Error fetching rescuers");
+        }
+        const rescuers = await rescuersResponse.json();
+
+        // Find the rescuer's name
+        const rescuer = rescuers.find(rescuer => rescuer.id === rescuerId);
+        const rescuerName = rescuer ? rescuer.name : 'Unknown Rescuer';
+
+        // Fetch the inventory for the specific rescuer
+        const inventoryResponse = await fetch(`http://localhost:3000/admin/rescuer-management/rescuers/${rescuerId}/inventory`);
+        if (!inventoryResponse.ok) {
             throw new Error("Error fetching inventory");
         }
-        const inventory = await response.json();
+        const inventory = await inventoryResponse.json();
         renderInventory(inventory);
+
+        // Show the rescuer's name in the modal
+        document.getElementById("rescuerName").textContent = `Inventory for ${rescuerName}`;
 
         // Show the modal
         const modal = document.getElementById("inventoryModal");
@@ -137,6 +152,7 @@ async function showInventory(rescuerId) {
         alert("Error fetching inventory. Please try again.");
     }
 }
+
 function renderInventory(inventory) {
     const inventoryList = document.getElementById("inventory-list");
     inventoryList.innerHTML = ""; // Clear existing list
