@@ -128,7 +128,7 @@ function queryParamToBool(value) {
 }
 
 // Function to generate a random offset in meters
-const randomOffset = () => Math.random() * (100 - 50) + 50; // Random number between 50 and 100
+const randomOffset = () => Math.random() * (40 - 10) + 10; // Random number between 40 and 30
 
 // Function to convert meters to degrees (approximate)
 const metersToDegreesLat = (meters) => meters / 111320;

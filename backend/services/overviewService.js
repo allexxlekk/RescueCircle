@@ -6,7 +6,8 @@ const overviewService = {
             SELECT r.id,
                    l.latitude,
                    l.longitude,
-                   r.status
+                   r.status,
+                   r.rescuer_id AS rescuer
             FROM request r
                      LEFT JOIN
                  user u ON u.id = r.citizen_id
@@ -42,7 +43,8 @@ const overviewService = {
             SELECT o.id,
                    l.latitude,
                    l.longitude,
-                   o.status
+                   o.status,
+                   o.rescuer_id AS rescuer
             FROM offer o
                      LEFT JOIN
                  user u ON u.id = o.citizen_id

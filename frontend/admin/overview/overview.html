@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Status</title>
     <link rel="stylesheet" href="overview.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -20,6 +23,71 @@
 
     </ul>
 </nav>
+<div class="main-section">
+    <div class="filter-container">
+        <h3>Filters</h3>
+        <div class="switch-container" style="background-color: rgba(52, 152, 219, 0.1); margin-bottom: 20px;">
+            <label class="switch">
+                <input type="checkbox" id="masterFilter" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label" style="font-weight: bold;">Show All</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-assumed-requests" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show assumed requests</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-pending-requests" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show pending requests</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-assumed-offers" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show assumed offers</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-pending-offers" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show pending offers</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-active-rescuers" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show active vehicles</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-inactive-rescuers" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show inactive vehicles</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-map-lines" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show lines</span>
+        </div>
+    </div>
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+</div>
+
 
 <script src="overview.js" type="module"></script>
 </body>
