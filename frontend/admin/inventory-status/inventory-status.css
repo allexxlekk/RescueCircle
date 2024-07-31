@@ -132,6 +132,24 @@ tbody tr:hover {
 
 }
 
+#category-filter::-webkit-scrollbar {
+    width: 8px;
+}
+
+#category-filter::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#category-filter::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+#category-filter::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 .category-option {
     display: inline-block;
 }
