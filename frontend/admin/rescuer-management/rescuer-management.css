@@ -53,6 +53,13 @@ h2 {
   margin-top: 20px;
 }
 
+#rescuer-list-title {
+  text-align: center;
+  color: var(--secondary-color);
+  margin-top: 20px;
+  border-bottom: 1px solid grey;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -75,7 +82,8 @@ h2 {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   max-height: 550px;
-  overflow-y: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 #rescuerRegistrationForm form {
@@ -129,19 +137,48 @@ h2 {
 }
 
 #rescuer-list {
+  max-height: 470px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 103.5%;
   padding: 0;
   list-style-type: none;
+}
+#rescuer-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#rescuer-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#rescuer-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+#rescuer-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .rescuer-item {
   background-color: var(--card-background);
   border-radius: var(--border-radius);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0.1, 0.1, 0.2);
   margin-bottom: 10px;
   padding: 20px;
+  margin-left: 5px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 10px;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+  width: 90%;
+}
+
+.rescuer-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0.2, 0.2, 0.3); /* Box-shadow on hover */
 }
 
 .rescuer-info {
@@ -152,6 +189,33 @@ h2 {
 .rescuer-info p {
   margin: 5px 0;
 }
+.rescuer-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #ddd; /* Add a top border to separate the contact info */
+  padding-top: 10px; /* Add some padding at the top */
+  /* Add some margin at the top */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.rescuer-info-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px; /* Add some space between the icon and text */
+}
+
+.rescuer-email,
+.rescuer-phone {
+  color: var(--text-color);
+  margin-top: 3px; /* Default text color */
+}
+
+.rescuer-contact p {
+  margin: 0; /* Remove margin for the contact info rows */
+}
+
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -172,7 +236,7 @@ h2 {
   border: 1px solid #888;
   width: 35%; /* Could be more or less, depending on screen size */
   max-height: 350px; /* Max height */
-  overflow-y: auto; /* Scrollbar if content overflows */
+  overflow-y: hidden; /* Scrollbar if content overflows */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   position: relative; /* For sticky positioning */
@@ -180,11 +244,37 @@ h2 {
 
 .modal-content h2 {
   width: 100%;
-
   background-color: #fefefe;
   margin: 0;
   padding: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#inventory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+#inventory-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#inventory-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#inventory-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+#inventory-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .close {
@@ -205,33 +295,106 @@ h2 {
 
 .inventory-item {
   padding: 10px;
-  margin: 10px 0;
+  margin: 10px auto; /* Center the item */
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-wrap: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0.3, 0.3, 0.3);
   transition: box-shadow 0.3s ease;
+  width: 55%; /* Set width to 50% of the parent */
 }
 
 .inventory-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0.5, 0.5, 0.5, 0.5);
 }
-@media screen and (max-width: 600px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
 
-  #rescuerRegistrationForm {
-    padding: 15px;
-  }
+.inventory-info-row {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-style: italic; /* Italicize the title */
+  color: black; /* Title color */
+}
 
-  #rescuerRegistrationForm input[type="text"],
-  #rescuerRegistrationForm input[type="email"],
-  #rescuerRegistrationForm input[type="password"],
-  #rescuerRegistrationForm select {
-    font-size: 12px;
-  }
+.inventory-info-row strong {
+  flex: 0 0 100px; /* Fixed width for the title */
+  text-align: right; /* Align title text to the right */
+  padding-right: 10px; /* Space between title and value */
+}
 
-  #rescuerRegistrationForm button {
-    padding: 8px 16px;
-  }
+.inventory-info-row span {
+  flex: 1;
+  font-style: normal; /* Remove italics from the value */
+  color: var(--text-color); /* Default value color */
+}
+
+.rescuer-username {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.rescuer-name {
+  color: var(--primary-color);
+}
+
+.rescuer-email {
+  color: var(--primary-color);
+}
+
+.rescuer-phone {
+  color: var(--primary-color);
+}
+
+.rescuer-vehicle-type {
+  color: var(--text-color);
+}
+
+.vehicle-van {
+  color: blue;
+}
+
+.vehicle-personal {
+  color: green;
+}
+
+.vehicle-pickup {
+  color: orange;
+}
+
+.rescuer-status {
+  color: var(--error-color);
+}
+
+.rescuer-tasks {
+  font-weight: bold;
+}
+
+.rescuer-tasks-zero {
+  color: red;
+}
+
+.rescuer-tasks-active {
+  color: green;
+}
+
+.rescuer-info-row {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: black; /* Title color */
+}
+
+.rescuer-info-row strong {
+  flex: 0 0 150px; /* Fixed width for the title */
+  text-align: right; /* Align title text to the right */
+  padding-right: 10px; /* Space between title and value */
+}
+
+.rescuer-info-row span {
+  flex: 1;
+  font-style: normal; /* Remove italics from the value */
+  /* Default value color */
 }

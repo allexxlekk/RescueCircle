@@ -86,20 +86,38 @@ function renderRescuers(rescuers) {
         listItem.className = "rescuer-item";
         listItem.dataset.id = rescuer.id; // Store the rescuer id for later use
 
+        const taskClass = rescuer.tasks > 0 ? 'rescuer-tasks-active' : 'rescuer-tasks-zero';
+        const vehicleClass = getVehicleClass(rescuer.vehicleType);
+
         listItem.innerHTML = `
             <div class="rescuer-info">
-                <p><strong>Username:</strong> ${rescuer.username}</p>
-                <p><strong>Full Name:</strong> ${rescuer.name}</p>
-                <p><strong>Email:</strong> ${rescuer.email}</p>
-                <p><strong>Phone:</strong> ${rescuer.phone}</p>
-                <p><strong>Vehicle Type:</strong> ${rescuer.vehicleType || 'N/A'}</p>
-                <p><strong>Status:</strong> ${rescuer.status || 'WAITING'}</p>
-                <p><strong>Active Tasks:</strong> ${rescuer.tasks || '0'}</p>
+                <p class="rescuer-info-row"><strong>Username:</strong> <span class="rescuer-username">${rescuer.username}</span></p>
+                <p class="rescuer-info-row"><strong>Full Name:</strong><span class="rescuer-name"> ${rescuer.name}</span></p>
+                <p class="rescuer-info-row"><strong>Vehicle Type:</strong> <span class="rescuer-vehicle-type ${vehicleClass}">${rescuer.vehicleType || 'N/A'}</span></p>
+                <p class="rescuer-info-row"><strong>Status:</strong><span class="rescuer-status"> ${rescuer.status || 'WAITING'}</span></p>
+                <p class="rescuer-info-row"><strong>Active Tasks:</strong><span class="rescuer-tasks ${taskClass}"> ${rescuer.tasks || '0'}</span></p>
+                <div class="rescuer-contact">
+                    <p class="rescuer-info-contact"><strong>✉:</strong> <span class="rescuer-email">${rescuer.email}</span></p>
+                    <p class="rescuer-info-contact"><strong>🕻:</strong> <span class="rescuer-phone"> ${rescuer.phone}</span></p> 
+                </div>
             </div>
         `;
         listItem.addEventListener('click', () => showInventory(rescuer.id));
         rescuerList.appendChild(listItem);
     });
+}
+// for display reasons 
+function getVehicleClass(vehicleType) {
+    switch (vehicleType) {
+        case 'VAN':
+            return 'vehicle-van';
+        case 'PERSONAL USE':
+            return 'vehicle-personal';
+        case 'PICKUP TRUCK':
+            return 'vehicle-pickup';
+        default:
+            return '';
+    }
 }
 
 async function showInventory(rescuerId) {
@@ -133,8 +151,10 @@ function renderInventory(inventory) {
             itemElement.className = "inventory-item";
 
             itemElement.innerHTML = `
-                <p><strong>Item:</strong> ${item.item}</p>
-                <p><strong>Amount:</strong> ${item.amount}</p>
+                  <p class="inventory-info-row"><strong>Item:</strong> <span class="inventory-item-name">${item.item}</span></p>
+                  <p class="inventory-info-row"><strong>Category:</strong> <span class="inventory-item-category">${item.category}</span></p>
+
+                <p class="inventory-info-row"><strong>Amount:</strong> <span class="inventory-item-amount">${item.amount}</span></p>
             `;
             inventoryList.appendChild(itemElement);
         });

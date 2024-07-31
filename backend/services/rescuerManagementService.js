@@ -82,10 +82,13 @@ const rescuerManagementService = {
     getRescuerInventory: async (id) => {
         let query = `
             SELECT ri.amount,
-                   i.name AS item
+                   i.name AS item,
+                   ic.name AS category
             FROM rescuer_inventory ri
                      LEFT JOIN
                  item i ON i.id = ri.item_id
+                 LEFT JOIN
+                 item_category ic ON ic.id = i.category_id
             WHERE ri.rescuer_id = ?
             ORDER BY i.name
         `;
