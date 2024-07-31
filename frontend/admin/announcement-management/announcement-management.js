@@ -82,6 +82,7 @@ const addItemToList = (items) => {
     });
     const newLi = document.createElement("li");
     const removeButton = document.createElement("button");
+    removeButton.className = 'remove-button';
     removeButton.textContent = "Remove item";
     removeButton.addEventListener("click", () => {
         newLi.remove();
@@ -175,9 +176,17 @@ function createAnnouncementCardElement(announcement) {
 
     descriptionDiv.textContent = `Description: ${announcement.description}`;
 
+
+    const offerCountDiv = document.createElement('div');
+    offerCountDiv.className = "offerCount";
+
+    offerCountDiv.textContent = `Offer count: ${announcement.offerCount}`;
+
+
     // Assemble the card
     li.appendChild(announcementNameDiv);
     li.appendChild(descriptionDiv);
+    li.appendChild(offerCountDiv);
 
     return li;
 }

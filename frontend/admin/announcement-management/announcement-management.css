@@ -46,14 +46,66 @@ body {
   background-color: var(--primary-color);
 }
 
-#create-announcement {
-  max-width: 600px;
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
   margin: 20px auto;
+}
+
+#create-announcement {
   background-color: var(--card-background);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  padding: 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 550px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content horizontally */
+}
+
+#create-announcement::-webkit-scrollbar {
+  width: 8px;
+}
+
+#create-announcement::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#create-announcement::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+#create-announcement::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+#announcements {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  padding: 20px;
+  max-height: 550px;
+}
+
+#create-announcement h2,
+#announcements h2 {
+  text-align: center;
+  color: var(--secondary-color);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 80%; /* Increased width */
 }
 
 label {
@@ -61,20 +113,37 @@ label {
   margin-bottom: 5px;
   color: var(--secondary-color);
   font-weight: bold;
-  margin-left: 20px; /* Align labels with input and textarea */
+  width: 100%;
 }
 
 #create-announcement input[type="text"],
 #create-announcement textarea,
 #create-announcement select {
-  width: calc(100% - 40px); /* Adjusted for padding */
-  max-width: 500px; /* Maximum width */
+  width: 100%; /* Adjusted for padding to match select */
   padding: 8px 12px;
-  margin: 0 auto 15px 20px; /* Center alignment and left padding */
+  margin-bottom: 15px;
   border: 1px solid #ced4da;
   border-radius: var(--border-radius);
   font-size: 14px;
-  display: block;
+}
+
+/* Scrollbar styling for select elements */
+select::-webkit-scrollbar {
+  width: 10px;
+}
+
+select::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 12px;
+}
+
+select::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 #create-announcement button {
@@ -85,10 +154,12 @@ label {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 80%; /* Adjusted width */
-  max-width: 300px; /* Maximum width */
-  margin: 10px auto; /* Center alignment */
+  width: 60%; /* Adjusted for padding */
+  text-wrap: nowrap;
+  max-width: 300px;
   display: block;
+  margin: 10px auto;
+  margin-top: -5px;
 }
 
 #create-announcement button:hover {
@@ -97,7 +168,6 @@ label {
 
 #announcement-items {
   margin-bottom: 15px;
-  text-align: center;
 }
 
 #announcement-items ul {
@@ -111,70 +181,57 @@ label {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+  width: 100%;
 }
 
 .announcement-item-select {
   flex-grow: 1;
-  width: 70%; /* Adjusted width to make select narrower */
-  max-width: 300px; /* Maximum width */
   padding: 8px 12px;
   border: 1px solid #ced4da;
   border-radius: var(--border-radius);
   font-size: 14px;
 }
 
-.remove-item-button {
-  background-color: var(--error-color);
-  color: white;
-  border: none;
-  padding: 6px 10px; /* Adjusted padding for smaller button */
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: auto;
-}
-
-.remove-item-button:hover {
-  background-color: #c0392b;
-}
-
-#announcements {
-  max-width: 800px;
-  margin: 20px auto;
-  background-color: var(--card-background);
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  padding: 20px;
-}
-
 #announcements .announcement-list-title {
   text-align: center;
-  color: var(--secondary-color);
+  color: white;
   padding: 20px 0;
   margin: 0;
-  background-color: #f8f9fa;
+  background-color: #3498db;
   border-bottom: 1px solid #e9ecef;
-}
-
-#announcements h2 {
-  text-align: center;
-  color: var(--secondary-color);
-  padding: 20px 0;
-  margin: 0;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+  border-radius: 15px;
 }
 
 #announcement-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  max-height: 450px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+#announcement-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#announcement-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#announcement-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+#announcement-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 #announcement-list li {
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
+  border-radius: 15px;
 }
 
 #announcement-list li:nth-child(even) {
@@ -186,6 +243,10 @@ label {
 }
 
 @media screen and (max-width: 600px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
   #create-announcement,
   #announcements {
     padding: 15px;
@@ -203,13 +264,44 @@ label {
 }
 
 .announcementName {
-  margin: 0 0 20px 0; /* Adjust margin-bottom for more space */
+  margin: 0 0 8px 0; /* Adjust margin-bottom for more space */
 }
 
 .description {
-  margin: 10px 0 0 0; /* Keep the existing margin-top */
+  margin: 0 0 8px 0; /* Keep the existing margin-top */
 }
 
-#name {
-  margin: 0 0 20px 0;
+.offerCount {
+  margin: 0 0 8px 0; /* Keep the existing margin-top */
+  /* Center the offer count text */
+}
+
+#item-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#item-list select {
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+}
+
+/* Style the remove button */
+.remove-button {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-button:hover {
+  background-color: #c0392b;
 }
