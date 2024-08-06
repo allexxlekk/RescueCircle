@@ -9,20 +9,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         itemDropdown.appendChild(option);
     });
 
-
-    document.getElementById('addAnotherAnnouncementButton').addEventListener('click', async () => {
-        let itemList = await fetchItems();
-        addItemToList(itemList);
+    document.getElementById('addAnotherAnnouncementButton').addEventListener('click', () => {
+        addItemToList(items);
     });
     document.getElementById('createAnnouncementButton').addEventListener('click', createAnnouncement);
 
     let announcements = await fetchAnnouncements();
     console.log(announcements);
-    updateAnnouncementCount();
     showAnnouncements(announcements);
-
+    updateAnnouncementCount();
 });
-
 
 async function fetchItems() {
     try {
@@ -41,16 +37,12 @@ async function createAnnouncement() {
 
     // Use querySelectorAll to get all select elements within itemList
     const selectElements = itemList.querySelectorAll('select');
-    const selectArray = Array.from(selectElements);
-    const selectedItemIds = []
-    selectArray.forEach(selectedItem =>
-        selectedItemIds.push(selectedItem.options[selectedItem.selectedIndex].value))
+    const selectedItemIds = Array.from(selectElements).map(select => select.value);
 
-    const uniqueItemIds = [...new Set(selectedItemIds)];
     const announcementBody = {
         name,
         description,
-        items: uniqueItemIds
+        items: selectedItemIds
     };
 
     try {
@@ -63,7 +55,15 @@ async function createAnnouncement() {
         });
 
         const result = await response.json();
-        console.log(result);
+        alert("Announcement Created successfully!");
+
+        // Add the new announcement to the DOM without refreshing the page
+        updateAnnouncementList(result);
+
+        // Clear the input fields
+        document.getElementById('name').value = '';
+        document.getElementById('description').value = '';
+        itemList.innerHTML = '';
 
     } catch (error) {
         console.error('Create announcement error:', error);
@@ -72,8 +72,8 @@ async function createAnnouncement() {
 
 const addItemToList = (items) => {
     const itemList = document.getElementById('item-list');
-    const newSelect = document.createElement("select")
-    newSelect.id = `item-${itemList.length}`;
+    const newSelect = document.createElement("select");
+    newSelect.id = `item-${itemList.children.length}`;
     items.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
@@ -93,8 +93,6 @@ const addItemToList = (items) => {
 }
 
 function showAnnouncements(announcements) {
-    // Access the announcements array directly from the data object
-
     const announcementListContainer = document.getElementById('announcements');
     if (!announcementListContainer) {
         console.error('Announcement list container not found');
@@ -123,17 +121,25 @@ function showAnnouncements(announcements) {
     // Iterate over the announcements array and create elements for each
     announcements.forEach(announcement => {
         let announcementCardElement = createAnnouncementCardElement(announcement);
-        console.log(announcementCardElement);
         announcementListElement.appendChild(announcementCardElement);
     });
+}
 
+function updateAnnouncementList(announcement) {
+    const announcementListContainer = document.getElementById('announcements');
+    const announcementListElement = announcementListContainer.querySelector('ul');
+
+    const announcementCardElement = createAnnouncementCardElement(announcement);
+    announcementListElement.appendChild(announcementCardElement);
+
+    // Update the announcement count
+    updateAnnouncementCount();
 }
 
 function closeAnnouncementModal() {
     const modal = document.getElementById('announcementModal');
     modal.style.display = 'none';
 }
-
 
 function showAnnouncementDetails(announcementDetails) {
     const modal = document.getElementById('announcementModal');
@@ -181,37 +187,16 @@ function showAnnouncementDetails(announcementDetails) {
     modal.style.display = 'block';
 }
 
-
-async function updateAnnouncementCount() {
-    const announcementList = document.getElementById('announcement-list');
-    const announcements = announcementList.getElementsByTagName('li');
-    const announcementCount = announcements.length; // Get the current number of <li> elements
+function updateAnnouncementCount() {
+    const announcementListContainer = document.getElementById('announcements');
+    const announcementListElement = announcementListContainer.querySelector('ul');
+    const announcementCount = announcementListElement.children.length;
 
     // Update the title with the new count
-    const titleDiv = document.getElementById('announcement-list-title');
-    titleDiv.value = `Announcements (${announcementCount})`;
-}
-
-async function addAnnouncementToList() {
-    const announcementName = document.getElementById('newAnnouncementName').value;
-    const announcementDescription = document.getElementById('newAnnouncementDescription').value;
-
-    if (!announcementName || !announcementDescription) {
-        alert('Both name and description are required.');
-        return;
+    let titleDiv = announcementListContainer.querySelector('.announcement-list-title');
+    if (titleDiv) {
+        titleDiv.textContent = `Announcements (${announcementCount})`;
     }
-
-    const announcement = { name: announcementName, description: announcementDescription };
-    const announcementCardElement = createAnnouncementCardElement(announcement);
-    const announcementList = document.getElementById('announcement-list');
-    announcementList.appendChild(announcementCardElement);
-
-    // Update the count after adding
-    updateAnnouncementCount();
-
-    // Optionally clear the input fields
-    document.getElementById('newAnnouncementName').value = '';
-    document.getElementById('newAnnouncementDescription').value = '';
 }
 
 function createAnnouncementCardElement(announcement) {
@@ -229,7 +214,7 @@ function createAnnouncementCardElement(announcement) {
 
     const offerCountDiv = document.createElement('div');
     offerCountDiv.className = 'offerCount';
-    offerCountDiv.textContent = `Offer count: ${announcement.offerCount}`;
+    offerCountDiv.textContent = `Offer count: ${announcement.offerCount || 0}`;
 
     // Assemble the card
     li.appendChild(announcementNameDiv);
@@ -248,7 +233,6 @@ function createAnnouncementCardElement(announcement) {
 async function fetchItems() {
     try {
         const response = await fetch('http://localhost:3000/items');
-
         return await response.json(); // Return the data
     } catch (error) {
         console.error('Fetch error:', error);
@@ -256,40 +240,9 @@ async function fetchItems() {
     }
 }
 
-async function fetchItemsBySearch(name) {
-    try {
-        let response;
-        if (name === "" || name === undefined || name === null) {
-            response = await fetchItems();
-            return response
-        } else {
-            response = await fetch(`http://localhost:3000/items/search?str=${name}`);
-            return await response.json(); // Return the data
-        }
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to be caught in the higher level
-    }
-}
-
-const fetchItemAvailability = async (itemName) => {
-    if (itemName === '') {
-        return false;
-    } else
-        try {
-            const response = await fetch('http://localhost:3000/items/isAvailable?itemName=' + encodeURIComponent(itemName));
-            const addedItem = await response.json();
-            return addedItem.isAvailable
-        } catch (error) {
-            console.error('Error while adding Item:', error);
-            return false;
-        }
-};
-
 async function fetchAnnouncements() {
     try {
         const response = await fetch('http://localhost:3000/announcements');
-
         return await response.json();
     } catch (error) {
         console.error('Fetch error:', error);

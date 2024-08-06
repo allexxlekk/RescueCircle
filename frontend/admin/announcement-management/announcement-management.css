@@ -173,9 +173,13 @@ select::-webkit-scrollbar-thumb:hover {
 #announcement-items ul {
   padding: 0;
   margin: 0;
-  /* list-style-type: none; */
+  list-style-type: none;
 }
 
+/* #item {
+  width: 160%;
+  border: 1px solid black;
+} */
 .announcement-item {
   display: flex;
   align-items: center;
