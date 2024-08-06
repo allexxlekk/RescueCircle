@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('createAnnouncementButton').addEventListener('click', createAnnouncement);
 
     let announcements = await fetchAnnouncements();
-    console.log(announcements);
     showAnnouncements(announcements);
     updateAnnouncementCount();
 
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.style.display = "none";
     }
     // When the user clicks anywhere outside of the modal, close it
-
     window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
@@ -34,15 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-async function fetchItems() {
-    try {
-        const response = await fetch('http://localhost:3000/items');
-        return await response.json();
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
-    }
-}
+
 
 async function createAnnouncement() {
     const name = document.getElementById('name').value;
@@ -60,7 +50,7 @@ async function createAnnouncement() {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/announcements', {
+        await fetch('http://localhost:3000/announcements', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -68,12 +58,11 @@ async function createAnnouncement() {
             body: JSON.stringify(announcementBody)
         });
 
-        const result = await response.json();
-        alert("Announcement Created successfully!");
 
+        const announcements = await fetchAnnouncements();
         // Add the new announcement to the DOM without refreshing the page
-        updateAnnouncementList(result);
-
+        await updateAnnouncementList(announcements);
+        showAnnouncements(announcements);
         // Clear the input fields
         document.getElementById('name').value = '';
         document.getElementById('description').value = '';
@@ -139,7 +128,7 @@ function showAnnouncements(announcements) {
     });
 }
 
-function updateAnnouncementList(announcement) {
+async function updateAnnouncementList(announcement) {
     const announcementListContainer = document.getElementById('announcements');
     const announcementListElement = announcementListContainer.querySelector('ul');
 
