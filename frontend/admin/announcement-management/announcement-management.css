@@ -46,6 +46,25 @@ body {
   background-color: var(--primary-color);
 }
 
+.logout-button {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  text-align: center;
+  height: 32px;
+  right: 20px;
+  top: 3px;
+}
+
+.logout-button:hover {
+  background-color: darkred;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
