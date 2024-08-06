@@ -1,25 +1,25 @@
-const jwt = require('jsonwebtoken');
+const {verify} = require("jsonwebtoken");
+
 
 // Middleware to verify JWT tokens
 
-function verifyJwtToken(req, res, next) {
-    const token = req.header('Authorization');
+function authenticateToken(req, res, next) {
+    const token = req.cookies?.token || req.headers.authorization?.split(' ')[1] || null;
 
     if (!token) {
-        return res.status(401).json({ error: 'Token not provided' });
+        req.authenticated = false;
+        return next();
     }
 
     try {
-        const secretKey = "mysecretkey";
-
-        // Verify the token and decode its payload
-        //TODO make it a .env variable
-        req.user = jwt.verify(token, secretKey);
-
+        req.user = verify(token, process.env.JWT_SECRET);
+        req.authenticated = true;
         next();
     } catch (error) {
-        res.status(401).json({ error: 'Invalid token' });
+        req.authenticated = false;
+        res.clearCookie('token');
+        next();
     }
 }
 
-module.exports = verifyJwtToken;
+module.exports = authenticateToken;

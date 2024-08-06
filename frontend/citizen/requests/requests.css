@@ -1,13 +1,11 @@
-#view-announcements-container .announcement-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* This will place the elements at opposite ends */
-}
-
-#view-offers-container .offers-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* This will place the elements at opposite ends */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --background-color: #ecf0f1;
+  --card-background: #ffffff;
+  --text-color: #333333;
+  --border-radius: 8px;
+  --error-color: #e74c3c;
 }
 
 #item-list-container .list-group#item-list {
@@ -16,13 +14,7 @@
   overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
 }
 
-#view-offer-container .list-group#request-list {
-  max-height: 680px; /* Adjust based on your preference */
-  overflow-y: auto;
-  overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
-}
-
-#view-announcements-container .list-group#announcement-list {
+#view-request-container .list-group#request-list {
   max-height: 680px; /* Adjust based on your preference */
   overflow-y: auto;
   overflow-x: hidden; /* Adding overflow-x as hidden to prevent horizontal scrollbar */
@@ -39,7 +31,7 @@ h4 {
   color: #333;
 }
 
-#offer-container {
+#request-container {
   max-width: 700px;
   margin: 40px auto;
   background: #ffffff;
@@ -53,7 +45,7 @@ h4 {
   color: #333;
 }
 
-#add-offer-container,
+#add-request-container,
 #item-list-container {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid #eaeaea;
@@ -132,17 +124,72 @@ h4 {
   line-height: 1.5; /* Adjust line height for better readability of wrapped text */
 }
 
-.pending-offer {
+.pending-request {
   background-color: #ffc107; /* Bootstrap's warning color for pending, or choose your own */
   color: #000; /* Text color */
 }
 
-.assumed-offer {
+.assumed-request {
   background-color: #17a2b8; /* Bootstrap's info color for assumed, or choose your own */
   color: #fff; /* Text color */
 }
 
-.completed-offer {
+.completed-request {
   background-color: #28a745; /* Bootstrap's success color for completed, or choose your own */
   color: #fff; /* Text color */
+}
+
+.request-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Aligns items to opposite ends */
+}
+
+#main-nav {
+  background-color: var(--secondary-color);
+  padding: 20px 0;
+}
+
+#main-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+#main-nav li {
+  margin: 0 15px;
+}
+
+#main-nav a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+#main-nav a:hover,
+#main-nav a.active {
+  background-color: var(--primary-color);
+}
+
+.logout-button {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  padding: 1px 15px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  text-align: center;
+  height: 32px;
+  right: 20px;
+  top: 3px;
+}
+
+.logout-button:hover {
+  background-color: darkred;
 }

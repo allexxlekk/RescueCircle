@@ -1,7 +1,6 @@
 import apiUtils from "../../utils/apiUtils.mjs";
 
 let selectedItemId = null;
-let citizenId = 7; //TODO: take this from jwt
 const searchFilter = document.getElementById("search-filter");
 const addRequestButton = document.getElementById("add-request-button");
 const cancelRequestButton = document.getElementById("cancel-request-button");
@@ -14,7 +13,7 @@ const viewRequestsContainer = document.getElementById("view-request-container");
 const selectedCategoryText = document.getElementById("selected-category-text");
 const selectedStatusText = document.getElementById("selected-request-text");
 const addRequestContainer = document.getElementById("add-request-container");
-
+const logoutButton = document.getElementById("logoutButton");
 
 const statusPriority = {
     'ASSUMED': 1,
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         await apiUtils.postRequest({
             itemId: selectedItemId,
             numberOfPeople: numberOfPeople,
-            citizenId: citizenId
         })
 
         await initViewRequests();
@@ -51,6 +49,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     )
     createRequestButton.addEventListener("click", async () => {
         await initAddRequest()
+    });
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
     });
 });
 
@@ -71,7 +73,7 @@ const initViewRequests = async () => {
     addRequestContainer.style.display = "none";
     statusFilter = "all-statuses";
     selectedStatusText.innerHTML = "All";
-    requests = await apiUtils.fetchCitizensRequests(citizenId);
+    requests = await apiUtils.fetchCitizensRequests();
     showRequests(requests);
 
 }
@@ -102,7 +104,7 @@ function createItemElement(item) {
     itemElement.innerHTML = `
         <h5 class="mb-1 list-item-name">${item.name}</h5>
         <small class="list-item-category">${item.category_name}</small>
-        <p class="mb-1">${item.description}</p>
+        <p class="mb-1">${item.description ? item.description : "No description"}</p>
     `;
 
     itemElement.addEventListener("click", async () => {
@@ -200,9 +202,9 @@ const createCategoryDropdown = async () => {
 
 const createStatusDropdown = () => {
 
-    const statusDropdown = document.getElementById("status-dropdown-request");
+    const statusDropdown = document.getElementById("status-dropdown");
     const selectedStatusText = document.getElementById("selected-request-text");
-    const allStatusDropDownChoice = document.getElementById("all-status-request");
+    const allStatusDropDownChoice = document.getElementById("all-status");
 
     statusFilter = "all-statuses";
 
