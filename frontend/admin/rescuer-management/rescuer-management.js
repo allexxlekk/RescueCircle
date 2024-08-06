@@ -1,3 +1,5 @@
+import apiUtils from "../../utils/apiUtils.mjs";
+const logoutButton = document.getElementById("logoutButton");
 async function postRegister(register) {
     const response = await fetch("http://localhost:3000/admin/rescuer-management/rescuers", {
         method: "POST",
@@ -36,6 +38,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             modal.style.display = "none";
         }
     }
+
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
+    });
 });
 
 const registerUser = async (event) => {

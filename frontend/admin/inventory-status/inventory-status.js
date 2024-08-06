@@ -1,7 +1,8 @@
+import apiUtils from "../../utils/apiUtils.mjs";
 let currentPage = 1;
 const itemsPerPage = 9;
 let allItems = [];
-
+const logoutButton = document.getElementById("logoutButton");
 async function refreshItemTable() {
     const searchInput = document.getElementById('search-input').value;
     const selectedCategories = Array.from(document.querySelectorAll('#category-filter input[type="checkbox"]:checked:not(#all-categories)'))
@@ -73,9 +74,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         refreshItemTable();
     }, 300));
 
+
+
     document.getElementById('category-filter').addEventListener('change', () => {
         currentPage = 1; // Reset to first page on category change
         refreshItemTable();
+    });
+
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
     });
 });
 

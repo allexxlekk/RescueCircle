@@ -1,3 +1,4 @@
+import apiUtils from "../../utils/apiUtils.mjs";
 const masterFilter = document.getElementById('masterFilter');
 const assumedRequestsFilter = document.getElementById('filter-assumed-requests');
 const pendingRequestsFilter = document.getElementById('filter-pending-requests');
@@ -12,7 +13,7 @@ let myMap;
 let rescuers = []
 let offers = []
 let requests = []
-
+const logoutButton = document.getElementById("logoutButton");
 // Array of all filters except the master filter
 let filterStates = {
     assumedRequests: assumedRequestsFilter.checked,
@@ -80,6 +81,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     applyFilters()
+
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
+    });
 });
 
 // Function to toggle all filters based on master filter state

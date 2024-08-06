@@ -1,3 +1,4 @@
+import apiUtils from "../../utils/apiUtils.mjs";
 const categoryList = document.getElementById('category-list');
 const itemList = document.getElementById('item-list');
 const searchCategoryInput = document.getElementById('search-category-input');
@@ -12,6 +13,7 @@ const uploadButton = document.getElementById('upload-json-btn');
 const syncButton = document.getElementById('sync-btn');
 
 let selectedCategoryId = null;
+const logoutButton = document.getElementById("logoutButton");
 
 async function refreshCategoryList() {
     itemListContainer.style.display = 'none';
@@ -101,6 +103,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             alert('Please select a JSON file first.');
         }
+    });
+
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
     });
 });
 

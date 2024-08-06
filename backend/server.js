@@ -53,7 +53,7 @@ app.get('/', authenticateToken, (req, res) => {
     // User is authenticated, redirect based on role
     switch (req.user.role) {
         case 'ADMIN':
-            res.sendFile(path.join(__dirname, '../frontend/citizen/request/requests.html'));
+            res.redirect('/admin/overview');
             break;
         case 'CITIZEN':
             res.redirect('/citizen/requests');
@@ -65,7 +65,7 @@ app.get('/', authenticateToken, (req, res) => {
 
 app.get('/citizen/requests', authenticateToken, (req, res) => {
     if (!req.authenticated || req.user.role !== 'CITIZEN') {
-        return res.redirect('/login');
+        return res.redirect('/');
     }
 
     res.sendFile(path.join(__dirname, '../frontend/citizen/requests/requests.html'));
@@ -74,10 +74,56 @@ app.get('/citizen/requests', authenticateToken, (req, res) => {
 
 app.get('/citizen/offers', authenticateToken, (req, res) => {
     if (!req.authenticated || req.user.role !== 'CITIZEN') {
-        return res.redirect('/login');
+        return res.redirect('/');
     }
 
     res.sendFile(path.join(__dirname, '../frontend/citizen/offers/offers.html'));
+
+});
+
+app.get('/admin/overview', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'ADMIN') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/admin/overview/overview.html'));
+
+});
+
+app.get('/admin/warehouse-management', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'ADMIN') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/admin/warehouse-management/warehouse-management.html'));
+
+});
+
+app.get('/admin/inventory-status', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'ADMIN') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/admin/inventory-status/inventory-status.html'));
+
+});
+
+app.get('/admin/rescuer-management', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'ADMIN') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/admin/rescuer-management/rescuer-management.html'));
+
+});
+
+
+app.get('/admin/announcement-management', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'ADMIN') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/admin/announcement-management/announcement-management.html'));
 
 });
 
@@ -158,7 +204,6 @@ app.post('/login', async (req, res) => {
         res.status(500).json({message: "Internal server error", error: err.message});
     }
 });
-
 
 
 app.listen(port, () => {

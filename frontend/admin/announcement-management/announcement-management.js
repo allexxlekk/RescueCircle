@@ -1,3 +1,5 @@
+import apiUtils from "../../utils/apiUtils.mjs";
+const logoutButton = document.getElementById("logoutButton");
 document.addEventListener('DOMContentLoaded', async () => {
     let items = await fetchItems();
     const itemDropdown = document.getElementById('item');
@@ -30,6 +32,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             modal.style.display = "none";
         }
     }
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
+    });
 });
 
 
