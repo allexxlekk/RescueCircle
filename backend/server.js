@@ -14,6 +14,9 @@ const announcementsRouter = require('./routes/announcements');
 const userService = require('./services/userService');
 const locationService = require('./services/locationService');
 const bodyParser = require('body-parser');
+const path = require('path');
+const authenticateToken = require('./middleware/auth')
+const cookieParser = require('cookie-parser');
 
 const app = express();
 // Use CORS middleware to allow requests from all origins
@@ -33,9 +36,49 @@ app.use('/admin/warehouse-management', adminWarehouseManagementRouter);
 app.use('/admin/inventory-status', adminInventoryStatusRouter);
 app.use('/admin/rescuer-management', adminRescuerManagementRouter);
 app.use('/admin/overview', adminOverviewRouter);
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('token');
+    return res.redirect('/login');
+});
+
+app.get('/', authenticateToken, (req, res) => {
+    if (!req.authenticated) {
+        return res.redirect('/login');
+    }
+
+    // User is authenticated, redirect based on role
+    switch (req.user.role) {
+        case 'ADMIN':
+            res.sendFile(path.join(__dirname, '../frontend/citizen/request/requests.html'));
+            break;
+        case 'CITIZEN':
+            res.redirect('/citizen/requests');
+            break;
+        default:
+            res.sendFile(path.join(__dirname, '../frontend/default-dashboard.html'));
+    }
+});
+
+app.get('/citizen/requests', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'CITIZEN') {
+        return res.redirect('/login');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/citizen/requests/requests.html'));
+
+});
+
+app.get('/citizen/offers', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'CITIZEN') {
+        return res.redirect('/login');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/citizen/offers/offers.html'));
+
 });
 
 // Register Endpoint
@@ -45,16 +88,35 @@ app.post('/register', async (req, res) => {
 
         // Validate password
         if (!isValidPassword(newUser.password)) {
-            return res.status(400).send({error: "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character."});
+            return res.status(400).json({
+                error: "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character."
+            });
         }
 
         // Register User
         const message = await userService.registerUser(newUser);
-        res.status(201).send(message);
+
+        // If registration is successful, redirect to login
+        res.status(201).json({
+            message: message,
+            redirect: '/login'
+        });
     } catch (err) {
-        res.status(500).send(err.message);
+        // If there's an error (e.g., user already exists), send an error response
+        res.status(500).json({error: err.message});
     }
 });
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/citizen/register/register.html'));
+});
+
+app.get('/login', authenticateToken, (req, res) => {
+    if (req.authenticated) {
+        return res.redirect('/');
+    }
+    res.sendFile(path.join(__dirname, '../frontend/login/login.html'));
+});
+
 
 app.post('/login', async (req, res) => {
     try {
@@ -64,20 +126,40 @@ app.post('/login', async (req, res) => {
         const authenticated = await userService.authenticateUser(email, password);
 
         if (!authenticated) {
-            res.status(401).send("Bad credentials");
-        } else {
-            // Generate a JWT token
-            const user = await userService.getUserByEmail(req.body.email);
-            const token = await userService.generateJwtToken(user);
-
-            // Send the token as a JSON response
-            res.json({token});
+            return res.status(401).json({message: "Bad credentials"});
         }
 
+        // Get user details
+        const user = await userService.getUserByEmail(email);
+
+        // Generate a JWT token
+        const token = await userService.generateJwtToken(user);
+
+        // Set the token as a cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000 // Cookie expires in 24 hours
+        });
+
+
+        // Send response with redirect URL
+        res.status(200).json({
+            message: 'Authentication successful',
+            user: {
+                id: user.id,
+                email: user.email,
+                role: user.role
+            },
+            token: token // Including token for debugging
+        });
+
     } catch (err) {
-        res.status(500).send(err.message);
+        console.error(err);
+        res.status(500).json({message: "Internal server error", error: err.message});
     }
 });
+
+
 
 app.listen(port, () => {
     console.log(`Backend Server is running on http://localhost:${port}`);

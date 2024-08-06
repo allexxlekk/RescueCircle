@@ -135,7 +135,7 @@ const apiUtils = {
 
             return await response.json(); // Return the data
         } catch
-        (error) {
+            (error) {
             console.error("Fetch error:", error);
             throw error; // Re-throw the error to be caught in the higher level
         }
@@ -149,7 +149,7 @@ const apiUtils = {
 
             return await response.json(); // Return the data
         } catch
-        (error) {
+            (error) {
             console.error("Fetch error:", error);
             throw error; // Re-throw the error to be caught in the higher level
         }
@@ -173,14 +173,30 @@ const apiUtils = {
         });
     },
     async fetchCitizensRequests(citizenId) {
-        const response = await fetch("http://localhost:3000/requests/citizen/" + citizenId);
+        let response = null;
+        if (citizenId) {
+            response = await fetch("http://localhost:3000/requests/citizen/" + citizenId);
+
+        } else {
+            response = await fetch("http://localhost:3000/requests/citizen");
+        }
 
         return await response.json(); // Return the data
     },
     async fetchCitizensOffers(citizenId) {
-        const response = await fetch("http://localhost:3000/offers/citizen/" + citizenId);
+        let response;
+        if (citizenId) {
+            response = await fetch("http://localhost:3000/offers/citizen/" + citizenId);
+        } else {
+            response = await fetch("http://localhost:3000/offers/citizen");
+
+        }
 
         return await response.json(); // Return the data
+    },
+    async logout() {
+            await fetch("http://localhost:3000/logout");
+        window.location.href = "/";
     },
     debounce(func, delay) {
         let timer;

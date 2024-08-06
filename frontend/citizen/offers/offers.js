@@ -12,6 +12,7 @@ const selectedStatusText = document.getElementById("selected-offers-text");
 let offers;
 const viewOffersContainer = document.getElementById("view-offers-container");
 const viewAnnouncementsContainer = document.getElementById("view-announcements-container");
+const logoutButton = document.getElementById("logoutButton");
 
 const statusPriority = {
     'ASSUMED': 1,
@@ -29,6 +30,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     createOfferButton.addEventListener("click", async () => {
         await initViewAnnouncements();
     });
+
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout()
+    });
 });
 
 const initViewAnnouncements = async () => {
@@ -45,7 +50,7 @@ const initViewOffers = async () => {
     viewAnnouncementsContainer.style.display = "none";
     statusFilter = "all-statuses";
     selectedStatusText.innerHTML = "All";
-    offers = await apiUtils.fetchCitizensOffers(citizenId);
+    offers = await apiUtils.fetchCitizensOffers();
     showOffers(offers);
 };
 
@@ -181,14 +186,14 @@ function createOfferElement(offer) {
        <p class="mb-1 offer-date">Request Date: <span class="offer-date-value">${offer.createdAt}</span></p>
        <p class="mb-1 assumed-date">Assumed Date: <span class="assume-date-value">${offer.assumedAt}</span></p>
        <p class="mb-1 completed-date">Completed Date: <span class="assume-date-value">${offer.completedAt}</span></p>
-       <button class="btn btn-danger delete-offer-button">Delete</button>
+       <button class="btn btn-danger delete-offer-button">Cancel Offer</button>
     `;
 
     // Delete button in each offer element 
     const deleteButton = offerElement.querySelector('.delete-offer-button');
     deleteButton.addEventListener('click', async (event) => {
         event.stopPropagation();
-        if (confirm('Are you sure you want to delete this offer?')) {
+        if (confirm('Are you sure you want to cancel this offer?')) {
             try {
                 await apiUtils.cancelOffer(offer.offerId);
                 alert('Offer deleted successfully.');

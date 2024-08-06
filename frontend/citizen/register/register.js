@@ -64,7 +64,7 @@ const registerUser = async () => {
     //TODO show alert and go to the login page
     alert("Register Completed Successfully");
 
-    window.location.href = '../login.html';
+    window.location.href = '/login';
   }
 };
 

@@ -1,10 +1,15 @@
 const express = require("express");
 const offersService = require("../services/offersService.js");
 const router = express.Router();
-router.post('/', async (req, res) => {
+const cookieParser = require('cookie-parser');
+const authenticateToken = require('../middleware/auth');
+
+router.use(cookieParser());
+router.post('/', authenticateToken, async (req, res) => {
 
     try {
-        const offer = req.body;
+        let offer = req.body;
+        offer.citizenId = req.user.id;
         const offerAdded = await offersService.addOffer(offer);
         if (offerAdded) {
             res.status(201).json({message: 'Offer added successfully'});
@@ -26,6 +31,18 @@ router.delete('/:offerId', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'Error deleting offer'});
+    }
+});
+
+router.get('/citizen', authenticateToken, async (req, res) => {
+    try {
+        const citizenId = req.user.id;
+        const offers = await offersService.fetchOffersForCitizen(citizenId);
+
+        res.status(200).json(offers);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: 'Error fetching requests'});
     }
 });
 
