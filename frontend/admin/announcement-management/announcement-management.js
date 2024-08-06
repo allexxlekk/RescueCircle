@@ -129,6 +129,59 @@ function showAnnouncements(announcements) {
 
 }
 
+function closeAnnouncementModal() {
+    const modal = document.getElementById('announcementModal');
+    modal.style.display = 'none';
+}
+
+
+function showAnnouncementDetails(announcementDetails) {
+    const modal = document.getElementById('announcementModal');
+    const announcementNameElement = document.getElementById('announcementName');
+    const announcementDetailsContainer = document.getElementById('announcementDetails');
+
+    announcementNameElement.textContent = announcementDetails.name;
+    announcementDetailsContainer.innerHTML = '';
+
+    const descriptionElement = document.createElement('p');
+    descriptionElement.className = 'announcement-description';
+    descriptionElement.textContent = `Description: ${announcementDetails.description}`;
+    announcementDetailsContainer.appendChild(descriptionElement);
+
+    const dateElement = document.createElement('p');
+    dateElement.className = 'announcement-date';
+    dateElement.textContent = `Date: ${announcementDetails.date}`;
+    announcementDetailsContainer.appendChild(dateElement);
+
+    const itemsListElement = document.createElement('ul');
+    itemsListElement.className = 'announcement-items';
+    announcementDetails.items.forEach(item => {
+        const itemElement = document.createElement('li');
+        itemElement.className = 'announcement-item';
+
+        const itemNameElement = document.createElement('span');
+        itemNameElement.className = 'announcement-item-name';
+        itemNameElement.textContent = item.name;
+
+        const itemCategoryElement = document.createElement('span');
+        itemCategoryElement.className = 'announcement-item-category';
+        itemCategoryElement.textContent = ` [${item.category}]`;
+
+        const itemDescriptionElement = document.createElement('span');
+        itemDescriptionElement.className = 'announcement-item-description';
+        itemDescriptionElement.textContent = ` ${item.description || 'No description'}`;
+
+        itemElement.appendChild(itemNameElement);
+        itemElement.appendChild(itemCategoryElement);
+        itemElement.appendChild(itemDescriptionElement);
+
+        itemsListElement.appendChild(itemElement);
+    });
+    announcementDetailsContainer.appendChild(itemsListElement);
+    modal.style.display = 'block';
+}
+
+
 async function updateAnnouncementCount() {
     const announcementList = document.getElementById('announcement-list');
     const announcements = announcementList.getElementsByTagName('li');
@@ -162,31 +215,31 @@ async function addAnnouncementToList() {
 }
 
 function createAnnouncementCardElement(announcement) {
-
     const li = document.createElement('li');
-    li.className = `announcement-card ${announcement.name}`; // Add status-based class for styling, though using the name here might be unique for each card
+    li.className = 'announcement-card';
+    li.dataset.announcementId = announcement.id;
 
     const announcementNameDiv = document.createElement('div');
-    announcementNameDiv.className = "announcementName";
+    announcementNameDiv.className = 'announcementName';
     announcementNameDiv.textContent = `Announcement Name: ${announcement.name}`;
 
-
     const descriptionDiv = document.createElement('div');
-    descriptionDiv.className = "description";
-
+    descriptionDiv.className = 'description';
     descriptionDiv.textContent = `Description: ${announcement.description}`;
 
-
     const offerCountDiv = document.createElement('div');
-    offerCountDiv.className = "offerCount";
-
+    offerCountDiv.className = 'offerCount';
     offerCountDiv.textContent = `Offer count: ${announcement.offerCount}`;
-
 
     // Assemble the card
     li.appendChild(announcementNameDiv);
     li.appendChild(descriptionDiv);
     li.appendChild(offerCountDiv);
+
+    // Add click event listener to fetch and show announcement details
+    li.addEventListener('click', () => {
+        getAnnouncementById(announcement.id);
+    });
 
     return li;
 }
@@ -241,5 +294,18 @@ async function fetchAnnouncements() {
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;
+    }
+}
+
+async function getAnnouncementById(announcementId) {
+    try {
+        const response = await fetch(`http://localhost:3000/announcements/${announcementId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const announcementDetails = await response.json();
+        showAnnouncementDetails(announcementDetails);
+    } catch (error) {
+        console.error('Error fetching announcement details:', error);
     }
 }
