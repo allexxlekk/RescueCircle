@@ -59,7 +59,7 @@ app.get('/', authenticateToken, (req, res) => {
             res.redirect('/citizen/requests');
             break;
         default:
-            res.sendFile(path.join(__dirname, '../frontend/default-dashboard.html'));
+            res.redirect('/rescuer');
     }
 });
 
@@ -69,6 +69,15 @@ app.get('/citizen/requests', authenticateToken, (req, res) => {
     }
 
     res.sendFile(path.join(__dirname, '../frontend/citizen/requests/requests.html'));
+
+});
+
+app.get('/rescuer', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'RESCUER') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/rescuer/rescuer.html'));
 
 });
 
