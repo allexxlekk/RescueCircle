@@ -19,7 +19,7 @@ async function fetchItems() {
     }
 }
 
-async function fetchInventory(rescuerId) {
+async function fetchInventory() {
     try {
         const response = await fetch('http://localhost:3000/rescuers/inventory?id=' + rescuerId);
 

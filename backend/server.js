@@ -7,6 +7,7 @@ const adminRescuerManagementRouter = require('./routes/admin/rescuerManagement')
 const adminOverviewRouter = require('./routes/admin/overview')
 const rescuersRouter = require('./routes/rescuers');
 const offersRouter = require('./routes/offers');
+const rescuerRouter = require('./routes/rescuerBusiness');
 const categoriesRouter = require('./routes/categories');
 const itemsRouter = require('./routes/items');
 const requestsRouter = require('./routes/requests');
@@ -31,6 +32,7 @@ app.use('/items', itemsRouter);
 app.use('/requests', requestsRouter);
 app.use('/announcements', announcementsRouter);
 app.use('/rescuers', rescuersRouter);
+app.use('/rescuer', rescuerRouter);
 app.use('/offers', offersRouter);
 app.use('/admin/warehouse-management', adminWarehouseManagementRouter);
 app.use('/admin/inventory-status', adminInventoryStatusRouter);

@@ -106,6 +106,22 @@ const getAllItems = async () => {
   }
 };
 
+const getBaseItems = async () => {
+  try {
+    const query = `
+            SELECT item.id, item.name, item.description, item.quantity,item.category_id, item_category.name AS category_name
+            FROM item
+                     INNER JOIN item_category ON item.category_id = item_category.id
+            WHERE item.quantity > 0;
+        `;
+    const [result] = await dbConnection.promise().query(query);
+    return result;
+  } catch (err) {
+    console.error("Error get items:", err);
+    throw err;
+  }
+};
+
 const changeItemQuantity = async (itemId, quantity) => {
   try {
     const query = `UPDATE item SET quantity = ? WHERE id = ?;`;
@@ -320,4 +336,5 @@ module.exports = {
   getItemById,
   changeItemQuantity,
   editItem,
+  getBaseItems
 };

@@ -141,7 +141,8 @@ BEGIN
     IF NEW.active_tasks > 0 THEN
         SET NEW.status = "ACTIVE";
     END IF;
-    IF NEW.active_tasks = 0 THEN
+    IF NEW.active_tasks <= 0 THEN
         SET NEW.status = "WAITING";
+        SET NEW.active_tasks = 0;
     END IF;
 END;

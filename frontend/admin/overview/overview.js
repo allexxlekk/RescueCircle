@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             fillOpacity: 0.1,
             radius: radius,
         }).addTo(myMap);
+        placeBaseMarker(baseLocation.latitude, baseLocation.longitude)
     } catch (error) {
         console.error("Error setting up map:", error);
     }
@@ -307,6 +308,27 @@ function placeRescuerMarkers() {
 
         window.rescuerMarkers.push(marker);
     });
+}
+
+function placeBaseMarker(latitude, longitude) {
+    if (window.baseMarkers) {
+        window.baseMarkers.forEach(marker => myMap.removeLayer(marker));
+    }
+    window.baseMarkers = [];
+
+    const markerColor = 'black';
+    const rescuerIcon = L.divIcon({
+        className: 'rescuer-marker',
+        html: `<span style="background-color: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; display: inline-block;"></span>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+
+    const marker = L.marker([latitude, longitude], {icon: rescuerIcon})
+        .addTo(myMap)
+
+
+    window.baseMarkers.push(marker);
 }
 
 function createRescuerPopupContent(rescuer) {

@@ -6,50 +6,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rescuer</title>
     <link rel="stylesheet" href="rescuer.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 
 
 <body>
-    <nav id="main-nav">
-        <ul>
+<nav id="main-nav">
+    <ul>
+        <button id="logoutButton" class="logout-button">Logout</button>
+    </ul>
 
-            <button id="logoutButton" class="logout-button">Logout</button>
-
-        </ul>
-
-    </nav>
-    <h1>Rescuer Page</h1>
-    <div id="main-container">
-        <div id="requests-offers">
-            <h3>Requests & Offers</h3>
-            <div id="request-list">
-                <ul>
-                </ul>
-            </div>
+</nav>
+<div id="main-container">
+    <div id="active-tasks-container">
+        <h3 class="container-title">Active Tasks (1)</h3>
+        <div id="task-requests-list-container">
+            <h2 class="container-subtitle">Requests</h2>
+            <ul id="task-requests-list"></ul>
         </div>
-        <div id="filters">
-            <h3>Filters</h3>
-            <!-- Add filter elements here -->
-        </div>
-        <div id="map-container">
-            <div id="mapid"></div>
-        </div>
-        <div id="inventory">
-            <h3>Inventory</h3>
-            <ul id="inventory-list">
-            </ul>
+        <div id="task-offers-list-container">
+            <h2 class="container-subtitle">Offers</h2>
+            <ul id="task-offers-list"></ul>
         </div>
     </div>
+    <div id="filter-container">
+        <h3 class="container-title"> Filters</h3>
+        <div class="switch-container" style="background-color: rgba(52, 152, 219, 0.1); margin-bottom: 20px;">
+            <label class="switch">
+                <input type="checkbox" id="masterFilter" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label" style="font-weight: bold;">Show All</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-assumed-requests" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show assumed requests</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-pending-requests" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show pending requests</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-assumed-offers" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show assumed offers</span>
+        </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="filter-pending-offers" checked>
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-label">Show pending offers</span>
+        </div>
+    </div>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div id="inventory">
+        <h3 class="container-title">Inventory</h3>
+        <ul id="inventory-list">
+        </ul>
 
-    <script src="rescuer.js" type="module"></script>
-    <script src="rescuerInventory.js" type="module"></script>
+        <button id="load-inventory-button">Load items from base</button>
+        <button id="unload-inventory-button">Unload items to base</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="rescuerRefactor.js" type="module"></script>
 </body>
 
 </html>
