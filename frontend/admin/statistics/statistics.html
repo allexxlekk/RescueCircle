@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics</title>
+  <link rel="stylesheet" href="statistics.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+
+<body>
+<nav id="main-nav">
+  <ul>
+    <li><a href="/admin/overview">Overview</a></li>
+    <li><a href="/admin/warehouse-management">Warehouse Management</a></li>
+    <li><a href="/admin/inventory-status">Inventory Status</a></li>
+    <li><a href="/admin/rescuer-management">Rescuer Management</a></li>
+    <li><a href="/admin/announcement-management">Announcement
+      Management</a></li>
+    <li><a href="#" class="active">Statistics</a></li>
+    <button id="logoutButton" class="logout-button">Logout</button>
+
+  </ul>
+</nav>
+  <div class="dashboard-content">
+    <h1 class="dashboard-title">Statistics Dashboard</h1>
+    <div class="statistics-container">
+    <div class="date-inputs">
+      <div class="input-group">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" class="date-input">
+      </div>
+      <div class="input-group">
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" class="date-input">
+      </div>
+      <button id="update-stats" class="update-button">Update Statistics</button>
+    </div>
+    <div class="chart-container">
+      <canvas id="statsChart"></canvas>
+    </div>
+    <div id="total-stats" class="total-stats"></div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="statistics.js" type="module"></script>
+</body>
+
+</html>
