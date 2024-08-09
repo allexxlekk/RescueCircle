@@ -1,4 +1,5 @@
-const rescuerId = 4; // Get from logged in rescuer
+import apiUtils from "../../utils/apiUtils.mjs";
+const logoutButton = document.getElementById("logoutButton");
 
 let mymap = L.map("mapid").setView([38.242, 21.727], 17);
 
@@ -29,8 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let role = "CITIZEN";
     let rescuer = 'RESCUER';
 
-
-
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -40,8 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     L.marker([baseLocation.latitude, baseLocation.longitude], { icon: baseIcon }).addTo(mymap)
         .bindPopup("BASE LOCATION")
         .openPopup();
-
-
 
     mymap.setView([baseLocation.latitude, baseLocation.longitude], 12);
     let center = [baseLocation.latitude, baseLocation.longitude];
@@ -57,38 +54,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     showUserMarkers(mymap, userMarkers);
 
     showRequests(await fetchCitizenRequests());
+    showOffers(await fetchCitizenOffers());
 
     let rescuerMarkers = await fetchMarkers(rescuer);
     showRescuerMarkers(mymap, rescuerMarkers);
 
     await displayActiveTasks(4);
+    logoutButton.addEventListener("click", async () => {
+        await apiUtils.logout();
+    });
 });
 
-
-//// Load Inventory code////
 async function fetchItems() {
-    try {
-        const response = await fetch('http://localhost:3000/items');
-
-        return await response.json(); // Return the data
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to be caught in the higher level
-    }
+    return [
+        { id: 1, name: 'Water Bottle', category_name: 'Essentials', quantity: 50 },
+        { id: 2, name: 'First Aid Kit', category_name: 'Medical', quantity: 30 },
+        { id: 3, name: 'Blanket', category_name: 'Essentials', quantity: 20 },
+    ];
 }
 
 async function fetchInventory(rescuerId) {
-    try {
-        const response = await fetch('http://localhost:3000/rescuers/inventory?id=' + rescuerId);
-
-        return await response.json(); // Return the data
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to be caught in the higher level
-    }
+    return [
+        { id: 1, name: 'Water Bottle', category_name: 'Essentials', amount: 10 },
+        { id: 2, name: 'First Aid Kit', category_name: 'Medical', amount: 5 },
+    ];
 }
-
-
 
 const loadInventory = async (itemId, amount, rescuerId) => {
     const inventory = {
@@ -96,39 +86,21 @@ const loadInventory = async (itemId, amount, rescuerId) => {
         amount: amount,
         rescuerId: rescuerId,
     };
-
-    try {
-        const postResponse = await fetch('http://localhost:3000/rescuers/load', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(inventory),
-        });
-
-        const response = await postResponse.json();
-        console.log(response);
-        alert('Item Loaded Successfully');
-        await updateInventoryDisplay(rescuerId);
-    } catch (error) {
-        console.error('Error loading inventory:', error);
-    }
+    // Fake loading success
+    console.log('Item Loaded Successfully');
+    alert('Item Loaded Successfully');
+    await updateInventoryDisplay(rescuerId);
 };
 
-//updateInventoryDisplay after clicking load item button 
 async function updateInventoryDisplay(rescuerId) {
-    try {
-        const inventoryItems = await fetchInventory(rescuerId);
-        const inventoryListElement = document.getElementById('inventory-list');
-        inventoryListElement.innerHTML = ''; // Clear existing items
+    const inventoryItems = await fetchInventory(rescuerId);
+    const inventoryListElement = document.getElementById('inventory-list');
+    inventoryListElement.innerHTML = ''; // Clear existing items
 
-        inventoryItems.forEach(item => {
-            let itemElement = createInventoryItemElement(item);
-            inventoryListElement.appendChild(itemElement);
-        });
-    } catch (error) {
-        console.error('Error updating inventory display:', error);
-    }
+    inventoryItems.forEach(item => {
+        let itemElement = createInventoryItemElement(item);
+        inventoryListElement.appendChild(itemElement);
+    });
 }
 
 function createInventoryItemElement(item) {
@@ -164,34 +136,66 @@ function createInventoryItemElement(item) {
     return itemElement;
 }
 
+async function fetchCitizenRequests() {
+    return [
+        { id: 1, name: 'John Doe', phone: '123-456-7890', date: '2023-08-01', item: 'Water Bottle', category: 'Essentials', amount: 5, canComplete: true },
+        { id: 2, name: 'Jane Smith', phone: '987-654-3210', date: '2023-08-02', item: 'First Aid Kit', category: 'Medical', amount: 2, canComplete: false },
+    ];
+}
 
-//Check if is correct
-const unloadInventory = async (rescuerId) => {
-    try {
-        const response = await fetch('http://localhost:3000/rescuers/unload/' + rescuerId);
+async function fetchCitizenOffers() {
+    return [
+        { id: 1, name: 'Alice Johnson', phone: '555-123-4567', date: '2023-08-03', item: 'Blanket', category: 'Essentials', amount: 10, canComplete: true },
+        { id: 2, name: 'Bob Brown', phone: '555-765-4321', date: '2023-08-04', item: 'Food Pack', category: 'Essentials', amount: 20, canComplete: true },
+    ];
+}
 
-        return await response.json(); // Return the data
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to be caught in the higher level
+async function fetchMarkers(role) {
+    if (role === "CITIZEN") {
+        return [
+            { id: 1, latitude: 38.245, longitude: 21.725, fullName: 'John Doe' },
+            { id: 2, latitude: 38.240, longitude: 21.728, fullName: 'Jane Smith' },
+        ];
+    } else {
+        return [
+            { id: 1, latitude: 38.242, longitude: 21.726, fullName: 'Rescuer 1' },
+            { id: 2, latitude: 38.243, longitude: 21.727, fullName: 'Rescuer 2' },
+        ];
     }
 }
 
+const fetchActiveTasks = async (rescuerId) => {
+    return 2; // Fake active tasks count
+};
+
+const displayActiveTasks = async (rescuerId) => {
+    const activeTasks = await fetchActiveTasks(rescuerId);
+    console.log('Active Tasks:', activeTasks); // Debug log
+    if (activeTasks !== undefined) {
+        const activeTasksElement = document.createElement('span');
+        activeTasksElement.id = 'active-tasks-count';
+        activeTasksElement.textContent = activeTasks;
+
+        const activeTasksContainer = document.getElementById('active-tasks');
+        activeTasksContainer.innerHTML = ''; // Clear any existing content
+        activeTasksContainer.appendChild(document.createTextNode('Tasks assigned: '));
+        activeTasksContainer.appendChild(activeTasksElement);
+    } else {
+        console.error('Active tasks is undefined');
+    }
+};
 
 function showItems(items) {
     const itemListElement = document.getElementById('item-list');
     itemListElement.innerHTML = '';
 
     items.forEach(item => {
-        // Create the list item
         let itemElement = createItemElement(item);
-        // Add it to the list
         itemListElement.appendChild(itemElement);
         itemListElement.appendChild(document.createElement("br"));
-
     });
-
 }
+
 function createItemElement(item) {
     const itemElement = document.createElement('li');
     itemElement.className = "item";
@@ -246,99 +250,16 @@ function createItemElement(item) {
     return itemElement;
 }
 
-///////////Map code//////
-//API CALLS////
-async function fetchRequests(citizenId) {
-    try {
-        const response = await fetch('http://localhost:3000/requests/citizen/' + citizenId);
-
-        return await response.json();
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
-    }
-}
-
-// window.acceptRequest = function (requestId) {
-
-//     console.log("Accepting request:", requestId);
-//     console.log("Rescuer ID:", rescuerId);
-// };
-
-
-
-
-
-async function fetchCitizenRequests() {
-    try {
-        const response = await fetch('http://localhost:3000/requests/citizens');
-
-        return await response.json();
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
-    }
-}
-
-async function fetchMarkers(role) {
-    try {
-        const response = await fetch('http://localhost:3000/users/markers/' + role);
-
-        return await response.json();
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
-    }
-}
-
-const fetchActiveTasks = async (rescuerId) => {
-    try {
-        const response = await fetch(`http://localhost:3000/rescuers/active-tasks?id=${encodeURIComponent(rescuerId)}`);
-        const data = await response.json();
-        console.log('Fetch Active Tasks Response:', data);
-        if (response.ok) {
-            return data;
-        } else {
-            console.error('Failed to fetch active tasks:', data.error);
-            return 0;
-        }
-    } catch (error) {
-        console.error('Error fetching active tasks:', error);
-        return 0;
-    }
-};
-
-//HELPER FUNCTIONS////////////////////////////////
-
-
-const displayActiveTasks = async (rescuerId) => {
-    const activeTasks = await fetchActiveTasks(rescuerId);
-    console.log('Active Tasks:', activeTasks); // Debug log
-    if (activeTasks !== undefined) {
-        const activeTasksElement = document.createElement('span');
-        activeTasksElement.id = 'active-tasks-count';
-        activeTasksElement.textContent = activeTasks;
-
-        const activeTasksContainer = document.getElementById('active-tasks');
-        activeTasksContainer.innerHTML = ''; // Clear any existing content
-        activeTasksContainer.appendChild(document.createTextNode('Tasks assigned: '));
-        activeTasksContainer.appendChild(activeTasksElement);
-    } else {
-        console.error('Active tasks is undefined');
-    }
-};
 function showRequests(requests) {
     const requestListContainer = document.getElementById('request-list');
     const requestListElement = requestListContainer.querySelector('ul');
 
-    // Check if the title and total number div already exists, if not create it
     let titleDiv = requestListContainer.querySelector('.request-list-title');
     if (!titleDiv) {
         titleDiv = document.createElement('div');
         titleDiv.className = 'request-list-title';
         requestListContainer.insertBefore(titleDiv, requestListElement);
 
-        // Add click event to toggle visibility of requests
         titleDiv.addEventListener('click', () => {
             if (requestListElement.style.display === 'none' || requestListElement.style.display === '') {
                 requestListElement.style.display = 'block';
@@ -348,72 +269,202 @@ function showRequests(requests) {
         });
     }
 
-    // Set the title and total number of requests
     titleDiv.textContent = `Requests (${requests.length})`;
 
     requestListElement.innerHTML = ''; // Clear existing items
 
     requests.forEach(request => {
-        // Create the request card with details
         let requestCardElement = createRequestCardElement(request);
-        // Add it to the list
         requestListElement.appendChild(requestCardElement);
     });
 }
+
+function showOffers(offers) {
+    const offerListContainer = document.getElementById('offer-list');
+    const offerListElement = offerListContainer.querySelector('ul');
+
+    let titleDiv = offerListContainer.querySelector('.offer-list-title');
+    if (!titleDiv) {
+        titleDiv = document.createElement('div');
+        titleDiv.className = 'offer-list-title';
+        offerListContainer.insertBefore(titleDiv, offerListElement);
+
+        titleDiv.addEventListener('click', () => {
+            if (offerListElement.style.display === 'none' || offerListElement.style.display === '') {
+                offerListElement.style.display = 'block';
+            } else {
+                offerListElement.style.display = 'none';
+            }
+        });
+    }
+
+    titleDiv.textContent = `Offers (${offers.length})`;
+
+    offerListElement.innerHTML = ''; // Clear existing items
+
+    offers.forEach(offer => {
+        let offerCardElement = createOfferCardElement(offer);
+        offerListElement.appendChild(offerCardElement);
+    });
+}
+
+function createRequestCardElement(request) {
+    const li = document.createElement('li');
+    li.className = `request-card ${request.canComplete ? 'complete' : 'incomplete'}`; // Add status-based class for styling
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = "item";
+    nameDiv.textContent = request.name;
+
+    const itemDiv = document.createElement('div');
+    itemDiv.className = "item";
+    itemDiv.textContent = request.item;
+
+    const detailsDiv = document.createElement('div');
+    detailsDiv.className = "details";
+
+    const statusDiv = document.createElement('div');
+    statusDiv.className = "status";
+    statusDiv.textContent = `Can Complete: ${request.canComplete}`;
+
+    const amountDiv = document.createElement('div');
+    amountDiv.className = "amount";
+    amountDiv.textContent = `Amount: ${request.amount}`;
+
+    const dateDiv = document.createElement('div');
+    dateDiv.className = "date";
+    dateDiv.textContent = `Date: ${request.date}`;
+
+    detailsDiv.appendChild(nameDiv);
+    detailsDiv.appendChild(statusDiv);
+    detailsDiv.appendChild(amountDiv);
+    detailsDiv.appendChild(dateDiv);
+
+    li.appendChild(itemDiv);
+    li.appendChild(detailsDiv);
+
+    li.addEventListener('mouseover', function () {
+        const markerId = request.id;
+        mymap.eachLayer(function (layer) {
+            if (layer instanceof L.Marker && layer.userId == markerId) {
+                layer._icon.classList.add('selected-marker');
+            }
+        });
+    });
+
+    li.addEventListener('mouseout', function () {
+        const markerId = request.id;
+        mymap.eachLayer(function (layer) {
+            if (layer instanceof L.Marker && layer.userId == markerId) {
+                layer._icon.classList.remove('selected-marker');
+            }
+        });
+    });
+
+    return li;
+}
+
+function createOfferCardElement(offer) {
+    const li = document.createElement('li');
+    li.className = `offer-card ${offer.canComplete ? 'complete' : 'incomplete'}`; // Add status-based class for styling
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = "item";
+    nameDiv.textContent = offer.name;
+
+    const itemDiv = document.createElement('div');
+    itemDiv.className = "item";
+    itemDiv.textContent = offer.item;
+
+    const detailsDiv = document.createElement('div');
+    detailsDiv.className = "details";
+
+    const statusDiv = document.createElement('div');
+    statusDiv.className = "status";
+    statusDiv.textContent = `Can Complete: ${offer.canComplete}`;
+
+    const amountDiv = document.createElement('div');
+    amountDiv.className = "amount";
+    amountDiv.textContent = `Amount: ${offer.amount}`;
+
+    const dateDiv = document.createElement('div');
+    dateDiv.className = "date";
+    dateDiv.textContent = `Date: ${offer.date}`;
+
+    detailsDiv.appendChild(nameDiv);
+    detailsDiv.appendChild(statusDiv);
+    detailsDiv.appendChild(amountDiv);
+    detailsDiv.appendChild(dateDiv);
+
+    li.appendChild(itemDiv);
+    li.appendChild(detailsDiv);
+
+    li.addEventListener('mouseover', function () {
+        const markerId = offer.id;
+        mymap.eachLayer(function (layer) {
+            if (layer instanceof L.Marker && layer.userId == markerId) {
+                layer._icon.classList.add('selected-marker');
+            }
+        });
+    });
+
+    li.addEventListener('mouseout', function () {
+        const markerId = offer.id;
+        mymap.eachLayer(function (layer) {
+            if (layer instanceof L.Marker && layer.userId == markerId) {
+                layer._icon.classList.remove('selected-marker');
+            }
+        });
+    });
+
+    return li;
+}
+
+async function getBaseLocation() {
+    return [{ latitude: 38.242, longitude: 21.727 }];
+}
+
 function showUserMarkers(map, citizens) {
     citizens.forEach(function (citizen) {
         let marker = L.marker([citizen.latitude, citizen.longitude]).addTo(map);
         marker.userId = citizen.id;
 
         marker.on('click', async () => {
-            try {
-                const requests = await fetchRequests(marker.userId);
-                if (requests && requests.length > 0) {
-                    let popupContent = `<div style="max-height: 160px; width:130%;overflow: auto;">
-                                            <h3>User: ${requests[0].fullName}</h3>`;
-                    requests.forEach((request, index) => {
-                        if (request.status !== "COMPLETED") {
-                            popupContent += `<div style="margin-top: 10px;">
-                                                <p>Item: <strong>${request.item.name}</strong></p>
-                                                <p>Status: <strong>${request.status}</strong></p>
-                                                <p>Quantity: <strong>${request.quantity}</strong></p>
-                                                <p>Date: <strong>${request.createdAt}</strong></p>
-                                                <button class="accept-btn" data-rescuer-id="${request.rescuerId}" data-request-id="${request.requestId}">Accept Request</button>
-                                            </div>`;
-                        }
-                    });
-                    popupContent += '</div>';
+            const requests = await fetchCitizenRequests();
+            if (requests && requests.length > 0) {
+                let popupContent = `<div style="max-height: 160px; width:130%;overflow: auto;">
+                                        <h3>User: ${citizen.fullName}</h3>`;
+                requests.forEach((request, index) => {
+                    if (request.canComplete) {
+                        popupContent += `<div style="margin-top: 10px;">
+                                            <p>Item: <strong>${request.item}</strong></p>
+                                            <p>Status: <strong>${request.canComplete}</strong></p>
+                                            <p>Amount: <strong>${request.amount}</strong></p>
+                                            <p>Date: <strong>${request.date}</strong></p>
+                                            <button class="accept-btn" data-rescuer-id="${rescuerId}" data-request-id="${request.id}">Accept Request</button>
+                                        </div>`;
+                    }
+                });
+                popupContent += '</div>';
 
-                    marker.bindPopup(popupContent).on('popupopen', function () {
-                        document.querySelectorAll('.accept-btn').forEach(button => {
-                            button.addEventListener('click', function () {
-                                // const rescuerId = button.getAttribute('data-rescuer-id');
-                                const rescuerId = 4;
-                                const requestId = button.getAttribute('data-request-id');
-                                console.log(rescuerId);  // Debug line to check rescuerId
-                                acceptRequest(rescuerId, requestId);
-                            });
+                marker.bindPopup(popupContent).on('popupopen', function () {
+                    document.querySelectorAll('.accept-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const rescuerId = 4;
+                            const requestId = button.getAttribute('data-request-id');
+                            console.log(rescuerId);  // Debug line to check rescuerId
+                            acceptRequest(rescuerId, requestId);
                         });
-                    }).openPopup();
-                } else {
-                    let fallbackContent = `<div><p>No active requests for this user found.</p></div>`;
-                    marker.bindPopup(fallbackContent).openPopup();
-                }
-            } catch (error) {
-                console.error('Error fetching requests:', error);
-                let errorContent = `<div>
-                    <h3>Citizen: ${citizen.fullName}</h3>
-                    <p>Location: ${citizen.latitude}, ${citizen.longitude}</p>
-                    <p>User ID: ${citizen.id}</p>
-                    <p>Error fetching requests.</p>
-                </div>`;
-                marker.bindPopup(errorContent).openPopup();
+                    });
+                }).openPopup();
+            } else {
+                let fallbackContent = `<div><p>No active requests for this user found.</p></div>`;
+                marker.bindPopup(fallbackContent).openPopup();
             }
         });
     });
 }
 
-//TODO: BACKEND CReate FetchRESCUERS 
 function showRescuerMarkers(map, rescuers) {
     rescuers.forEach(function (rescuer) {
         let marker = L.marker([rescuer.latitude, rescuer.longitude], { icon: rescuerIcon }).addTo(map);
@@ -425,8 +476,6 @@ function showRescuerMarkers(map, rescuers) {
         </div>`);
     });
 }
-
-
 
 window.acceptRequest = async function (rescuerId, requestId) {
     if (!rescuerId || !requestId) {
@@ -455,98 +504,3 @@ window.acceptRequest = async function (rescuerId, requestId) {
         return false;
     }
 }
-
-
-
-function createRequestCardElement(request) {
-    const li = document.createElement('li');
-    li.className = `request-card ${request.status.toLowerCase()}`; // Add status-based class for styling
-
-    const nameDiv = document.createElement('div');
-    nameDiv.className = "item";
-    nameDiv.textContent = request.fullName;
-
-
-    const itemDiv = document.createElement('div');
-    itemDiv.className = "item";
-    itemDiv.textContent = request.item.name;
-
-    const detailsDiv = document.createElement('div');
-    detailsDiv.className = "details";
-
-    const statusDiv = document.createElement('div');
-    statusDiv.className = "status";
-    statusDiv.textContent = `Status: ${request.status}`;
-
-    const numberOfPeopleDiv = document.createElement('div');
-    numberOfPeopleDiv.className = "number-of-people";
-    numberOfPeopleDiv.textContent = `Number Of People: ${request.numberOfPeople}`;
-
-    const quantityDiv = document.createElement('div');
-    quantityDiv.className = "quantity";
-    quantityDiv.textContent = `Quantity: ${request.quantity}`;
-
-    const createdAtDiv = document.createElement('div');
-    createdAtDiv.className = "created-at";
-    createdAtDiv.textContent = `Requested At: ${request.createdAt}`;
-
-
-
-    const completedAtDiv = document.createElement('div');
-    completedAtDiv.className = "completed-at";
-    completedAtDiv.textContent = `Completed at: ${request.completedAt}`;
-
-    // Assemble the details
-    detailsDiv.appendChild(nameDiv);
-
-    detailsDiv.appendChild(statusDiv);
-    detailsDiv.appendChild(numberOfPeopleDiv);
-    detailsDiv.appendChild(quantityDiv);
-    detailsDiv.appendChild(createdAtDiv);
-
-
-    detailsDiv.appendChild(completedAtDiv);
-
-
-    // Assemble the card
-    li.appendChild(itemDiv);
-    li.appendChild(detailsDiv);
-    li.addEventListener('mouseover', function () {
-
-        const markerId = request.userId;
-        // Iterate over each layer (marker) on the map
-        mymap.eachLayer(function (layer) {
-            // Check if the layer is a marker and has the matching user ID
-            if (layer instanceof L.Marker && layer.userId == markerId) {
-                // Add a class on mouseover
-                layer._icon.classList.add('selected-marker');
-            }
-        });
-    })
-    li.addEventListener('mouseout', function () {
-        const markerId = request.userId;
-
-        mymap.eachLayer(function (layer) {
-            if (layer instanceof L.Marker && layer.userId == markerId) {
-                // Remove the class on mouseout
-                layer._icon.classList.remove('selected-marker');
-            }
-        });
-    });
-
-    return li;
-
-}
-
-async function getBaseLocation() {
-    try {
-        const response = await fetch("http://localhost:3000/baseLocation");
-
-        return await response.json(); // Return the data
-    } catch (error) {
-        console.error("Fetch error:", error);
-        throw error; // Re-throw the error to be caught in the higher level
-    }
-}
-
-

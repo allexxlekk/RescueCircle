@@ -1,129 +1,150 @@
-.custom-div-icon i {
-  display: block;
-  margin: 0 auto;
-}
-.material-icons {
-  font-family: "Material Icons";
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  /* -webkit-font-feature-settings: "liga"; */
-  -webkit-font-smoothing: antialiased;
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --background-color: #ecf0f1;
+  --card-background: #ffffff;
+  --text-color: #333333;
+  --border-radius: 8px;
+  --error-color: #e74c3c;
 }
 
-#active-tasks {
-  text-align: center;
-  margin-bottom: 20px;
+#main-nav {
+  background-color: var(--secondary-color);
+  padding: 20px 0;
 }
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding-bottom: 5%;
+
+#main-nav ul {
+  list-style-type: none;
   padding: 0;
-}
-
-header .container-fluid {
+  margin: 0;
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
-header .btn-danger {
-  background-color: #ff0000; /* Red color */
+#main-nav li {
+  margin: 0 15px;
+}
+
+#main-nav a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+#main-nav a:hover,
+#main-nav a.active {
+  background-color: var(--primary-color);
+}
+
+.logout-button {
+  background-color: var(--error-color);
+  color: white;
   border: none;
+  padding: 8px 15px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  text-align: center;
+  height: 32px;
+  right: 20px;
+  top: 3px;
 }
 
-header .btn-danger:hover {
-  background-color: #cc0000; /* Darker red on hover */
+.logout-button:hover {
+  background-color: darkred;
 }
-
 h1,
 h3 {
   text-align: center;
 }
 
+#main-container {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+}
+
+#requests-offers,
+#filters,
+#inventory {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#map-container {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #mapid {
-  display: flex;
-  align-self: center;
-  width: 80vw;
-  height: 65vh;
-}
-#map-request-div {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
+  width: 100%;
+  height: 70vh;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#request-list {
-  margin-top: 20px;
-  max-height: 400px; /* Max height for the request list */
-  overflow-y: auto; /* Scrollbar for overflow content */
-  overflow-x: hidden;
-}
-
-#request-list ul {
+#request-list ul,
+#offer-list ul {
   list-style-type: none;
   padding: 0;
-  display: grid;
-  gap: 3;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 3fr));
 }
 
-.request-card {
+.request-card,
+.offer-card {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
   background-color: #f9f9f9;
-  width: 100%;
+  margin-bottom: 10px;
 }
 
-.request-card:hover {
+.request-card:hover,
+.offer-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.request-card .item {
+.request-card .item,
+.offer-card .item {
   font-size: 18px;
   font-weight: bold;
   color: #333;
 }
 
-.request-card .details {
+.request-card .details,
+.offer-card .details {
   margin-top: 10px;
 }
 
-.request-card .details div {
+.request-card .details div,
+.offer-card .details div {
   margin-bottom: 5px;
   font-size: 14px;
 }
 
-.request-card.pending {
-  background-color: #fff3cd;
-  border-color: #ffeeba;
-}
-
-.request-card.assumed {
-  background-color: #d1ecf1;
-  border-color: #bee5eb;
-}
-
-.request-card.completed {
+.request-card.complete,
+.offer-card.complete {
   background-color: #c3e6cb;
   border-color: #b1dfbb;
 }
 
-.request-list-title {
-  cursor: pointer; /* Pointer cursor to indicate clickable title */
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-align: center; /* Center the title */
+.request-card.incomplete,
+.offer-card.incomplete {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
 }
 
 .selected-marker {
@@ -131,169 +152,45 @@ h3 {
   box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
 }
 
-header a {
-  text-decoration: none;
-  color: #fff;
-  margin: 0 10px;
+#inventory-list {
+  list-style-type: none;
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
-/* Container Styles */
-#header-container {
-  padding: 20px;
-  background-color: #e9dede;
-  margin: 10px; /* Add margin for spacing */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 25px; /* Add box shadow to the container */
-}
-
-/* Form Styles */
-label {
-  font-weight: bold;
-}
-
-input[type="text"],
-select {
-  padding: 10px;
-  width: 20%;
-  margin-bottom: 10px;
-  border-radius: 25px;
-}
-input[type="text"] {
-  background-color: rgb(225, 236, 174);
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #2b2e4a;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  border-radius: 25px;
-}
-
-#main {
+#inventory-list li {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-#item-list {
-  max-height: 400px; /* Maximum height of 400px as requested */
-  overflow-y: auto; /* Adds a scrollbar if the content exceeds 400px */
-  background-color: #fff; /* White background for the list */
-  border: 1px solid #ccc; /* Grey border around the list */
-  padding: 10px; /* Padding inside the list */
-  list-style-type: none; /* Removes default list item bullets */
-  width: 50%;
-  margin-inline: 25%;
-  align-self: center;
-}
-
-/* List item styling */
-#item-list li {
-  padding: 8px; /* Padding for each list item */
-  border-bottom: 1px solid #eee; /* Light grey border under each item */
-  display: flex;
-  align-items: center;
   justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 
-/* Last child border removal */
-#item-list li:last-child {
-  border-bottom: none; /* Removes the border from the last list item */
+#inventory-list li:last-child {
+  border-bottom: none;
 }
 
-/* Button styling */
 button.load {
-  background-color: #007bff; /* Blue background color */
-  color: white; /* White text color */
-  border: none; /* No border */
-  padding: 6px 12px; /* Padding around the text */
-  text-transform: uppercase; /* Uppercase text */
-  font-weight: bold; /* Bold text */
-  cursor: pointer; /* Cursor indicates button */
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: var(--border-radius);
 }
 
 button.load:hover {
-  background-color: #0056b3; /* Darker blue when hovered */
+  background-color: #2980b9;
 }
 
-/* Input styling */
 input[type="number"] {
   padding: 4px;
-  width: 60px; /* Fixed width for number input */
-  margin-right: 8px; /* Spacing between input and button */
+  width: 60px;
+  margin-right: 8px;
 }
 
-/* Styling for name, category, and quantity spans */
 .name,
 .category,
 .quantity {
-  font-weight: bold; /* Makes text bold */
-}
-
-/* Adding some space between items in list */
-li > div {
-  margin-right: 10px;
-}
-
-h3 {
-  text-align: center;
-}
-
-h1 {
-  text-align: center;
-}
-
-div {
-  width: 80%; /* Control the width of the div container to your preference */
-  margin: auto; /* Center the container horizontally */
-  max-width: 1000px; /* Max width can be adjusted based on design needs */
-}
-
-#inventory-list {
-  padding: 2;
-
-  list-style-type: none; /* Removes default list item bullets */
-  max-height: 250px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-}
-
-/* List item styling */
-#inventory-list li {
-  display: flex;
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  align-items: center;
-}
-
-/* Column styling to ensure alignment */
-#inventory-list li > div {
-  flex: 1; /* Each div takes equal space */
-  display: flex;
-  align-items: center;
-}
-
-#inventory-list li > div:first-child {
-  flex: 3; /* Allocate more space to the name column if needed */
-}
-
-#inventory-list li > div:nth-child(2) {
-  flex: 3; /* Adjust flex value based on content size */
-}
-
-#inventory-list li > div:nth-child(3) {
-  flex: 1;
-  justify-content: flex-end; /* Align amount to the right */
-}
-
-/* Optional: Additional styling for visual aesthetics */
-#inventory-list li > div:not(:last-child) {
-  margin-right: 10px; /* Adds margin to the right of each column except the last one */
+  font-weight: bold;
 }

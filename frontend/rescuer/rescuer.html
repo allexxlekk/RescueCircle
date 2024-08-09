@@ -13,42 +13,35 @@
 
 
 <body>
-    <header>
-        <div class="container-fluid">
-            <div class="row align-items-center">
+    <nav id="main-nav">
+        <ul>
 
-                <div class="col-auto ml-auto">
-                    <button id="logout-button" class="btn btn-danger">Logout</button>
-                </div>
+            <button id="logoutButton" class="logout-button">Logout</button>
+
+        </ul>
+
+    </nav>
+    <h1>Rescuer Page</h1>
+    <div id="main-container">
+        <div id="requests-offers">
+            <h3>Requests & Offers</h3>
+            <div id="request-list">
+                <ul>
+                </ul>
             </div>
         </div>
-    </header>
-    <h1>Rescuer page</h1>
-    <h3>See requests and offers on the map</h3>
-    <div id="active-tasks"> </div>
-
-    <div id="map-request-div">
-        <div id="mapid"></div>
-
-        <div id="request-list">
-            <ul>
-
+        <div id="filters">
+            <h3>Filters</h3>
+            <!-- Add filter elements here -->
+        </div>
+        <div id="map-container">
+            <div id="mapid"></div>
+        </div>
+        <div id="inventory">
+            <h3>Inventory</h3>
+            <ul id="inventory-list">
             </ul>
         </div>
-    </div>
-    <h1>Inventory</h1>
-    <div>
-        <ul id="inventory-list">
-
-        </ul>
-    </div>
-
-    <button type="submit" id="load-button" style="display:none;">Load</button>
-    <h3>Choose item to load</h3>
-    <div>
-        <ul id="item-list">
-
-        </ul>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
