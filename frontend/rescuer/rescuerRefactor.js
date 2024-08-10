@@ -45,6 +45,8 @@ const uiFilters = [
     pendingOffersFilter,
 ];
 
+
+
 document.addEventListener('DOMContentLoaded', async () => {
 
     rescuer = await fetchRescuer();
@@ -78,6 +80,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Error setting up map:", error);
     }
 
+    document.getElementById('modal-close-icon').addEventListener('click', closeModal);
+
+    // Close the modal when the close button is clicked
+    document.getElementById('modal-close-button').addEventListener('click', closeModal);
+
+    // Event listener for loading selected items from the modal
+    document.getElementById('modal-load-button').addEventListener('click', async () => {
+        const checkboxes = document.querySelectorAll('.base-item-checkbox:checked');
+        for (const checkbox of checkboxes) {
+            const itemId = checkbox.value;
+            const amountInput = checkbox.closest('.base-item').querySelector('.base-item-amount');
+            const amount = parseInt(amountInput.value);
+            // Check if amount is valid and not 0 
+            if (amount && !isNaN(amount) && amount > 0) {
+                await loadInventory(itemId, amount);
+                closeModal();
+            } else {
+                alert("Invalid amount entered. Please enter a valid number.");
+            }
+        }
+
+
+        await showInventory(); // Refresh the inventory list
+    });
+
+    document.getElementById('load-inventory-button').addEventListener('click', async () => {
+        if (nearBase) {
+            await showBaseItemsModal();
+        }
+    });
 
     logoutButton.addEventListener("click", async () => {
         await apiUtils.logout()
@@ -91,6 +123,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyFilters();
 
     initializeFilterListeners();
+    showInventory();
+
+
 
 });
 
@@ -193,7 +228,7 @@ async function loadInventory(itemId, amount) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({itemId: itemId, amount: amount})
+            body: JSON.stringify({ itemId: itemId, amount: amount })
         });
 
         await showTasks()
@@ -440,7 +475,7 @@ window.changeRescuerLocation = async function (latitude, longitude) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({latitude: latitude, longitude: longitude})
+            body: JSON.stringify({ latitude: latitude, longitude: longitude })
         });
 
         await showTasks()
@@ -519,7 +554,7 @@ function placeRequestMarkers() {
             iconAnchor: [10, 10]
         });
 
-        const marker = L.marker([request.latitude, request.longitude], {icon: requestIcon})
+        const marker = L.marker([request.latitude, request.longitude], { icon: requestIcon })
             .addTo(myMap)
             .on('click', async () => {
                 const requestDetails = await fetchRequestById(request.id);
@@ -551,7 +586,7 @@ function placeOfferMarkers() {
             iconAnchor: [10, 10]
         });
 
-        const marker = L.marker([offer.latitude, offer.longitude], {icon: offerIcon})
+        const marker = L.marker([offer.latitude, offer.longitude], { icon: offerIcon })
             .addTo(myMap)
             .on('click', async () => {
                 const offerDetails = await fetchOfferById(offer.id);
@@ -580,7 +615,7 @@ function placeRescuerMarker() {
         iconAnchor: [10, 10]
     });
 
-    const marker = L.marker([rescuer.latitude, rescuer.longitude], {icon: rescuerIcon, draggable: true})
+    const marker = L.marker([rescuer.latitude, rescuer.longitude], { icon: rescuerIcon, draggable: true })
         .addTo(myMap)
     marker.on('dragend', async function (event) {
         const position = marker.getLatLng();
@@ -611,7 +646,7 @@ function placeBaseMarker(latitude, longitude) {
         iconAnchor: [10, 10]
     });
 
-    const marker = L.marker([latitude, longitude], {icon: rescuerIcon})
+    const marker = L.marker([latitude, longitude], { icon: rescuerIcon })
         .addTo(myMap)
 
 
@@ -679,4 +714,123 @@ function createOfferPopupContent(offer) {
 function booleanAsString(booleanValue) {
     return booleanValue ? "true" : "false";
 }
+
+async function showInventory() {
+    try {
+        // Fetch the inventory data from the backend
+        const inventoryItems = await fetchInventory();
+
+        // Get the inventory list element
+        const inventoryList = document.getElementById('inventory-list');
+
+        // Clear any existing items
+        inventoryList.innerHTML = '';
+
+        // Loop through each item and create a list element
+        inventoryItems.forEach(item => {
+            // Create the list item
+            const listItem = document.createElement('li');
+            listItem.className = 'inventory-item';
+
+            // Create a span for the category
+            const categorySpan = document.createElement('span');
+            categorySpan.className = 'inventory-category';
+            categorySpan.textContent = item.category_name;
+
+            // Create a span for the item name
+            const itemNameSpan = document.createElement('span');
+            itemNameSpan.className = 'inventory-item-name';
+            itemNameSpan.textContent = item.name;
+
+            // Create a span for the amount
+            const amountSpan = document.createElement('span');
+            amountSpan.className = 'inventory-amount';
+            amountSpan.textContent = item.amount;
+
+            // Append the spans to the list item
+            listItem.appendChild(itemNameSpan);
+            listItem.appendChild(categorySpan);
+
+            listItem.appendChild(amountSpan);
+
+            // Append the list item to the inventory list
+            inventoryList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error('Error showing inventory:', error);
+    }
+}
+
+async function showBaseItemsModal() {
+    try {
+        const baseItems = await fetchBaseItems();
+
+        const baseItemsList = document.getElementById('base-items-list');
+        baseItemsList.innerHTML = ''; // Clear existing items
+
+        baseItems.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.className = 'base-item';
+
+            const checkboxContainer = document.createElement('div');
+            checkboxContainer.className = 'checkbox-container';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'base-item-checkbox';
+            checkbox.value = item.id;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'base-item-name';
+            nameSpan.textContent = item.name;
+
+            const descriptionSpan = document.createElement('span');
+            descriptionSpan.className = 'base-item-description';
+            descriptionSpan.textContent = item.description;
+
+            const categorySpan = document.createElement('span');
+            categorySpan.className = 'base-item-category';
+            categorySpan.textContent = item.category_name;
+
+            const quantitySpan = document.createElement('span');
+            quantitySpan.className = 'base-item-quantity';
+            quantitySpan.textContent = `Quantity: ${item.quantity}`;
+
+            const amountInput = document.createElement('input');
+            amountInput.type = 'number';
+            amountInput.className = 'base-item-amount';
+            amountInput.min = 1;
+            amountInput.placeholder = 'Amount';
+
+            checkboxContainer.appendChild(checkbox);
+            listItem.appendChild(checkboxContainer);
+            listItem.appendChild(nameSpan);
+            listItem.appendChild(descriptionSpan);
+            listItem.appendChild(categorySpan);
+            listItem.appendChild(quantitySpan);
+            listItem.appendChild(amountInput);
+
+            baseItemsList.appendChild(listItem);
+        });
+
+        // Show the modal
+        document.getElementById('base-items-modal').style.display = 'block';
+
+    } catch (error) {
+        console.error('Error fetching base items:', error);
+    }
+}
+// Function to hide the modal
+function closeModal() {
+    document.getElementById('base-items-modal').style.display = 'none';
+}
+
+document.getElementById('modal-close-button').addEventListener('click', closeModal);
+
+// Event listener for Load Inventory button
+document.getElementById('load-inventory-button').addEventListener('click', async () => {
+    if (nearBase) {
+        await showBaseItemsModal();
+    }
+});
 
