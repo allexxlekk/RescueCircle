@@ -111,6 +111,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    document.getElementById('unload-inventory-button').addEventListener('click', async () => {
+        if (nearBase) { // Ensure that the rescuer is near the base
+            await unloadInventory();
+
+        } else {
+            alert('You are too far from the base to unload inventory.');
+        }
+    });
+
     logoutButton.addEventListener("click", async () => {
         await apiUtils.logout()
     });
@@ -182,8 +191,24 @@ function updateFilterStates() {
 }
 
 function updateBaseButtons() {
-    unloadInventoryButton.disabled = !nearBase;
-    loadInventoryButton.disabled = !nearBase
+    const unloadInventoryButton = document.getElementById('unload-inventory-button');
+    const loadInventoryButton = document.getElementById('load-inventory-button');
+    // Check the distance to base to disable the buttons
+    if (nearBase) {
+        unloadInventoryButton.disabled = false;
+        loadInventoryButton.disabled = false;
+        unloadInventoryButton.style.backgroundColor = 'var(--error-color)';
+        loadInventoryButton.style.backgroundColor = 'var(--primary-color)';
+        unloadInventoryButton.style.cursor = 'pointer';
+        loadInventoryButton.style.cursor = 'pointer';
+    } else {
+        unloadInventoryButton.disabled = true;
+        loadInventoryButton.disabled = true;
+        unloadInventoryButton.style.backgroundColor = '#bdc3c7'; // Greyed out color
+        loadInventoryButton.style.backgroundColor = '#bdc3c7'; // Greyed out color
+        unloadInventoryButton.style.cursor = 'not-allowed';
+        loadInventoryButton.style.cursor = 'not-allowed';
+    }
 }
 
 
@@ -214,6 +239,7 @@ async function unloadInventory() {
         await fetch("http://localhost:3000/rescuer/inventory/unload");
 
         await showTasks();
+        await showInventory();
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;
