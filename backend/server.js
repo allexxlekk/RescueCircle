@@ -7,6 +7,7 @@ const adminRescuerManagementRouter = require('./routes/admin/rescuerManagement')
 const adminOverviewRouter = require('./routes/admin/overview')
 const rescuersRouter = require('./routes/rescuers');
 const offersRouter = require('./routes/offers');
+const statisticsRouter = require('./routes/admin/statistics');
 const rescuerRouter = require('./routes/rescuerBusiness');
 const categoriesRouter = require('./routes/categories');
 const itemsRouter = require('./routes/items');
@@ -35,6 +36,7 @@ app.use('/rescuers', rescuersRouter);
 app.use('/rescuer', rescuerRouter);
 app.use('/offers', offersRouter);
 app.use('/admin/warehouse-management', adminWarehouseManagementRouter);
+app.use('/admin/statistics', statisticsRouter);
 app.use('/admin/inventory-status', adminInventoryStatusRouter);
 app.use('/admin/rescuer-management', adminRescuerManagementRouter);
 app.use('/admin/overview', adminOverviewRouter);
@@ -125,6 +127,15 @@ app.get('/admin/rescuer-management', authenticateToken, (req, res) => {
     }
 
     res.sendFile(path.join(__dirname, '../frontend/admin/rescuer-management/rescuer-management.html'));
+
+});
+
+app.get('/admin/statistics', authenticateToken, (req, res) => {
+    if (!req.authenticated || req.user.role !== 'ADMIN') {
+        return res.redirect('/');
+    }
+
+    res.sendFile(path.join(__dirname, '../frontend/admin/statistics/statistics.html'));
 
 });
 

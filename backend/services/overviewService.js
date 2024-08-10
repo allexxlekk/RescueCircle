@@ -224,7 +224,43 @@ const overviewService = {
             console.error('Error fetching offer:', error);
             throw error;
         }
-    }
+    },
+
+    getStatistics: async (startDate, endDate ) => {
+        const query = `
+            SELECT
+                (SELECT COUNT(*) FROM request WHERE status = 'COMPLETED' AND created_at BETWEEN ? AND ?) as completed_requests,
+                (SELECT COUNT(*) FROM request WHERE status != 'COMPLETED' AND created_at BETWEEN ? AND ?) as not_completed_requests,
+                (SELECT COUNT(*) FROM offer WHERE status = 'COMPLETED' AND created_at BETWEEN ? AND ?) as completed_offers,
+                (SELECT COUNT(*) FROM offer WHERE status != 'COMPLETED' AND created_at BETWEEN ? AND ?) as not_completed_offers,
+                (SELECT MIN(created_at) FROM (
+                                                 SELECT MIN(created_at) as created_at FROM request
+                                                 UNION
+                                                 SELECT MIN(created_at) FROM offer
+                                             ) as min_dates) as earliest_date
+        `;
+
+
+
+
+        try {
+            const [results] = await dbConnection.promise().query(query, [
+                startDate || '1970-01-01',
+                endDate || new Date().toISOString().split('T')[0],
+                startDate || '1970-01-01',
+                endDate || new Date().toISOString().split('T')[0],
+                startDate || '1970-01-01',
+                endDate || new Date().toISOString().split('T')[0],
+                startDate || '1970-01-01',
+                endDate || new Date().toISOString().split('T')[0]
+            ]);
+
+            return results[0];
+        } catch (error) {
+            console.error('Error fetching statistics:', error);
+            throw error;
+        }
+    },
 
 };
 
