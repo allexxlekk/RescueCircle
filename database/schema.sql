@@ -120,6 +120,8 @@ CREATE TABLE rescuer_inventory
     FOREIGN KEY (item_id) REFERENCES item (id)
 );
 
+-- Change the delimiter to define the first trigger
+DELIMITER $$
 
 CREATE TRIGGER before_insert_item
     BEFORE INSERT ON item
@@ -131,18 +133,26 @@ BEGIN
     IF NEW.offer_quantity IS NULL THEN
         SET NEW.offer_quantity = 2;
     END IF;
-END;
+END$$
 
+-- Reset the delimiter back to the default ';'
+DELIMITER ;
+
+-- Change the delimiter again for the second trigger
+DELIMITER $$
 
 CREATE TRIGGER before_update_rescue_vehicle
     BEFORE UPDATE ON rescue_vehicle
     FOR EACH ROW
 BEGIN
     IF NEW.active_tasks > 0 THEN
-        SET NEW.status = "ACTIVE";
+        SET NEW.status = 'ACTIVE';
     END IF;
     IF NEW.active_tasks <= 0 THEN
-        SET NEW.status = "WAITING";
+        SET NEW.status = 'WAITING';
         SET NEW.active_tasks = 0;
     END IF;
-END;
+END$$
+
+-- Reset the delimiter back to the default ';'
+DELIMITER ;

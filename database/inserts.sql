@@ -57,5 +57,6 @@ INSERT INTO item_details (name, value, item_id) VALUES ('Grain', 'Whole Wheat', 
 
 INSERT INTO location (id, latitude, longitude, distance_to_base) VALUES(1, 38.24289851714071, 21.727808051916337, 0);
 
+-- P@ssw0rd21
 INSERT INTO user (id, username, password, role, full_name, email, phone, location_id)
-VALUES(1, 'admin', 'admin', 'ADMIN', '', 'admin.base0@system.gov', '', 1);
+VALUES(1, 'admin', '$2b$10$Df9RoH2d8BwWUWGIsAJ74er5Dvjpr8snpLnBizrJPaAcQc4UGDxty', 'ADMIN', '', 'admin.base0@system.gov', '', 1);
